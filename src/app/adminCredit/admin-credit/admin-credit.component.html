@@ -1,0 +1,298 @@
+<div class="container-fluid padding-mv-0">
+  <div class="row margin-mv-0">
+    <div class="col-12 padding-mv-0">
+      <div class="card formula mt3em">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>Pagar el credito</h2>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12">
+              
+            </div>
+            <div class="col-12">
+
+              <ngb-accordion #acc="ngbAccordion" >
+               
+                <ngb-panel>
+                  <ng-template ngbPanelTitle>
+                   
+                    <p class="titulo-panel">  <i class="fa fa-arrow-circle-o-down" aria-hidden="true"></i> Pago vía transferencia bancaria</p>
+                  </ng-template>
+                  <ng-template ngbPanelContent style="    padding-top: 0;" >
+                    <div class="row">
+                      <div class="col-md-12" style="text-align: center;">
+                        <p><b>Ingresa a tu cuenta bancaria y realiza el pago de tu crédito </b></p>
+                     
+                      </div>
+                      <div class="col-md-12" style="text-align: center;">
+                        <p><b>Tu número de referencia es: {{solicitud.numero_credito}} </b></p>
+                     
+                      </div>
+                      <div class="col-md-12" style="text-align: center;">
+                        <p *ngIf="!conceptoNovacion"><b>Valor a pagar: ${{montoPT | number:'1.0-0':'es' }}</b></p>
+                        <p *ngIf="conceptoNovacion"><b>Valor a pagar: ${{totalConceptoNovacion | number:'1.0-0':'es' }}</b></p>
+                     
+                      </div><br>
+                    </div>
+                    <div class="row">
+                      <div class="dark">
+                        <div class="row"><span class="col-md-4 left">A nombre de:&nbsp;</span><span class="col-md-8 left"> Creditos Panda SAS . NIT: 901.369.753-0. </span></div>
+                        
+                        <div class="row"><span class="col-md-4 left">Banco:&nbsp;</span><span class="col-md-8 left">Banco de las Microfinanzas Bancamia.</span></div>
+                        
+                        <div class="row"><span class="col-md-4 left">Cuenta Ahorros:&nbsp;</span><span class="col-md-8 left"># 2110065594200011</span>
+                          <span class="col-md-12 left"><small style="    font-size: 13px;">Los pagos por estos medios pueden llegar a demorar en imputarse hasta 48 horas hábiles.</small></span>
+                        </div>
+                        
+                        <!-- <div class="row"><span class="col-md-4 left">Referencia 1:&nbsp;</span><span class="col-md-8 left">el número de tu Cédula de Ciudadanía</span></div>
+                        
+                        <div class="row"><span class="col-md-4 left">Referencia 2:&nbsp;</span><span class="col-md-8 left">el número de tu Contrato de Crédito</span></div>
+                        
+                        <div class="row"><span class="col-md-4 left">&nbsp;</span><span class="col-md-8 left">Escriba el número de convenio para Recaudo: 7267</span></div> -->
+                        </div><br>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-3">
+                        <a href="https://oficinavirtual.bancamia.com.co/ASPortalFrontWeb/#no-back-button" target="_blank">
+                          <img style="width: 100%;"  src="/assets/img/bancamia_2.png">
+                        </a>
+                      </div>
+                      <div class="col-md-3">
+                        <a href="https://www.bancoagrario.gov.co/BancaVirtual/Paginas/Ingresar.aspx" target="_blank">
+                          <img style="width: 100%;"  src="/assets/img/bancoagrario.png">
+                        </a>
+                      </div>
+                      <div class="col-md-3">
+                        <a href="https://www.bancodebogota.com/wps/portal/banco-de-bogota/bogota/personas" target="_blank">
+                          <img style="width: 100%;"  src="/assets/img/bancobogota.png">
+                        </a>
+                      </div>
+                      <div class="col-md-3">
+                        <a href="https://www.bancocajasocial.com/portalserver/bcs-public/login" target="_blank">
+                          <img style="width: 100%;"  src="/assets/img/bancocajasocial.png">
+                        </a>
+                      </div>
+                      <div class="col-md-3">
+                        <a href="https://www.bancofalabella.com.co/" target="_blank">
+                          <img style="width: 100%;padding-top: 20px;"  src="/assets/img/c76c2988-7598-4b5b-aa30-026d6b1b8672.jpg">
+                        </a>
+                      </div>
+
+                      <div class="col-md-3">
+                        <a href="https://transacciones.bancofinandina.com/BP/login" target="_blank">
+                          <img style="width: 100%;padding-top: 20px;"  src="/assets/img/a8874c0c-9715-4e2a-a9cd-3587e7b1eb26.jpg">
+                        </a>
+                      </div>
+                      <div class="col-md-3">
+                        <a href="https://www.gnbsudameris.com.co/" target="_blank">
+                          <img style="width: 100%;"  src="/assets/img/bancognb.png">
+                        </a>
+                      </div>
+                      <div class="col-md-3">
+                        <a href="https://sucursalpersonas.transaccionesbancolombia.com/mua/USER?scis=FfZPHUnpKKG8eu6JAXkVFwkhke5UGEgkZuorB6iRxmM%3D#no-back-button" target="_blank">
+                          <img style="width: 100%;"  src="/assets/img/c3ea83ce-f097-494a-9b59-a9470c7cab47.jpg">
+                        </a>
+                      </div>
+                      <div class="col-md-3">
+                        <a href="https://www.bancodeoccidente.com.co/portaltransaccional/#/login" target="_blank">
+                          <img style="width: 100%;"  src="/assets/img/2133f594-9af7-4328-a5ac-e87c8dcfa1e8.jpg">
+                        </a>
+                      </div>
+                      <div class="col-md-3">
+                        <a href="https://www.banco.colpatria.com.co/banca-virtual/login/" target="_blank">
+                          <img style="width: 100%;"  src="/assets/img/387265a7-95fe-4fcf-817d-fa333ee9db52.jpg">
+                        </a>
+                      </div>
+                      <div class="col-md-3">
+                        <a href="https://www.avvillas.com.co/wps/portal/avvillas/banco/consultas/!ut/p/z1/04_Sj9CPykssy0xPLMnMz0vMAfIjo8zijdxd3A0cTQx9DPycnAwCAwPCXI0CQ43cQ831w8EKfAIszTwsTQx8LAJ8LAwcQz28PMz8XYyDPUz1o4jRb4ADOBoQpx-Pgij8xofrR4GV4PMBITMKckNDIwwyHQH9O6Ob/dz/d5/L2dBISEvZ0FBIS9nQSEh/" target="_blank">
+                          <img style="width: 100%;"  src="/assets/img/6494e2b0-8b21-4a95-8ef0-77234fec413e.jpg">
+                        </a>
+                      </div>
+                      <div class="col-md-3">
+                        <a href="https://www.davivienda.com/wps/portal/personas/nuevo" target="_blank">
+                          <img style="width: 100%;"  src="/assets/img/f763b575-9c85-4f5b-bdcd-cf72a8655f67.jpg">
+                        </a>
+                      </div>
+
+                      <div class="col-md-3">
+                        <a href="https://oficinavirtual.bancoomeva.com.co/IB/presentation/bccp_mb/index.htm" target="_blank">
+                          <img style="width: 100%;"  src="/assets/img/15545f6c-975f-4597-836d-d51eb80308ad.jpg">
+                        </a>
+                      </div>
+                      <div class="col-md-3">
+                        <a href="https://mi.bancopopular.com.co/login" target="_blank">
+                          <img style="width: 100%;"  src="/assets/img/bancopopular.png">
+                        </a>
+                      </div>
+                      <div class="col-md-3">
+                        <a href="https://ebanking.bancoprocredit.com.co/User/LogOn?ReturnUrl=%2f" target="_blank">
+                          <img style="width: 100%;"  src="/assets/img/bancoprocredit.jpg">
+                        </a>
+                      </div>
+                      <div class="col-md-3">
+                        <a href="https://www.bbva.com.co/" target="_blank">
+                          <img style="width: 80%;"  src="/assets/img/bf1c08e6-1727-4aa5-9f43-54f132579de6.jpg">
+                        </a>
+                      </div>
+
+
+                      <div class="col-md-3">
+                        <a href="https://www.bancopichincha.com.co/frontend/login/" target="_blank">
+                          <img style="width: 100%;padding-top: 20px;"  src="/assets/img/4beb14e3-1c97-4e63-8ca5-08fbba76980f.jpg">
+                        </a>
+                      </div>
+
+                    
+
+
+
+                      <div class="col-md-3">
+                        <a href="https://www.coopcentral.com.co/apps_web/portal/natural/portal_natural.html" target="_blank">
+                          <img style="width: 100%;"  src="/assets/img/cooperativo.png">
+                        </a>
+                      </div>
+                      <div class="col-md-3">
+                        <a href="https://www.itau.co/index" target="_blank">
+                          <img style="width: 100%;"  src="/assets/img/b46b7a42-cf23-4fab-91b0-2be0e3a8e4ac.jpg">
+                        </a>
+                      </div>
+                      <div class="col-md-3">
+                        <a href="https://www.santander.com.co/" target="_blank">
+                          <img style="width: 100%;"  src="/assets/img/cc9bbbc8-7bee-4328-bef0-d1e2f9367a47.jpg">
+                        </a>
+                      </div>
+                   
+                    </div>
+                  </ng-template>
+                </ngb-panel>
+                <ngb-panel>
+                  <ng-template ngbPanelTitle>
+                   
+                    <p class="titulo-panel">  <i class="fa fa-arrow-circle-o-down" aria-hidden="true"></i> Pago en efectivo</p>
+                  </ng-template>
+                  <ng-template ngbPanelContent  >
+                   <b><p>Con el número de convenio 878787, el número de NIT de la empresa (901369753-0) y el valor a pagar, podrás pagar en cualquier punto baloto del país. Tomará 1 día hábil en verse reflejado el pago.</p></b>
+                     <div class="dark">
+                      <div class="row">
+                        <!-- <div class="col-md-12"><p><strong>:</strong></p></div> -->
+                        
+                          <div class="col-md-12" style="text-align: center;">
+                            <p><b>Tu número de referencia es: {{solicitud.numero_credito}} </b></p>
+                         
+                          </div>
+                          <div class="col-md-12" style="text-align: center;">
+                            <p *ngIf="!conceptoNovacion"><b>Valor a pagar: ${{montoPT | number:'1.0-0':'es' }}</b></p>
+                            <p *ngIf="conceptoNovacion"><b>Valor a pagar: ${{totalConceptoNovacion | number:'1.0-0':'es' }}</b></p>
+                          </div>
+  
+                          <div class="col-md-2">
+                            
+                          </div>
+                          <div class="col-md-10 left">
+                            <img style="width: 30%;" src="/assets/img/Baloto-logo-copia.png">
+                            <span>Código de convenio: <b>878787</b></span>
+                          </div>
+  
+                      </div>
+                      <!-- <div class="row"><span class="col-md-4 left"><b>Tu número de referencia es:&nbsp;</b></span><span class="col-md-8 left"> {{solicitud.numero_credito}} </span></div>
+                      
+                      <div class="row"><span class="col-md-4 left">Valor a pagar:&nbsp;</span><span class="col-md-8 left">${{pagoProximo.montoPagar | number:'1.0-0':'es' }}</span></div>
+                      
+                      <div class="row"><span class="col-md-4 left"> <img style="width: 100%;" src="/assets/img/Baloto-logo-copia.png"></span><span class="col-md-8 left" style="padding-top: 1em;"><b># 878787</b></span></div>
+                      
+                       <div class="row"><span class="col-md-12 center">Descargar recibo de consignacion&nbsp;</span></div><br>
+                      <div class="row">
+                        <span class="col-md-12 center"><img style="width: 20%;" src="/assets/img/bajar_pdf.png"></span>
+                      </div>
+                    <div class="row"><span class="col-md-4 left">Referencia 2:&nbsp;</span><span class="col-md-8 left">el número de tu Contrato de Crédito</span></div>
+                      
+                      <div class="row"><span class="col-md-4 left">&nbsp;</span><span class="col-md-8 left">Escriba el número de convenio para Recaudo: 7267</span></div> -->
+                      </div>
+                      <div class="row" style="margin-top: 2em;">
+                        <div class="col-md-12"><p><strong>Si prefieres acercarte a tu Banco o cajero, puedes pagar tus cuotas por vía bancaria.</strong></p></div>
+                      </div>
+                      <div class="dark">
+                        <div class="row"><span class="col-md-4 left">A nombre de:&nbsp;</span><span class="col-md-8 left"> Creditos Panda SAS . NIT: 901.369.753-0. </span></div>
+                        
+                        <div class="row"><span class="col-md-4 left">Banco:&nbsp;</span><span class="col-md-8 left">Banco de las Microfinanzas Bancamia.</span></div>
+                        
+                        <div class="row"><span class="col-md-4 left">Cuenta Ahorros:&nbsp;</span><span class="col-md-8 left"># 2110065594200011</span>
+                          <span class="col-md-12 left"><small style="    font-size: 13px;">Los pagos por estos medios pueden llegar a demorar en imputarse hasta 48 horas hábiles.</small></span>
+                        </div>
+                        
+                        <!-- <div class="row"><span class="col-md-4 left">Referencia 1:&nbsp;</span><span class="col-md-8 left">el número de tu Cédula de Ciudadanía</span></div>
+                        
+                        <div class="row"><span class="col-md-4 left">Referencia 2:&nbsp;</span><span class="col-md-8 left">el número de tu Contrato de Crédito</span></div>
+                        
+                        <div class="row"><span class="col-md-4 left">&nbsp;</span><span class="col-md-8 left">Escriba el número de convenio para Recaudo: 7267</span></div> -->
+                        </div><br>
+                        <!-- <div class="row"><span class="col-md-12 left" >Descargar recibo de consignacion&nbsp;</span></div><br> -->
+                        <div class="row">
+                    
+  
+                            <div class="col-md-6">
+                              <div class="col-md-12 " >
+                                <b>Descargar recibo de consignacion&nbsp;</b>
+                              </div>
+                              <div class="col-md-8 " style="text-align: center;" >
+                               <a (click)="exportPDF()"><img style="width: 40%;" src="/assets/img/bajar_pdf.png" ></a> 
+                              </div>
+                                
+                             
+                            </div>
+                     
+                  
+  
+                          
+                            <div class="col-md-6">
+                              <div class="col-md-12 " style="padding-left: 0;" >
+                                <b>Ten presente enviar tu recibo de consignación luego de realizar el pago por estos medios.</b>
+                              </div>
+                              <div class="col-md-12 " style="text-align: center;
+                              padding: 15px 15px;
+                              background: #f7f9fa;" >
+                              <a class="ft-mail" style="color:orange"></a>   recaudos@creditospanda.com
+                              </div>
+                                
+                             
+                            </div>
+                          
+                         
+                        </div>
+                  </ng-template>
+                </ngb-panel>
+                <!-- <ngb-panel>
+                  <ng-template ngbPanelTitle>
+                   
+                    <p class="titulo-panel">  <i class="fa fa-arrow-circle-o-down" aria-hidden="true"></i> Pago a través de PSE</p>
+                  </ng-template>
+                  <ng-template ngbPanelContent >
+                    <div class="dark">
+                     <div class="row">
+                       <div class="col-md-6">
+                        <p><strong>Puedes hacer tu pago a través de tu cuenta virtual PSE</strong></p>
+                        <p><a class="btn btn-block btn-primary" href="#" style="color:#fff;" target="_blank">Continuar</a></p>
+                       </div>
+                       <div class="col-md-6">
+                        <img width="100%" height="auto" alt="PSE" src="/admin/frontend/assets/img/pse_logo.png">
+                       </div>
+                     </div>
+                      </div>
+                  </ng-template>
+                </ngb-panel> -->
+             
+              </ngb-accordion>
+            
+            </div>
+          </div>
+        
+        </div>
+      </div>
+      <!-- {{ users$ | async | json }} -->
+    </div>
+  </div>
+</div>
+

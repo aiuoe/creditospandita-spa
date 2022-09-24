@@ -1,0 +1,218 @@
+<div class="container-fluid">
+  <div class="row align-items-end">
+    <div class="col-xs-12">
+      <div class="card formula mt3em">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>
+              {{ (configToEdit$ | async)?.id ? 'Edición' : 'Registro' }} de
+              Configuracion de Calculadora
+            </h2>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-content">
+            <form [formGroup]="formConfig">
+              <div class="form-row align-items-end">
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="email">Monto minimo</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="monto_minimo"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="email">Monto maximo</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="monto_maximo"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="email">(Dias/Meses) minimo</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="dias_minimo"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="email">(Dias/Meses) maximo</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="dias_maximo"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="col-6" *ngIf="(configToEdit$ | async)?.id && (configToEdit$ | async)?.tipo == 1">
+                  <div class="form-group">
+                    <label for="email">Monto para la restriccion de meses</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="monto_restriccion"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="col-6" *ngIf="(configToEdit$ | async)?.id && (configToEdit$ | async)?.tipo == 1">
+                  <div class="form-group">
+                    <label for="email">Meses restriccion</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="dias_restriccion"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="email">Porcentaje iva</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="porcentaje_iva"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="email">Porcentaje plataforma</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="porcentaje_plataforma"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="email"*ngIf="(configToEdit$ | async)?.id && (configToEdit$ | async)?.tipo == 2">Porcentaje express</label>
+                    <label for="email"*ngIf="(configToEdit$ | async)?.id && (configToEdit$ | async)?.tipo == 1">Porcentaje express de primera condicion</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="porcentaje_express"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="col-6" *ngIf="(configToEdit$ | async)?.id && (configToEdit$ | async)?.tipo == 1">
+                  <div class="form-group">
+                    <label for="email">Porcentaje express de segunda condicion</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="porcentaje_express_dos"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="col-6" *ngIf="(configToEdit$ | async)?.id && (configToEdit$ | async)?.tipo == 1">
+                  <div class="form-group">
+                    <label for="email">Porcentaje express de tercera condicion</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="porcentaje_express_tres"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="email">Tasa</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="tasa"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="email">Monto de restriccion para usuarios nuevos</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="monto_restriccion_tooltip"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="email">Tipo de calculadora</label>
+                    <select disabled formControlName="tipo" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" class="form-control" required="true">
+                      <option value="1">Meses</option>
+                      <option value="2">Dias</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div
+                  class="col-auto my-2"
+                  *ngIf="(configToEdit$ | async)?.id; else noEditMode"
+                >
+                  <button
+                    type="button"
+                    class="btn btn-raised btn-primary"
+                    [disabled]="formConfig.invalid"
+                    (click)="edit()"
+                  >
+                    Editar
+                  </button>
+                </div>
+                <ng-template #noEditMode>
+                  <div class="col-auto my-2">
+                    <button
+                      type="button"
+                      class="btn btn-raised btn-primary"
+                      [disabled]="formConfig.invalid"
+                      (click)="add()"
+                    >
+                      Guardar
+                    </button>
+                  </div>
+                </ng-template>
+
+                <div class="col-auto my-2">
+                  <button
+                    type="button"
+                    class="btn btn-raised btn-warning"
+                    [disabled]="!formConfig.dirty"
+                    (click)="formConfig.reset()"
+                  >
+                    Limpiar
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

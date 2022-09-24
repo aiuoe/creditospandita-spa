@@ -1,0 +1,1200 @@
+<div class="container-fluid padding-mv-0 pdd0" style="width: 100%;">
+    <div class="row margin-mv-0 pdd0">
+      <div class="col-12 padding-mv-0 pdd0">
+        <div class="card formula mt3em">
+          <div class="card-header">
+            <div class="card-title">
+              <h2>Formulario de solicitud de crédito</h2>
+            </div>
+          </div>
+          <div class="card-body padding-mv-0 pdd0">
+            <div class="row">
+                 
+              <div class="col-md-12 espacio">
+
+                <div class="col-md-6">
+                    <div class="form-group">
+
+                            <label>Seleccione el tipo de crédito</label>
+                            <select (change)="obtenerCalc($event.target.value)"  style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="ecivil" class="form-control fed_form_post ">
+                            <option value="" >Seleccione</option>
+                                        <option value="m" selected>Panda Meses</option>
+                                        <option value="d">Panda Dias</option>
+
+                            </select> 
+                                    
+                    </div>
+                </div>
+                
+              </div>
+           
+            </div>
+
+            <!--HASTA AQUI-->
+            <div class="row margin-0">
+            <!--PANDA DIAS-->
+            <div class="col-md-12 padding-mv-0 pdd0" *ngIf="cualMostrar==2">
+
+                        <form [formGroup]="homeFormDias" class="form_calc salario" name="calc">
+                            <div class="row">
+                            <div class="col-md-4 ">
+<strong><h5 style="font-weight: 600;">¿Cuanto dinero necesitas?</h5></strong>
+                        <div class="columna_form med solicita">
+
+                            <span class="col-md-12 pdd0" style="text-align: center;">
+                                <label id="textcal">Monto Solicitado:
+                                    <label id="valorpesos">$</label>
+                                </label> <span id="monto_solicitado_desc_salario"> {{ montoSolicitadoDias | number:'1.0-0':'es'}}</span>   <br/>
+                            
+                            </span>
+                        
+
+                            <input name="m_solicitado" formControlName="m_solicitado" style="padding-top: 10px;" triggers="manual" #td="ngbTooltip" placement="top" tooltipClass="tolColor" ngbTooltip="Los clientes nuevos solo pueden solicitar hasta ${{ (configCalDias ? configCalDias.monto_restriccion_tooltip : 500000) | number:'1.0-0':'es' }}" type="range" min="{{ configCalDias ? configCalDias.monto_minimo : 175000 }}" max="{{ configCalDias ? configCalDias.monto_maximo : 1000000 }}" step="10000" value="{{ configCalDias ? configCalDias.monto_minimo : 175000 }}" (change)="monto_solicitado_dias($event, td)" id="m_solicitado_salario">
+                            <br/>
+                            <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-lg-6" style="text-align: left;">
+                                <label id="montom2"> $ {{ (configCalDias ? configCalDias.monto_minimo : 175000) | number:'1.0-0':'es' }}</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-lg-6" style="text-align: right;">
+                                <label id="montoma2">$ {{ (configCalDias ? configCalDias.monto_maximo : 1000000) | number:'1.0-0':'es' }}</label>
+
+                            </div>
+                            </div>
+                            
+                        </div>
+
+
+                            </div>
+                            
+                            <div class="col-md-4 borderes">
+                                <strong><h5 style="font-weight: 600;">¿Cuando puedes pagarlo?</h5></strong>
+                                <div class="columna_form med solicita">
+                                                      
+                                    <span class="col-md-12" style="text-align: center;">
+                                        <label id="textcal">Plazo de Pago: </label> <span id="val_meses_salario"> {{ plazoDias }} </span>
+                                        <label id="textcal2"> días</label> 
+                                        <br/>
+                                    
+                                    </span>
+                              
+
+                                    <input name="c_mensual" formControlName="c_mensual" [(ngModel)]="cant_dias" style="padding-top: 10px;" type="range" min="{{ configCalDias ? configCalDias.dias_minimo : 15 }}" max="{{ configCalDias ? configCalDias.dias_maximo : 35 }}" step="1" value="{{ configCalDias ? configCalDias.dias_minimo : 15 }}" (change)="obtenerMonto2()" id="c_mensual_salario">
+                                    <br/>
+                                    <div class="row">
+                                    <span class="col-sm-6 col-md-6 col-lg-6 padding-10" style="text-align: left;">
+                                        <label id="montom22">{{ configCalDias ? configCalDias.dias_minimo : 15 }} días </label>
+                                    </span>
+                                    <span class="col-sm-6 col-md-6 col-lg-6 padding-10" style="text-align: right;">
+
+                                        <label id="montoma22">{{ configCalDias ? configCalDias.dias_maximo : 35 }} días </label>
+                                    </span>
+                                  </div>
+                                </div>
+                                
+                                
+                                                            </div>
+                            <div class="col-md-4 padding-rl-5">
+                                <strong><h5 style="font-weight: 600;">Simulación de tu prestamo</h5></strong>
+
+                                <table class="table table-borderless">
+                                
+                                    <tbody>
+                                      <tr>
+                                   
+                                        <th>Monto Solicitado</th>
+                                      
+                                        <td>$ {{ montoSolicitadoDias | number:'1.0-0':'es'}}</td>
+                                      </tr>
+                                      <tr>
+                                   
+                                        <th>Tasa de interes</th>
+                                      
+                                        <td>$ {{ t_interesDias | number:'1.0-0':'es'}}</td>
+                                      </tr>
+                                      <tr>
+                                   
+                                        <th>Subtotal</th>
+                                      
+                                        <td>$ {{ subtotalDias | number:'1.0-0':'es'}}</td>
+                                      </tr>
+                                      <tr>
+                                        <th>Plataforma (opcional)</th>
+                                      
+                                        <td>$ {{ plataformaDias | number:'1.0-0':'es'}}</td>
+                                      </tr>
+                                      <tr>
+                                        <th>Aprobación rapida (opcional)</th>
+                                      
+                                        <td>$ {{ ap_expressDias | number:'1.0-0':'es'}}</td>
+                                      </tr>
+                                      <tr>
+                                        <th>IVA</th>
+                                      
+                                        <td>$ {{ ivaDias | number:'1.0-0':'es'}}</td>
+                                      </tr>
+                                      <tr class="bordersito">
+                                        <th>Total a pagar</th>
+                                      
+                                        <td>$ {{ totalDias | number:'1.0-0':'es'}}</td>
+                                      </tr>
+                                    
+                                    </tbody>
+                                  </table>
+                                  <div class="col-md-12">
+                                    <div class="form-group">
+
+                                        <label class="lb-codigo">Codigo de descuento</label>
+                                        <input type='text' class='form-control codigo' name='codigo' placeholder='Introduzca codigo de descuento' (blur)="canjear($event.target.value)"   /> 
+
+                                    </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                    <div class="form-group margin-b-0">
+
+                                        <label class="fw-600">
+                                            <input type='checkbox'  name='select_all' formControlName="select_all"  class='' (click)="seleccionarTodoDias($event)" /> Seleccionar todos los campos abajo
+                                        </label>
+                                    </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                    <div class="form-group margin-b-0">
+
+                                        <label class="fw-600">
+                                            <input type='checkbox' [ngClass]="{ 'is-invalid': submittedD && fd.datos.errors }" formControlName="datos"  name='datos' class=''  /> Estoy de acuerdo con el uso y procesamiento de mis datos personales <a class="dec_privacidad" (click)="open(myModal)">Declaración de privacidad</a>
+                                        </label>
+                                        <div *ngIf="submittedD && fd.datos.errors" class="error">
+                                            <div *ngIf="fd.datos.errors.required"><small>Acepta declaración de privacidad</small></div>
+                                        </div> 
+                                    </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                    <div class="form-group margin-b-0">
+
+                                        <label class="fw-600">
+                                            <input type='checkbox' [ngClass]="{ 'is-invalid': submittedD && fd.datos2.errors }" formControlName="datos2" name='dato2' class=''  /> He leido y acepto voluntariamente los <a class="term_generales" (click)="open(terminos)">Términos Generales y Condiciones</a>
+                                        </label>
+                                        <div *ngIf="submittedD && fd.datos2.errors" class="error">
+                                            <div *ngIf="fd.datos2.errors.required"><small>Acepta terminos y condiciones</small></div>
+                                        </div> 
+                                    </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                    <div class="form-group margin-b-0">
+
+                                        <label class="fw-600">
+                                            <input type='checkbox' [ngClass]="{ 'is-invalid': submittedD && fd.datos3.errors }" formControlName="datos3" name='datos3'  class='' /> He leído, acepto y firmo el <a class="pagare" (click)="open(pagare)">Pagaré</a>
+                                        </label>
+                                        <div *ngIf="submittedD && fd.datos3.errors" class="error">
+                                            <div *ngIf="fd.datos3.errors.required"><small>Acepta firmar el pagaré</small></div>
+                                        </div> 
+                                    </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                    <div class="form-group margin-b-0">
+                                        <label class="fw-600">
+                                            <input type='checkbox' formControlName="datos4" name='datos4'  class=''  /> Acepto voluntariamente el cobro de la <a class="tarifa_apx" href="#" data-toggle="modal" data-target="#aprobacion" (click)="open(aprobacion)">Tarifa de Aprobación Rapida</a>
+                                        </label>
+                                  
+                                    </div>
+                                    </div>
+                                  
+                                    <div class="col-md-12">
+                                    <div class="form-group margin-b-0">
+
+                                        <label class="fw-600">
+                                            <input type='checkbox' formControlName="datos5" name='datos5'  class='' /> Acepto voluntariamente el cobro de la <a class="tar_plataforma" (click)="open(_plataforma)">Tarifa de Plataforma</a>
+                                        </label>
+                           
+                                    </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                    <div class="form-group margin-b-0">
+
+                                        <label class="fw-600">
+                                            <input type='checkbox' [ngClass]="{ 'is-invalid': submittedD && fd.datos6.errors }" formControlName="datos6" name='datos6'  class='' /> Doy mi consentimiento libre, que Creditos Panda <a class="empleador" (click)="open(empleador)">contacte a mi empleador</a>
+                                        </label>
+                                        <div *ngIf="submittedD && fd.datos6.errors" class="error">
+                                            <div *ngIf="fd.datos6.errors.required"><small>Acepta contacto de empleador</small></div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+    
+                                            <label>
+                                                <input type='checkbox'  [ngClass]="{ 'is-invalid': submitted && fd.datos7.errors }" formControlName="datos7" name='datos7'  class='' required="required" /> Acepto que consulten mis datos e información en los operadores de información  <a class="empleador" (click)="open(pila)">PILA</a>
+                                            </label>
+                                            <div *ngIf="submitted && fd.datos7.errors" class="error">
+                                                <div *ngIf="fd.datos7.errors.required"><small>Acepta consultar tus datos</small></div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                        
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+    
+                                                <label>
+                                                    <input type='checkbox'  formControlName="datos8" name='datos8'  class=''  /> Me gustaria recibir comunicaciones promocionales
+                                                </label>
+                                                
+                                            </div>
+                                            </div>
+                                    <div *ngIf="msjSubmitD" class="col-md-12 text-center">
+                                        <img src="/assets/img/load.gif" width="150" height="100">
+                                        <p>Enviando solicitud espere...</p>
+                                    </div>
+                                  <div class="col-md-12 tac" >
+                                    <input type="submit"  [disabled]="desahabilitado || msjSubmitD" name="calc" value="¡Solicitar!" (click)="GuardarSolicitudDias()" class="tamanores" style="border-width: 0;cursor:pointer">
+                                  </div>
+                            </div>
+                        </div>
+                        </form>
+
+            </div>
+
+
+
+                       <!--PANDA MESESSS-->
+                       <div class="col-md-12 padding-mv-0 pdd0" *ngIf="cualMostrar==1">
+
+                        <!-- <div class="content-calculadora">
+                            <div class="calc_plus" id="calc_plus"> -->
+                                    <form [formGroup]="homeForm" class="form_calc" name="calc">
+                                        <div class="row">
+                                   <div class="col-md-4 ">
+        <strong><h5 style="font-weight: 600;">¿Cuanto dinero necesitas?</h5></strong>
+                                        <div class="columna_form med solicita">
+                                            <span class="col-md-12 pdd0" style="text-align: center;">
+                                                <label id="textcal">Monto Solicitado:
+                                                    <label id="valorpesos">$</label>
+                                                </label> <span id="monto_solicitado_desc">{{ montoSolicitado | number:'1.0-0':'es'}}</span>   <br/>
+                                            
+                                            </span>
+                                        
+        
+                                            <input name="m_solicitado" formControlName="m_solicitado" style="padding-top: 10px;" type="range" min="{{ configCalMeses ? configCalMeses.monto_minimo : 250000 }}" max="{{ configCalMeses ? configCalMeses.monto_maximo : 3000000 }}" step="50000" value="{{ configCalMeses ? configCalMeses.monto_minimo : 250000 }}" (change)="monto_solicitado($event, tm)" triggers="manual" #tm="ngbTooltip" placement="top" tooltipClass="tolColor" ngbTooltip="Los clientes nuevos solo pueden solicitar hasta ${{ (configCalMeses ? configCalMeses.monto_restriccion_tooltip : 1000000) | number:'1.0-0':'es' }}" id="m_solicitado">
+                                            <br/>
+                                            <div class="row">
+                                            <div class="col-sm-6 col-md-6 col-lg-6 padding-10" style="text-align: left;">
+                                                <label id="montom">$ {{ (configCalMeses ? configCalMeses.monto_minimo : 250000) | number:'1.0-0':'es' }}</label>
+                                            </div>
+                                            <div class="col-sm-6 col-md-6 col-lg-6 padding-10" style="text-align: right;">
+                                                <label id="montoma"> $ {{ (configCalMeses ? configCalMeses.monto_maximo : 3000000) | number:'1.0-0':'es' }}</label>
+                                            </div>
+                                        </div>
+                                        </div>
+        
+        
+                                    </div>
+                                    
+                                    <div class="col-md-4 borderes">
+                                        <strong><h5 style="font-weight: 600;">¿Cuando puedes pagarlo?</h5></strong>
+                                                                        <div class="columna_form med solicita">
+                                                                            <span class="col-md-12" style="text-align: center;">
+                                                                                <label id="textcal">Plazo de pago: </label> <span id="val_meses"> {{plazoMeses}} </span>
+                                                                                <label id="textcal2"> meses</label>
+                                                                                <br/>
+                                                                                </span>
+                                                                                
+                                                                                <input formControlName="c_mensual" name="c_mensual" style="padding-top: 10px;" type="range" min="{{ configCalMeses ? configCalMeses.dias_minimo : 2 }}" max="{{ configCalMeses ? configCalMeses.dias_maximo : 12 }}" step="1" (change)="plazo_mensual($event)" id="c_mensual">
+                                                                                <br/>
+                                                                                <div class="row">
+                                                                                <span class="col-sm-6 col-md-6 col-lg-6 padding-10" style="text-align: left;">
+                                                                                    <label id="montom2"> {{ configCalMeses ? configCalMeses.dias_minimo : 2 }} meses</label>
+                                                                                </span>
+                                                                                <span class="col-sm-6 col-md-6 col-lg-6 padding-10" style="text-align: right;">
+                                                                                    <label id="montoma2">{{ configCalMeses ? configCalMeses.dias_maximo : 12 }} meses</label>
+                          
+                                                                                </span>
+                                                                              </div>
+                                                                        </div>
+                                        
+                                        
+                                                                    </div>
+                                    <div class="col-md-4 padding-rl-5">
+                                        <strong><h5 style="font-weight: 600;">Simulación de tu prestamo</h5></strong>
+        
+                                        <table class="table table-borderless">
+                                        
+                                            <tbody>
+                                              <tr>
+                                           
+                                                <th>Monto Solicitado</th>
+                                              
+                                                <td>$ {{ montoSolicitado | number:'1.0-0':'es'}}</td>
+                                              </tr>
+                                              <tr>
+                                           
+                                                <th>Tasa de interes</th>
+                                              
+                                                <td>$ {{ taxInTotal | number:'1.0-0':'es'}}</td>
+                                              </tr>
+                                              <tr>
+                                           
+                                                <th>Subtotal</th>
+                                              
+                                                <td>$ {{ subtotal | number:'1.0-0':'es'}}</td>
+                                              </tr>
+                                              <tr>
+                                                <th>Plataforma (opcional)</th>
+                                              
+                                                <td>$ {{ plataforma | number:'1.0-0':'es' }}</td>
+                                              </tr>
+                                              <tr>
+                                                <th>Aprobación rapida (opcional)</th>
+                                              
+                                                <td>$ {{ ap_express | number:'1.0-0':'es'}}</td>
+                                              </tr>
+                                              <tr>
+                                                <th>IVA</th>
+                                              
+                                                <td>$ {{ iva | number:'1.0-0':'es'}}</td>
+                                              </tr>
+                                              <tr>
+                                                <th>Cuota Mensual</th>
+                                              
+                                                <td>$ {{ cuotaMensual | number:'1.0-0':'es'}}</td>
+                                              </tr>
+                                              
+                                              <tr class="bordersito">
+                                                <th>Total a pagar</th>
+                                              
+                                                <td>$ {{ total | number:'1.0-0':'es'}}</td>
+                                              </tr>
+                                            
+                                            </tbody>
+                                          </table>
+                                          <div class="col-md-12">
+                                            <div class="form-group">
+
+                                                <label class="lb-codigo">Codigo de descuento</label>
+                                                <input type='text' name='codigo' value='' class='form-control codigo' placeholder='' (blur)="canjear($event.target.value)" /> 
+
+                                            </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                            <div class="form-group margin-b-0">
+
+                                                <label class="fw-600">
+                                                    <input type='checkbox'  name='select_all' formControlName="select_all"  class='' (click)="seleccionarTodoMeses($event)" /> Seleccionar todos los campos abajo
+                                                </label>
+                                            </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                            <div class="form-group margin-b-0">
+
+                                                <label class="fw-600">
+                                                    <input type='checkbox' [ngClass]="{ 'is-invalid': submittedM && fm.datos.errors }" formControlName="datos"  name='datos' class=''  /> Estoy de acuerdo con el uso y procesamiento de mis datos personales <a class="dec_privacidad" (click)="open(myModal)" >Declaración de privacidad</a>
+                                                </label>
+                                                <div *ngIf="submittedM && fm.datos.errors" class="error">
+                                                    <div *ngIf="fm.datos.errors.required"><small>Acepta declaración de privacidad</small></div>
+                                                </div> 
+                                            </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                            <div class="form-group margin-b-0">
+
+                                                <label class="fw-600">
+                                                    <input type='checkbox' [ngClass]="{ 'is-invalid': submittedM && fm.datos2.errors }" formControlName="datos2" name='dato2' class='' /> He leido y acepto voluntariamente los <a class="term_generales" (click)="open(terminos)" >Términos Generales y Condiciones</a>
+                                                </label>
+                                                <div *ngIf="submittedM && fm.datos2.errors" class="error">
+                                                    <div *ngIf="fm.datos2.errors.required"><small>Acepta terminos y condiciones</small></div>
+                                                </div> 
+                                            </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                            <div class="form-group margin-b-0">
+
+                                                <label class="fw-600">
+                                                    <input type='checkbox' [ngClass]="{ 'is-invalid': submittedM && fm.datos3.errors }" formControlName="datos3" name='datos3'  class='' /> He leído, acepto y firmo el <a class="pagare" (click)="open(pagare)">Pagaré</a>
+                                                </label>
+                                                <div *ngIf="submittedM && fm.datos3.errors" class="error">
+                                                    <div *ngIf="fm.datos3.errors.required"><small>Acepta firmar el pagaré</small></div>
+                                                </div> 
+                                            </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                            <div class="form-group margin-b-0">
+                                                <label class="fw-600">
+                                                    <input type='checkbox' formControlName="datos4" name='datos4'  class=''  /> Acepto voluntariamente el cobro de la <a class="tarifa_apx" (click)="open(aprobacion)">Tarifa de Aprobación Rapida</a>
+                                                </label>
+                                                <!-- <div *ngIf="submitted && f.datos4.errors" class="error">
+                                                    <div *ngIf="f.datos4.errors.required"><small>Acepta tarifa de aprobación express</small></div>
+                                                </div> -->
+                                            </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                            <div class="form-group margin-b-0">
+
+                                                <label class="fw-600">
+                                                    <input type='checkbox' formControlName="datos5" name='datos5'  class='' /> Acepto voluntariamente el cobro de la <a class="tar_plataforma" (click)="open(_plataforma)">Tarifa de Plataforma</a>
+                                                </label>
+                                                <!-- <div *ngIf="submitted && f.datos5.errors" class="error">
+                                                    <div *ngIf="f.datos5.errors.required"><small>Acepta tarifa de plataforma</small></div>
+                                                </div> -->
+                                            </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                            <div class="form-group margin-b-0">
+
+                                                <label class="fw-600">
+                                                    <input type='checkbox' [ngClass]="{ 'is-invalid': submittedM && fm.datos6.errors }" formControlName="datos6" name='datos6'  class=''  /> Doy mi consentimiento libre, que Creditos Panda <a class="empleador" (click)="open(empleador)">contacte a mi empleador</a>
+                                                </label>
+                                                <div *ngIf="submittedM && fm.datos6.errors" class="error">
+                                                    <div *ngIf="fm.datos6.errors.required"><small>Acepta contacto de empleador</small></div>
+                                                </div>
+                                            </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+            
+                                                    <label>
+                                                        <input type='checkbox'  [ngClass]="{ 'is-invalid': submitted && fm.datos7.errors }" formControlName="datos7" name='datos7'  class='' required="required" /> Acepto que consulten mis datos e información en los operadores de información  <a class="empleador"  data-toggle="modal" data-target="#pila" (click)="open(pila)">PILA</a>
+                                                    </label>
+                                                    <div *ngIf="submitted && fm.datos7.errors" class="error">
+                                                        <div *ngIf="fm.datos7.errors.required"><small>Acepta consultar tus datos</small></div>
+                                                    </div>
+                                                </div>
+                                                </div>
+                                                
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+            
+                                                        <label>
+                                                            <input type='checkbox'  formControlName="datos8" name='datos8'  class=''  /> Me gustaria recibir comunicaciones promocionales
+                                                        </label>
+                                                        
+                                                    </div>
+                                                    </div>
+                                            
+                                            <div class="col-md-12">
+                                            <div class="form-group">
+
+                                                
+                                                <input type='hidden' name='fed_registration_form' value='frf' class='form-control ' placeholder='' required="required" /> 
+                                            </div>
+                                            </div>
+                                            <div *ngIf="msjSubmitM" class="col-md-12 text-center">
+                                                <img src="/assets/img/load.gif" width="150" height="100">
+                                                <p>Enviando solicitud espere...</p>
+                                            </div>
+                                          <div class="col-md-12 tac" >
+                                            <input type="submit" [disabled]="desahabilitado || msjSubmitM" name="calc" value="¡Solicitar!"  (click)="GuardarSolicitudMeses()" class="tamanores" style="border-width: 0;cursor:pointer">
+                                          </div>
+                                    </div>
+                                </div>
+                                </form>
+                            <!-- </div>
+                        </div> -->
+        
+        
+        
+                        
+                    </div>
+                </div>
+            
+          </div>
+        </div>
+        <!-- {{ users$ | async | json }} -->
+      </div>
+    </div>
+  </div>
+  
+  
+  <ng-template #myModal let-modal>
+       <!-- Modal Prueba -->
+     
+      
+          <!-- Modal content-->
+        
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"  (click)="modal.dismiss('Cross click')">&times;</button>
+              <!-- <h4 class="modal-title">Modal Header</h4> -->
+            </div>
+            <div class="modal-body" style="max-height: 300px;overflow-y: scroll;">
+                <p><strong><em>POL&Iacute;TICA DE TRATAMIENTO DE DATOS PERSONALES CREDITOS PANDA SAS</em></strong></p>
+
+                <ol>
+                <li><strong><em>Consideraciones</em></strong></li>
+                </ol>
+                <p>Dando cumplimiento a lo dispuesto en la Ley estatutaria 1581 de 2012 y a su Decreto Reglamentario 1377 de 2013, <strong><em>CREDITOS PANDA SAS.</em></strong>adopta la presente pol&iacute;tica para el tratamiento de datos personales, la cual ser&aacute; informada a todos los titulares de los datos recolectados a trav&eacute;s de cualquier canal o medio de contacto en el que se desarrollen las actividades, comerciales o laborales que desempe&ntilde;e la compa&ntilde;&iacute;a.</p>
+                <p><strong><em>CREDITOS PANDA SAS</em></strong><strong>&nbsp;</strong>como entidad responsable del tratamiento de datos personales, gener&oacute; la siguiente pol&iacute;tica de tratamiento de datos personales que garantiza el cumplimiento de la normativa vigente y que se llegare a expedir en materia de protecci&oacute;n de datos personales.</p>
+                <ol start="2">
+                <li><strong><em> &nbsp;Tratamiento y Finalidades&nbsp;</em></strong></li>
+                </ol>
+                <p>Los Datos Personales tratados por <strong><em>CREDITOS PANDA SAS</em></strong>se destinar&aacute;n estrictamente y &uacute;nicamente a las finalidades que se se&ntilde;alan a continuaci&oacute;n. As&iacute; mismo los encargados o terceros que tengan acceso a los Datos Personales por virtud de Ley o contrato, mantendr&aacute;n el Tratamiento dentro de las siguientes finalidades:</p>
+                <ol>
+                <li>a)&nbsp;Gestionar toda la informaci&oacute;n necesaria para el cumplimiento de las obligaciones tributarias y de registros comerciales, corporativos y contables de <strong><em>CREDITOS PANDA SAS</em></strong><em>y en particular para el estudio y otorgamiento de cr&eacute;ditos, gestiones de cobranza, actualizaci&oacute;n de datos, consulta y reporte a centrales de riesgo o de informaci&oacute;n financiera, contacto con referencias comerciales y personales, as&iacute; como informaci&oacute;n relevante en redes sociales que nos permitan conocer mejor el solicitante del cr&eacute;dito. </em></li>
+                <li>b)&nbsp;Cumplir con los procesos internos de <strong><em>CREDITOS PANDA SAS</em></strong>en materia de administraci&oacute;n de proveedores, contratistas, clientes y empleados.</li>
+                <li>c)&nbsp;Para identificar a los usuarios cuando ingresen al Sitio Web.</li>
+                <li>d) Para proceder a la facturaci&oacute;n y cobro del servicio respectivo.</li>
+                <li>e) Para compartir los Datos Personales con empresas de servicios o empresas de &ldquo;outsourcing&rdquo; que contribuyan a mejorar o a facilitar las operaciones a trav&eacute;s de <strong><em>CREDITOS PANDA SAS</em></strong>, dentro de las que se incluyen, medios de pago, seguros o intermediarios de la gesti&oacute;n de pagos. <strong><em>CREDITOS PANDA SAS</em></strong> velar&aacute; porque las pol&iacute;ticas de los terceros tengan est&aacute;ndares similares a los de la presente Pol&iacute;tica, mediante la firma de acuerdos, convenios y/o contrato.</li>
+                <li>f) Solicitar ante los operadores de informaci&oacute;n autorizados por la Ley, la consulta de informaci&oacute;n crediticia, score, y dem&aacute;s par&aacute;metros que prevean el comportamiento financiero del titular de la informaci&oacute;n, as&iacute; como para realizar el reporte sobre la creaci&oacute;n, modificaci&oacute;n, extinci&oacute;n, cumplimiento o incumplimiento de las obligaciones contra&iacute;das a favor de <strong>CREDITOS PANDA SAS</strong>y consultar listas preventivas del lavado de activos y financiaci&oacute;n del terrorismo</li>
+                <li>g) Compartir e intercambiar con sus entidades filiales, matrices, aliadas y/o con entidades financieras, u otras personas naturales o jur&iacute;dicas que tengan inter&eacute;s en conocer el estado de la cartera de CR&Eacute;DITOS PANDA SAS, la informaci&oacute;n personal y financiera y dem&aacute;s informaci&oacute;n relacionada con los cr&eacute;ditos contratados u otorgados con o a trav&eacute;s de <strong><em>CREDITOS PANDA SAS </em></strong><em>para realizar servicios tales como cesiones de cartera a cualquier t&iacute;tulo, incluyendo pero sin limitarse a la compra de la misma, cobro de obligaciones de forma prejudicial o judicial y cualquier otra actividad autorizada legalmente. </em></li>
+                <li>h) Realizar actividades de gesti&oacute;n de cobro (por cualquier medio permitido en Colombia, como son gestiones de cobro presencial o electr&oacute;nica en cualquiera de los datos de contacto y ubicaci&oacute;n que sean conocidos por CREDITOS PANDA SAS), aviso de reporte a las centrales de riesgo y entrega de extractos de obligaciones y actualizar informaci&oacute;n a trav&eacute;s de consulta en base de datos p&uacute;blicas, p&aacute;ginas de internet, redes sociales y referencias de terceras personas</li>
+                <li>i) Utilizar los comentarios, art&iacute;culos, fotos, videos y otros contenidos que se publican por los clientes o usuarios en nuestra p&aacute;gina web o que se presentan por cualquier otro medio de comunicaci&oacute;n de <strong>CREDITOS PANDA SAS </strong>para la realizaci&oacute;n de actividades comerciales o de mercadeo de <strong>CREDITOS PANDA SAS </strong>y utilizarlos como parte de nuestras campa&ntilde;as de mercadeo y comerciales dirigidas al p&uacute;blico en general a trav&eacute;s de distintos medios de comunicaci&oacute;n.</li>
+                <li>j) Adelantar contactos con fines comerciales y/o promocionales ya sea sobre los productos y servicios ofrecidos por <strong><em>CR&Eacute;DITOS</em><em>PANDA SAS</em></strong>, o los de terceros con los que <strong><em>CREDITOS PANDA SAS</em></strong>. tenga relaciones comerciales o alianzas, a trav&eacute;s de correo, tel&eacute;fono, celular, correo electr&oacute;nico o cualquier otro medio conocido o por conocer.</li>
+                <li>k)&nbsp;Las dem&aacute;s finalidades que determineCR&Eacute;DITOS PANDA SASy que sean autorizadas por los Titulares en el momento de la recolecci&oacute;n de los datos personales.</li>
+                <li>l)&nbsp;El proceso de archivo, de actualizaci&oacute;n de los sistemas, de protecci&oacute;n y custodia de informaci&oacute;n y bases de datos de <strong><em>CREDITOS PANDA SAS</em></strong></li>
+                <li>m)&nbsp;Procesos al interior de la compa&ntilde;&iacute;a, con fines de desarrollo u operativo y/o de administraci&oacute;n de sistemas. &nbsp;</li>
+                <li>n)&nbsp;La transmisi&oacute;n de datos a terceros tales como proveedores de servicio de call centers, servicio de mensajer&iacute;a, empresas de cobranza, fondeadores, cesionarios y otros terceros, localizados dentro o fuera de Colombia,con los cuales se hayan celebrado contratos con este objeto, para fines comerciales, administrativos, de mercadeo y/o operativos. En todo caso esas entidades estar&aacute;n igualmente sujetas a las obligaciones de confidencialidad en el manejo de la informaci&oacute;n con las limitaciones legales impuestas por las leyes aplicables sobre la materia, en la jurisdicci&oacute;n donde esta se recolecte, archive, procese o transmita.</li>
+                <li>o)&nbsp;Mantener, procesar y almacenar por computadora u otros medios, cualquier tipo de informaci&oacute;n relacionada con la actividad de los clientes de CREDITOS PANDA SAS con el fin de brindar los servicios y productos pertinentes.</li>
+                <li>p) Efectuar las gestiones pertinentes para el desarrollo de la etapa precontractual, contractual y pos contractual de cualquiera de los productos y servicios ofrecidos, as&iacute; como dar cumplimiento a la ley colombiana y las &oacute;rdenes de autoridades judiciales o administrativas.</li>
+                <li>q) Gestionar tr&aacute;mites (solicitudes, quejas, reclamos), realizar an&aacute;lisis de riesgo, efectuar encuestas de satisfacci&oacute;n respecto de los bienes y servicios de la empresa.</li>
+                <li>r) Suministrar informaci&oacute;n de contacto y documentos pertinentes a la fuerza comercial y/o red de distribuci&oacute;n, tele-mercadeo, investigaci&oacute;n de mercados y cualquier tercero con el cual la empresa posea un v&iacute;nculo contractual de cualquier &iacute;ndole.</li>
+                <li>s) Dar a conocer, transferir y/o trasmitir los datos personales dentro y fuera del pa&iacute;s, a terceros a consecuencia de un contrato, ley o v&iacute;nculo l&iacute;cito que as&iacute; lo requiera o para implementar servicios ofrecidos por <strong><em>CREDITOS PANDA SAS</em></strong></li>
+                </ol>
+                <p>t)Controlar y prevenir el fraude en cualquiera de sus modalidades.</p>
+                <ol>
+                <li>u) solicitar a los Operadores de Informaci&oacute;n del PILA, y a &eacute;stos a su vez para que le suministren a Cr&eacute;ditos Panda por el medio que consideren pertinente y seguro, mis datos personales relacionados con la afiliaci&oacute;n y pago de los aportes al Sistema de Seguridad Social Integral, tales como el ingreso base de cotizaci&oacute;n, informaci&oacute;n relacionada con mi situaci&oacute;n laboral, mi empleador, as&iacute; como mis datos personales de contenido patrimonial, de ubicaci&oacute;n y contacto, y dem&aacute;s datos que sobre m&iacute; reposen en la Planilla Integrada de Liquidaci&oacute;n de Aportes &ndash; PILA , excluyendo los datos personales de naturaleza sensible definidos en la Ley 1581 de 2012 y el Decreto 1377 de 2013</li>
+                </ol>
+                <p>La informaci&oacute;n personal no ser&aacute; utilizada o tratada con prop&oacute;sitos diferentes a los aqu&iacute; indicados.</p>
+                <ol start="3">
+                <li><strong><em> Responsable del Tratamiento de Datos y datos de contacto.</em></strong></li>
+                </ol>
+                <p><strong><em>&nbsp;</em></strong></p>
+                <p>El responsable del tratamiento de datos personales de los Titulares es <strong><em>CREDITOS PANDA SAS, </em></strong><em>identificada con Nit.901.369.753-0</em>con domicilio y direcci&oacute;n Carrera 49 B. No 93-38 Bogot&aacute;, Colombia; correo electr&oacute;nico:<a href="mailto:info@creditospanda.com">info@creditospanda.com</a>y cuyo tel&eacute;fono de contacto es 3212403734</p>
+                <ol start="4">
+                <li><strong><em> Datos sensibles y de menores de edad.</em></strong></li>
+                </ol>
+                <p>CREDITOS PANDA SAS no realizar&aacute; tratamiento de datos sensibles relacionados con el origen racial o &eacute;tnico, la orientaci&oacute;n pol&iacute;tica, las convicciones religiosas o filos&oacute;ficas, la pertenencia a sindicatos, organizaciones sociales, de derechos humanos o que promueva intereses de cualquier partido pol&iacute;tico o que garanticen los derechos y garant&iacute;as de partidos pol&iacute;ticos de oposici&oacute;n as&iacute; como los datos relativos a la salud, a la vida sexual, ni tampoco realizar&aacute; tratamiento de datos de menores de edad.</p>
+                <p>CR&Eacute;DITOS PANDA S.A.S., &uacute;nicamente solicitar&aacute; datos biom&eacute;tricos como son fotos para identificarte y adelantar el proceso de cr&eacute;dito, cumpliendo para ello toda la normatividad aplicable en el proceso de solicitud de autorizaci&oacute;n y tratamiento de estos datos.</p>
+                <p><strong><em>&nbsp;</em></strong></p>
+                <ol start="5">
+                <li><strong><em> Autorizaciones</em></strong></li>
+                </ol>
+                <p><strong><em>CREDITOS PANDA SAS</em></strong>solicitar&aacute; al titular de la informaci&oacute;n su autorizaci&oacute;n previa y expresa antes de recolectar y efectuar cualquier tratamiento sobre los datos del titular.</p>
+                <p>CREDITOS PANDA SAS, solicitar&aacute; al Titular de los datos personales, autorizaci&oacute;n para realizar el tratamiento, entre otros, de los siguientes datos personales: nombre y apellidos, correo electr&oacute;nico, n&uacute;mero de tel&eacute;fonos fijo y celular, informaci&oacute;n laboral o de actividad econ&oacute;mica, identificaci&oacute;n en redes sociales, direcci&oacute;n ip que permita conocer la ubicaci&oacute;n del titular de la informaci&oacute;n, y en general cualquier otro dato personal que permita desarrollar las finalidades establecidas en esta pol&iacute;tica.</p>
+                <p>El titular de la informaci&oacute;n cuando entregue datos de contacto de terceras personas, como posibles referencias personales o comerciales, declara y garantiza que cuenta con autorizaci&oacute;n de aquellas para compartir esta informaci&oacute;n.</p>
+                <p><strong><em>&nbsp;</em></strong></p>
+                <ol start="6">
+                <li><strong><em> Veracidad</em></strong></li>
+                </ol>
+                <p><strong><em>&nbsp;</em></strong></p>
+                <p>El titular de los datos personales, se obliga a suministrar informaci&oacute;n veraz, completa, actualizada y comprobable, as&iacute; mismo, este deber&aacute; garantizar que a partir de los datos suministrados no busca inducir al error en los procesos internos para lo cual <strong><em>CREDITOS PANDA SAS</em></strong> en procura de la veracidad realizar&aacute; las rectificaciones respectivas siendo estas &uacute;ltimas de pleno conocimiento del usuario. El titular de los datos se compromete a notificar de cualquier cambio en la informaci&oacute;n suministrada en el proceso de aplicaci&oacute;n o durante la duraci&oacute;n de la relaci&oacute;n comercial entre las partes.</p>
+                <p><strong><em>&nbsp;</em></strong></p>
+                <ol start="7">
+                <li><strong><em> Derechos de los Titulares de la informaci&oacute;n.</em></strong></li>
+                </ol>
+                <p><strong><em>&nbsp;</em></strong></p>
+                <p>Conforme a la legislaci&oacute;n vigente, los titulares de la informaci&oacute;n&nbsp;tienen el derecho de conocer, actualizar, rectificar su informaci&oacute;n, y/o revocar la autorizaci&oacute;n para su tratamiento. En especial, de conformidad con el art&iacute;culo 8 de la Ley 1581 de 2012, son derechos de los Titulares los siguientes:</p>
+                <ol>
+                <li>a)&nbsp;Conocer, actualizar y rectificar sus datos personales.</li>
+                <li>b)&nbsp;Solicitar prueba de la autorizaci&oacute;n otorgada.</li>
+                <li>c)&nbsp;Ser informado, previa solicitud, respecto del uso que les ha dado a sus datos personales.</li>
+                <li>d)&nbsp;Presentar ante la Superintendencia de Industria y Comercio quejas por infracciones a lo dispuesto en la ley.</li>
+                <li>e)&nbsp;Revocar la autorizaci&oacute;n y/o solicitar la supresi&oacute;n del dato.</li>
+                <li>f)&nbsp;Acceder en forma gratuita a sus datos personales que hayan sido objeto de Tratamiento.</li>
+                <li><strong><em>Procedimientos para ejercer los derechos de los Titulares de los Datos Personales.</em></strong></li>
+                </ol>
+                <p>Procedimiento para ejercer sus derechos. En caso de que desee ejercer sus derechos, el Titular deber&aacute; enviar un correo electr&oacute;nico o f&iacute;sico a las direcciones de contacto establecidas en el numeral 3&deg; de la presente Pol&iacute;tica de Tratamiento. El procedimiento que se seguir&aacute; para dichas comunicaciones, ser&aacute;n los que se indican a continuaci&oacute;n:</p>
+                <p><strong>8.1. Peticiones y Consultas Sobre Datos Personales.</strong> Cuando el titular de los datos o sus causahabientes deseen consultar la informaci&oacute;n que reposa en la base de datos de<strong><em>CREDITOS PANDA SAS</em></strong>,la compa&ntilde;&iacute;a responder&aacute; la solicitud en un plazo &nbsp;m&aacute;ximo diez (10) d&iacute;as h&aacute;biles en cumplimiento a lo dispuesto en la Ley 1581 de 2012, cuando no fuere posible atender la consulta dentro de dicho t&eacute;rmino, se informar&aacute; al Titular, se le expresar&aacute; los motivos de la demora y se le se&ntilde;alar&aacute; la fecha en que se atender&aacute; su consulta, la cual no podr&aacute; superar los cinco (5) d&iacute;as h&aacute;biles siguientes al vencimiento del primer t&eacute;rmino.</p>
+                <p><strong>8.2. Revocaci&oacute;n de autorizaci&oacute;n, retiro o supresi&oacute;n de la Base de Datos y reclamos Sobre Datos Personales</strong>. Cuando el titular de los datos o sus causahabientes consideren que la informaci&oacute;n contenida en las bases de datos debe ser objeto de correcci&oacute;n, actualizaci&oacute;n o supresi&oacute;n, o cuando adviertan el presunto incumplimiento de cualquiera de los deberes contenidos en la Ley 1581 de 2012, podr&aacute;n presentar un reclamo ante <strong><em>CREDITOS PANDA SAS</em></strong>, el cual ser&aacute; tramitado bajo las siguientes reglas: 1. El reclamo se formular&aacute; mediante solicitud dirigida a <strong><em>CREDITOS PANDA SAS</em></strong>,&nbsp; con la identificaci&oacute;n de los Titulares de los datos personales, la descripci&oacute;n de los hechos que dan lugar al reclamo, la direcci&oacute;n en que recibir&aacute; notificaciones, y se anexar&aacute;n los documentos u otras pruebas que pretendan demostrar la reclamaci&oacute;n prestada. Si el reclamo resulta incompleto, <strong><em>CREDITOS PANDA SAS</em></strong>, podr&aacute; requerir al interesado dentro de los cinco (5) d&iacute;as siguientes a la recepci&oacute;n del reclamo para que subsane las fallas. Transcurridos dos (2) meses desde la fecha del requerimiento, sin que el solicitante presente la informaci&oacute;n requerida, se entender&aacute; que ha desistido del reclamo. En caso de que <strong><em>CREDITOS PANDA SAS</em></strong>,no sea competente para resolver el reclamo, dar&aacute; traslado a quien corresponda en un t&eacute;rmino m&aacute;ximo de dos (2) d&iacute;as h&aacute;biles e informar&aacute; de la situaci&oacute;n al Titular. 2. Una vez recibido el reclamo completo, cuando este no pueda ser resuelto de manera expedita y siempre y cuando sea t&eacute;cnicamente posible, se incluir&aacute; en la base de datos una leyenda que diga "reclamo en tr&aacute;mite" y el motivo del mismo, en un t&eacute;rmino no mayor a dos (2) d&iacute;as h&aacute;biles. Dicha leyenda deber&aacute; mantenerse hasta que el reclamo sea decidido. 3. El t&eacute;rmino m&aacute;ximo para atender el reclamo ser&aacute; de quince (15) d&iacute;as h&aacute;biles contados a partir del d&iacute;a siguiente a la fecha de su recibo. Cuando no fuere posible atender el reclamo dentro de dicho t&eacute;rmino, se informar&aacute; al Titular los motivos de la demora y la fecha en que se atender&aacute; su reclamo, la cual en ning&uacute;n caso podr&aacute; superar los ocho (8) d&iacute;as h&aacute;biles siguientes al vencimiento del primer t&eacute;rmino. El retiro o supresi&oacute;n no proceder&aacute; cuando exista un deber contractual o legal de permanecer en la base de datos de <strong><em>CREDITOS PANDA SAS</em></strong>, como, por ejemplo, para el cumplimiento de deberes contables, tributarios, comerciales o jur&iacute;dicos.</p>
+                <ol start="9">
+                <li><strong> T&eacute;rminos y condiciones del sitio web </strong></li>
+                </ol>
+                <p>Los datos personales consignados en los sitios web de <strong>CR&Eacute;DITOS PANDASAS </strong>ser&aacute;n incluidos en ficheros de datos de car&aacute;cter personal y/o archivos y/o mensajes de datos digitalizados de propiedad de <strong>CR&Eacute;DITOS PANDA SAS</strong>, que manejar&aacute; los datos los cuales son necesarios para el uso de las funcionalidades de los mismos. Los usuarios aceptan que dichos datos recopilados a trav&eacute;s de los sitios propiedad de <strong>CR&Eacute;DITOS PANDA SAS</strong> pueden ser almacenados en bases de datos propiedad de <strong>CR&Eacute;DITOS PANDA SAS</strong>, de compa&ntilde;&iacute;as relacionadas, o de terceros expresamente autorizados por <strong>CR&Eacute;DITOS PANDA SAS</strong>.</p>
+                <p><strong>CR&Eacute;DITOS PANDA SAS </strong>declara que, aloja los datos personales en bases de datos bajo estrictos est&aacute;ndares de responsabilidad protegiendo la informaci&oacute;n; esta informaci&oacute;n la emplea para dar a conocer los productos y servicios que tiene a disposici&oacute;n <strong>CR&Eacute;DITOS PANDA SAS</strong> para sus clientes, as&iacute; como para dar cumplimiento al contrato de mutuo y todos los acuerdos all&iacute; contenidos.</p>
+                <ol start="10">
+                <li><strong><em> Cookies</em></strong></li>
+                </ol>
+                <p><strong><em>&nbsp;</em></strong></p>
+                <p><strong><em>CREDITOS PANDA SAS</em></strong> utiliza&rdquo; Cookies&rdquo; que son peque&ntilde;as unidades de informaci&oacute;n almacenada temporalmente en el disco duro del computador del usuario, &uacute;tiles para navegar en el sitio. La informaci&oacute;n contenida en las 'Cookies' sirve, v.g., para el control de sesiones, en particular navegaci&oacute;n mejorada y para obtener un alto desempe&ntilde;o como usuario amigable de un sitio web, y para almacenar informaci&oacute;n personal relativa a identificaci&oacute;n. La mayor&iacute;a de los 'browsers' de la red aceptan las 'cookies' autom&aacute;ticamente. El usuario puede evitar esto cambiando la configuraci&oacute;n de su 'browser'. Puede eliminar las 'cookies' almacenadas en el PC en cualquier momento suprimiendo los archivos de Internet temporales ("Herramientas/Extras" de la barra del 'Browser' -"Opciones de Internet").</p>
+                <p>M&aacute;s informaci&oacute;n sobre los cookies y sus caracter&iacute;sticas pueden ser consultadas en las siguientes p&aacute;ginas web: <a href="http://www.allaboutcookies.org">www.allaboutcookies.org</a> y www.youronlinechoices.eu</p>
+                <p>CREDITOS PANDA SAS utiliza las cookies recolectadas para recordar las preferencias del cliente en el uso de nuestros servicios, y para registrar informaci&oacute;n an&oacute;nima acerca de c&oacute;mo utiliza el mismo, qu&eacute; p&aacute;ginas has consultado o cuanto tiempo mantienes el mismo sitio web.</p>
+                <p><strong><em>11.Seguridad</em></strong></p>
+                <p>En desarrollo del principio de seguridad establecido en la Ley 1581 de 2012, <strong><em>CREDITOS PANDA SAS</em></strong> adoptar&aacute; las medidas t&eacute;cnicas, tecnol&oacute;gicas, humanas y administrativas que sean necesarias para otorgar seguridad a los registros evitando su adulteraci&oacute;n, p&eacute;rdida, consulta, uso o acceso no autorizado o fraudulento. <strong><em>CREDITOS PANDA SAS</em></strong> mantendr&aacute; protocolos de seguridad de obligatorio cumplimiento para el personal con acceso a los datos de car&aacute;cter personal y a los sistemas de informaci&oacute;n.</p>
+                <p>Nuestro sitio cuenta con certificado SSL, el cual nos permite encriptar los datos mientras viajan desde el computador de nuestros clientes o usuarios hasta nuestro servidor.</p>
+                <p><strong>CREDITOS PANDA SAS, </strong>posibilita el acceso a otros sitios en internet a trav&eacute;s de &ldquo;Links&rdquo; cuya inclusi&oacute;n en este sitio no compromete en ning&uacute;n sentido a <strong>CREDITOS PANDA SAS, </strong>ni significa el apoyo o patrocinio a tales productos, empresas, servicios o personas, e igualmente no se responsabiliza por el contenido y administraci&oacute;n de ninguno de ellos.</p>
+                <p>No obstante, de lo anterior, es una responsabilidad de nuestros clientes o usuarios implementar los controles de seguridad necesarios, en sus equipos y redes privadas para su navegaci&oacute;n hacia el/los portales de <strong>CREDITOS PANDA SAS </strong>o para el envi&oacute; de correos electr&oacute;nicos. De esta manera <strong>CREDITOS PANDA SAS </strong>no se responsabiliza por cualquier consecuencia derivada del ingreso fraudulento por parte de terceros a la base de datos y por alguna falla t&eacute;cnica en el funcionamiento que sobrepasen las actividades desarrolladas con la diligencia debida.</p>
+                <ol start="12">
+                <li><strong> Propiedad exclusiva</strong></li>
+                </ol>
+                <p>Todos los bienes intangibles susceptibles de ser protegidos tales como:&nbsp; marcas, nombres comerciales, lemas, ense&ntilde;as, signos distintivos, c&oacute;digo fuente, y dem&aacute;s, usados en este sitio son de propiedad exclusiva de <strong>CREDITOS PANDA SAS</strong>. En consecuencia, sin la previa autorizaci&oacute;n otorgada en cada caso y por escrito por <strong>CREDITOS PANDA, </strong>no se podr&aacute; hacer uso comercial alguno de tales elementos.</p>
+                <ol start="13">
+                <li><strong> Modificaciones a las pol&iacute;ticas </strong></li>
+                </ol>
+                <p><strong>CR&Eacute;DITOS PANDA SAS</strong> se reserva el derecho de modificar la pol&iacute;tica de privacidad de la informaci&oacute;n de car&aacute;cter personal en cualquier momento y de manera unilateral. Para el efecto realizar&aacute; la publicaci&oacute;n de un aviso en la p&aacute;gina de internet con quince (15) d&iacute;as h&aacute;biles de antelaci&oacute;n a su entrada en vigencia. En caso de no estar de acuerdo por razones v&aacute;lidas y que se constituyan en una justa causa con las nuevas pol&iacute;ticas de manejo de la informaci&oacute;n personal, los titulares de la informaci&oacute;n o sus representantes podr&aacute;n solicitar a <strong>CR&Eacute;DITOS PANDA SAS</strong> el retiro de su informaci&oacute;n a trav&eacute;s del medio indicado anteriormente, sin embargo no se podr&aacute; solicitar el retiro de los datos mientras se mantenga un v&iacute;nculo contractual con <strong>CR&Eacute;DITOS PANDA SAS</strong> y/o seg&uacute;n lo estipulado arriba en la secci&oacute;n de "Derechos de los titulares y su ejercicio " .</p>
+                <p><strong><em>&nbsp;</em></strong></p>
+                <ol start="14">
+                <li><strong><em> Vigencia</em></strong></li>
+                </ol>
+                <p>Esta pol&iacute;tica de tratamiento de datos personales ha sido publicada el d&iacute;a 1 del mes Julio del a&ntilde;o 2020, fecha a partir de la cual empieza su vigencia.</p>
+                <p>Los Datos Personales que sean almacenados, utilizados o transmitidos permanecer&aacute;n en la base de datos de<strong><em> CREDITOS PANDA SAS</em></strong>, durante el tiempo que sea necesario para las finalidades mencionadas en esta Pol&iacute;tica, para las cuales fueron recolectados. De este modo, la vigencia de la base de datos est&aacute; estrechamente relacionada con las finalidades para las cuales fueron recolectados los datos personales.</p>
+                <ol start="15">
+                <li><strong> Ley y jurisdicci&oacute;n </strong></li>
+                </ol>
+                <p>Toda interpretaci&oacute;n, actuaci&oacute;n judicial o administrativa derivada del tratamiento de los datos personales que conforman las bases de datos de <strong>CREDITOS PANDA SA</strong>S y la presente declaraci&oacute;n de privacidad estar&aacute; sujeta a la ley 1581 de 2012 y las autoridades administrativas o jurisdiccionales competentes para la resoluci&oacute;n de cualquier inquietud, queja o demanda sobre las mismas designadaspor la Rep&uacute;blica de Colombia.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default"  (click)="modal.dismiss('Cross click')" getDismissReason style="background-color: #f36c21;color: white;border-color: #f36c21;">Cerrar</button>
+            </div>
+        
+      
+       
+    
+    </ng-template>
+    
+    
+      <!-- TERMINOS Y CONDICIONES -->
+      <ng-template #terminos let-modal>
+    
+            <div class="modal-header">
+              <button type="button" class="close"  (click)="modal.dismiss('Cross click')" data-dismiss="modal">&times;</button>
+              <!-- <h4 class="modal-title">Modal Header</h4> -->
+            </div>
+            <div class="modal-body" style="max-height: 300px;overflow-y: scroll;">
+                <p><strong>T&Eacute;RMINOS Y CONDICIONES PARA EL OTORGAMIENTO DE UNO O M&Aacute;S CR&Eacute;DITOS POR CREDITOS PANDA S.A.S</strong></p>
+            <ol>
+            <li><strong>&iquest;QU&Eacute; OFRECEMOS EN CREDITOS PANDA?.</strong></li>
+            </ol>
+            <p><strong>CREDITOS PANDA </strong>es una plataforma de soluciones financieras, por medio de la cual, nuestros clientes podr&aacute;n solicitar en cualquier momento prestamos en l&iacute;nea y digitales de libre destinaci&oacute;n, bajo monto y a corto plazo. Por medio de la plataforma los clientes podr&aacute;n solicitar cr&eacute;ditos por distintos montos, sin que exista obligaci&oacute;n de <strong>CR</strong><strong>EDITOS PANDA </strong>de aprobar el cr&eacute;dito solicitado, por lo que podr&aacute; rechazar el mismo o realizar una oferta al cliente con base en el an&aacute;lisis de cr&eacute;dito efectuado.</p>
+            <p>Los pr&eacute;stamos otorgados por <strong>CREDITOS PANDA</strong> bajo este contrato son aprobados y desembolsados por <strong>CREDITOS PANDA</strong> en pesos colombianos (COP) y son pagados por sus clientes en la misma moneda.</p>
+            <p>Tenemos dos opciones de cr&eacute;ditos, seg&uacute;n su plazo para que realices el pago de los mismos: PANDA MESES cuando el cr&eacute;dito que solicitas y gastos asociados, deban ser pagados entre dos (2) a doce (12) meses y PANDA D&Iacute;AS, cuando el cr&eacute;dito y gastos asociados, deban ser pagados entre ocho (8) a treinta y cinco (35) d&iacute;as.&nbsp; Los intereses que se generen en cualquier modalidad de cr&eacute;dito, se calculan sobre la base de un a&ntilde;o calendario de 360 d&iacute;as</p>
+            <p><strong>CREDITOS PANDA </strong>hace uso de plataformas tecnol&oacute;gicas agiles e innovadoras que facilitan a sus clientes el acceso a cr&eacute;ditos y ofrecen por ende un servicio adicional al simple pr&eacute;stamo de dinero.</p>
+            <ol start="2">
+            <li><strong>&iquest;QUI&Eacute;N ES EL ACREEDOR/PRESTAMISTA DE LOS CR&Eacute;DITOS?</strong></li>
+            </ol>
+            <p><strong>CREDITOS PANDA</strong> es una empresa privada que otorga cr&eacute;ditos con sus recursos propios, que no realiza captaci&oacute;n masiva de dineros del p&uacute;blico, ni actividades de intermediaci&oacute;n bancaria ni otras actividades exclusivas de los establecimientos de cr&eacute;dito u otras instituciones financieras vigiladas en Colombia</p>
+            <p>La informaci&oacute;n legal de <strong>CREDITOS PANDA </strong>es la siguiente:</p>
+            <p><strong>Raz&oacute;n social: CREDITOS PANDA S.A.S</strong><strong><em>, </em></strong></p>
+            <p><strong>Nit: 9</strong>01.369.753-0</p>
+            <p><strong>Domicilio principal: </strong>Carrera 49 B. No 93-38 Bogot&aacute;, Colombia;</p>
+            <p>Correo electr&oacute;nico: <a href="mailto:info@creditospanda.com">info@creditospanda.com</a></p>
+            <p>Tel&eacute;fono de contacto: 3212403734</p>
+            <ol start="3">
+            <li><strong>Datos de nuestro cliente (deudor)</strong></li>
+            </ol>
+            <p>Una vez recibes el desembolso del cr&eacute;dito solicitado y aceptado por tu parte, te conviertes en deudor de <strong>CREDITOS PANDA </strong>y adquieres la obligaci&oacute;n de pagar el cr&eacute;dito desembolsado, m&aacute;s sus intereses y otros gastos asociados en los plazos que aceptaste al momento de solicitar tu desembolso.</p>
+            <ol>
+            <li><strong>OBJETO DEL ACUERDO </strong>&nbsp;</li>
+            </ol>
+        
+            <p><strong>CR&Eacute;DITOS PANDA, </strong>previo an&aacute;lisis y aprobaci&oacute;n del riesgo de cr&eacute;dito del DEUDOR se compromete a entregar en calidad de pr&eacute;stamo de consumo al <strong>DEUDOR</strong> el monto de dinero acordado, en los plazos y condiciones aceptados previamente por las partes.</p>
+        
+            <ol>
+            <li><strong>TARIFAS Y OTROS SERVICIOS.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong></li>
+            </ol>
+        
+            <p><strong>Tarifa Aprobaci&oacute;n R&aacute;pida (opcional): </strong>El <strong>DEUDOR </strong>tiene a su elecci&oacute;n el uso o no de la aprobaci&oacute;n r&aacute;pida de <strong>CR&Eacute;DITOS PANDA, </strong>no obstante, en caso de uso de la aprobaci&oacute;n r&aacute;pida el <strong>DEUDOR </strong>deber&aacute; sufragar los costos de utilizaci&oacute;n de la misma conforme al valor informado en los t&eacute;rminos y condiciones del pr&eacute;stamo se&ntilde;alados en este documento y se causar&aacute; al momento en el que el <strong>DEUDOR </strong>reciba el monto del pr&eacute;stamo otorgado, no obstante, por comodidad del <strong>DEUDOR, </strong>este monto ser&aacute; diferido en igual cantidad de cuotas mensuales a las acordadas para el pr&eacute;stamo. Pago diferido que desde ya acepta el <strong>DEUDOR </strong>que se realice.</p>
+            <p>En caso de pago anticipado del pr&eacute;stamo antes de la fecha de vencimiento, el <strong>DEUDOR </strong>deber&aacute; pagar a <strong>CR&Eacute;DITOS PANDA </strong>el monto restante que se deba de la tarifa de aprobaci&oacute;n R&aacute;pida.</p>
+            <p>El uso de la aprobaci&oacute;n r&aacute;pida de <strong>CR&Eacute;DITOS PANDA </strong>permitir&aacute; al <strong>DEUDOR:</strong></p>
+            <ol>
+            <li>Tener respuesta dentro de las 24 horas h&aacute;biles siguientes a su solicitud de cr&eacute;dito.</li>
+            </ol>
+            <ol>
+            <li>Hacer uso de una metodolog&iacute;a &aacute;gil en el estudio de la solicitud de cr&eacute;dito o de su eventual novaci&oacute;n presentada por el DEUDOR, metodolog&iacute;a que utiliza desarrollos tecnol&oacute;gicos especializados que aceleran el proceso y facilita no exigir documentos y garant&iacute;as adicionales tales como, pero sin limitarse a un codeudor con finca ra&iacute;z no hipotecada, certificado de tradici&oacute;n y libertad del inmueble del co-deudor y pagar&eacute; firmado por el codeudor debidamente notariado.</li>
+            </ol>
+            <p>Si decides no pagar la Tarifa de Aprobaci&oacute;n R&aacute;pida, pero si la tarifa de plataforma tu solicitud ser&aacute; revisada en un plazo de hasta 15 d&iacute;as h&aacute;biles, despu&eacute;s de ser recibidos via correo electr&oacute;nico los siguientes documentos: A. Certificado de tradici&oacute;n y libertad del inmueble del co-deudor, con fecha no mayor de 30 d&iacute;as a la fecha de presentaci&oacute;n del documento. B. certificaciones laborales del codeudor solidario &lt; 30 d&iacute;as que acredite m&iacute;nimo 6 meses de historia laboral en la empresa. C. Certificado de ingresos, expedido por contador acreditado. D. pagar&eacute; y carta de instrucciones firmados por el codeudor solidario debidamente notarizados.</p>
+            <p>Se entender&aacute; el cobro de la tarifa de aprobaci&oacute;n R&aacute;pida cuando el <strong>DEUDOR </strong>as&iacute; lo haya aceptado en el formulario de solicitud dentro de la p&aacute;gina web y la firma electr&oacute;nica del presente documento implica aceptaci&oacute;n del <strong>DEUDOR </strong>de los cargos de la tarifa aprobaci&oacute;n r&aacute;pida.</p>
+            <p><strong>Tarifa uso de la plataforma (opcional):&nbsp; </strong>El <strong>DEUDOR </strong>tiene a su elecci&oacute;n el uso o no de la plataforma tecnol&oacute;gica de <strong>CR&Eacute;DITOS PANDA, </strong>no obstante, en caso de uso de la plataforma el <strong>DEUDOR </strong>deber&aacute; sufragar los costos de utilizaci&oacute;n de la misma conforme al valor informado en los t&eacute;rminos y condiciones del pr&eacute;stamo, aclarando que la tarifa se calcular&aacute; el primer d&iacute;a h&aacute;bil de cada mes hasta el pago total del pr&eacute;stamo otorgado. Para conveniencia del DEUDOR esta tarifa ser&aacute; distribuida en pagos mensuales iguales hechos por el DEUDOR. En caso de pago anticipado del pr&eacute;stamo la tarifa se calcular&aacute; hasta el momento en que se us&oacute; la plataforma.</p>
+            <p>La tarifa no ser&aacute; cobrada en el caso que el <strong>DEUDOR</strong> decida no hacer uso de la misma y realizar todos los tr&aacute;mites de solicitud del cr&eacute;dito y pagos posteriores de forma f&iacute;sica.</p>
+            <p>El uso de la plataforma de <strong>CR&Eacute;DITOS PANDA </strong>permitir&aacute;:</p>
+            <ol>
+            <li>Llenar el formulario de solicitud de cr&eacute;dito en l&iacute;nea</li>
+            <li>Acceso a un perfil en l&iacute;nea espec&iacute;ficamente designado para &eacute;ste en la p&aacute;gina web de <strong>CREDITOS PANDA</strong></li>
+            <li>Organizaci&oacute;n de informaci&oacute;n (capital, intereses, costos, etc.) del pr&eacute;stamo.</li>
+            <li>Firma digital y/o electr&oacute;nica de documentos.</li>
+            <li>Pagos Electr&oacute;nicos.</li>
+            <li>Seguimiento del progreso del pr&eacute;stamo del <strong>DEUDOR</strong> a trav&eacute;s de plataformas omni-canales (computador, tel&eacute;fono celular)</li>
+            <li>Consulta de pagos y saldos.</li>
+            <li>Recepci&oacute;n de comunicaciones en relaci&oacute;n con promociones y otras actividades de mercadeo;</li>
+            <li>Evitar impresi&oacute;n y env&iacute;o por correo certificado del formulario de solicitud de cr&eacute;dito y otros documentos detallados m&aacute;s adelante, y en caso de ser aprobada la solicitud el env&iacute;o por correo certificado de los siguientes documentos firmados y notarizados: contrato de mutuo, poder, pagar&eacute;, carta de instrucciones y autorizaci&oacute;n de descuento a tu empleador</li>
+            </ol>
+            <p>Si decides pagar la Tarifa de Aprobaci&oacute;n R&aacute;pida, pero no la Tarifa de Plataforma, tienes que enviar por correo certificado a nuestras oficinas la siguiente documentaci&oacute;n; A) formulario de solicitud de cr&eacute;dito firmado y notariado B) copia de tu c&eacute;dula ampliada, C) copia de tus servicios p&uacute;blicos D) extracto bancario &uacute;ltimos tres meses E) si eres independiente deber&aacute;s anexar F) certificaci&oacute;n de pagos a la seguridad social y G) copia de la matr&iacute;cula de tu veh&iacute;culo. ADICIONALMENTE si es aprobada tu solicitud deber&aacute;s imprimir y enviarnos H) el presente contrato de mutuo, I) carta de autorizaci&oacute;n de descuento, J) el poder, K) el pagar&eacute; y L) carta de instrucciones debidamente diligenciados y notarizados, a la direcci&oacute;n de nuestras oficinas que aparece en nuestra p&aacute;gina web WWW.CREDITOSPANDA.COM.</p>
+            <p>El solo uso de la plataforma de <strong>CR&Eacute;DITOS PANDA</strong> y la firma del presente documento a trav&eacute;s de la misma, implica aceptaci&oacute;n del <strong>DEUDOR </strong>de los cargos por uso de la plataforma.</p>
+            <p>Si decides aplicar SIN aceptar la Tarifa de Plataforma y la de Aprobaci&oacute;n R&aacute;pida, tendr&aacute;s que enviar por correo certificado los siguientes documentos</p>
+            <ol>
+            <li>Certificado de tradici&oacute;n y libertad del inmueble del co-deudor, con fecha no mayor de 30 d&iacute;as a la fecha de presentaci&oacute;n del documento.</li>
+            <li>Certificaciones laborales del codeudor solidario &lt; 30 d&iacute;as que acredite m&iacute;nimo 6 meses de historia laboral en la empresa.</li>
+            <li>Certificado de ingresos, expedido por contador acreditado.</li>
+            <li>pagar&eacute; y carta de instrucciones firmados por el codeudor solidario debidamente notarizados.</li>
+            <li>Formulario de solicitud de cr&eacute;dito firmado y notarizado</li>
+            <li>copia de tu c&eacute;dula ampliada</li>
+            <li>copia de tus servicios p&uacute;blicos</li>
+            <li>extracto bancario &uacute;ltimos tres meses</li>
+            <li>Si eres independiente deber&aacute;s anexar: certificaci&oacute;n de pagos a la seguridad social y copia de la matr&iacute;cula de tu veh&iacute;culo.</li>
+            <li>ADICIONALMENTE si es aprobada tu solicitud deber&aacute;s imprimir y enviarnos</li>
+            <ul>
+            <li>El presente contrato de mutuo</li>
+            <li>Carta de autorizaci&oacute;n de descuento</li>
+            <li>el poder</li>
+            <li>el pagar&eacute;</li>
+            <li>carta de instrucciones debidamente diligenciados y notarizados, a la direcci&oacute;n de nuestras oficinas que aparece en nuestra p&aacute;gina web WWW.CREDITOSPANDA.COM.</li>
+            </ul>
+            </ol>
+            <p>Despu&eacute;s de recibir toda la informaci&oacute;n requerida, la respuesta a la solicitud se dar&aacute; en un plazo de hasta 15 d&iacute;as h&aacute;biles.</p>
+            <p><strong>Novaci&oacute;n</strong>: La novaci&oacute;n (obtener m&aacute;s plazo para pagar el cr&eacute;dito) es un servicio solicitado por el <strong>DEUDOR</strong> de manera OPCIONAL, en el cual se incurre en costos asociados a la prestaci&oacute;n del servicio (Art&iacute;culo 1700 y 1701 del C&oacute;digo Civil Colombiano). Es un servicio opcional &uacute;nicamente para el &ldquo;prestamo de Panda D&iacute;as&rdquo;. EL <strong>DEUDOR </strong>podr&aacute; solicitarlo antes o despu&eacute;s de la fecha de vencimiento del cr&eacute;dito. Al momento de vencerse tendr&aacute; m&aacute;ximo 15 d&iacute;as para solicitar la Novaci&oacute;n. El d&iacute;a que el <strong>DEUDOR </strong>solicite la novaci&oacute;n deber&aacute; hacer el pago de: Intereses del cr&eacute;dito actual, tarifa uso de la plataforma y la aprobaci&oacute;n r&aacute;pida si solicit&oacute; estos servicios e IVA causado.</p>
+        
+            <p>Cada Per&iacute;odo adicional generado por la novaci&oacute;n ser&aacute; de la misma duraci&oacute;n que el per&iacute;odo de vencimiento inicial y durante este per&iacute;odo se generar&aacute;n intereses remuneratorios seg&uacute;n la tasa pactada y las tarifas por aprobaci&oacute;n r&aacute;pida, uso de la plataforma y cualquier otra solicitada y aprobada.</p>
+        
+            <p>Esta opci&oacute;n de novaci&oacute;n podr&aacute; no generar costo adicional en el caso de que el Deudor no acepte las tarifas de uso de la plataforma ni la tarifa de aprobaci&oacute;n r&aacute;pida. En este evento, el Deudor deber&aacute; hacer entrega por medios f&iacute;sicos, los documentos necesarios para analizar el cupo de cr&eacute;dito en esta novaci&oacute;n:</p>
+            <p>a)Certificado de tradici&oacute;n y libertad del inmueble del co-deudor, con fecha no mayor de 30 d&iacute;as a la fecha de presentaci&oacute;n del documento. b) Certificaciones laborales del codeudor solidario &lt; 30 d&iacute;as que acredite m&iacute;nimo 6 meses de historia laboral en la empresa. c) Certificado de ingresos, expedido por contador acreditado. d)pagar&eacute; y carta de instrucciones firmados por el codeudor solidario debidamente notarizados. e) Formulario de solicitud de cr&eacute;dito firmado y notarizado. f) copia de tu c&eacute;dula ampliada g) copia de tus servicios p&uacute;blicos h) extracto bancario &uacute;ltimos tres meses i) Si eres independiente deber&aacute;s anexar: certificaci&oacute;n de pagos a la seguridad social y copia de la matr&iacute;cula de tu veh&iacute;culo. j) ADICIONALMENTE si es aprobada tu solicitud deber&aacute;s imprimir y enviarnos: El presente contrato de mutuo, Carta de autorizaci&oacute;n de descuento, el poder, el pagar&eacute; y carta de instrucciones debidamente diligenciados y notarizados, a la direcci&oacute;n de nuestras oficinas que aparece en nuestra p&aacute;gina web WWW.CREDITOSPANDA.COM.</p>
+            <ol>
+            <li><strong>PROCEDIMIENTO DE SOLICITUD DEL PRESTAMO </strong><strong>&nbsp;</strong></li>
+            </ol>
+            <ul>
+            <li>Al solicitar un Pr&eacute;stamo, el DEUDOR debe primero seleccionar en la calculadora de la p&aacute;gina web de <a href="http://www.creditospanda.com/">creditospanda.com</a> los campos correspondientes al tipo de pr&eacute;stamo ya sea &ldquo;Panda D&iacute;as&rdquo; o &ldquo;Panda Meses&rdquo;, el monto y el per&iacute;odo de financiamiento. Al dar clic en &ldquo;solicitar un pr&eacute;stamo&rdquo; el <strong>DEUDOR </strong>ser&aacute; re direccionado al formulario de solicitud de pr&eacute;stamo donde podr&aacute; confirmar su aceptaci&oacute;n de este contrato, dar su aprobaci&oacute;n para el uso, tratamiento y almacenamiento de sus datos personales por parte de CREDITOS PANDA, as&iacute; como su consentimiento para autorizar a CREDITOS PANDA solicitar su informaci&oacute;n a operadores de informaci&oacute;n del PILA, y que estos provean la informaci&oacute;n a CREDITOS PANDA, aceptar la tarifa r&aacute;pida (opcional), la tarifa de uso de plataforma (opcional), pagar&eacute; y carta de instrucciones y el formato de autorizaci&oacute;n descuento por n&oacute;mina.</li>
+            <li>El DEUDOR aplica para un Pr&eacute;stamo, diligenciando el formulario de Solicitud a trav&eacute;s de la P&aacute;gina Web o de forma f&iacute;sica, de acuerdo con las condiciones especificadas en este contrato. En la Solicitud, es necesario especificar en los campos correspondientes datos personales como nombres y apellido, n&uacute;mero de cedula, direcci&oacute;n, informaci&oacute;n de empleo (lugar de trabajo), ingresos y egresos mensuales, direcci&oacute;n de correo electr&oacute;nico, n&uacute;mero de tel&eacute;fono de contacto, n&uacute;mero de cuenta de desembolso del Pr&eacute;stamo, referencias personales y comerciales, fotograf&iacute;a del documento de identidad de la persona titular de la cuenta, cualquier otro documento o informaci&oacute;n que sea necesaria para la aprobaci&oacute;n del pr&eacute;stamo.</li>
+            <li><strong>CR&Eacute;DITOS PANDA</strong> no ser&aacute; responsable en caso de cualquier error imputable al <strong>DEUDOR </strong>en los datos provistos por este. Si el <strong>DEUDOR</strong> presenta su Solicitud en la P&aacute;gina Web, la Solicitud debe completarse por el mismo DEUDOR. Si la Solicitud es presentada por tel&eacute;fono, los datos relevantes son dados por el <strong>DEUDOR</strong> a un empleado de <strong>CREDITOS PANDA</strong> que completar&aacute; el formulario de Solicitud a trav&eacute;s de la plataforma tecnol&oacute;gica autorizando previamente el <strong>DEUDOR</strong> la creaci&oacute;n de su perfil y el cobro de uso de la plataforma (opcional) y la tarifa de aprobaci&oacute;n r&aacute;pida (opcional).</li>
+            <li><strong>CREDITOS PANDA</strong> verificar&aacute; la capacidad crediticia del DEUDOR, la afiliaci&oacute;n y pago de los aportes al sistema de seguridad social integral, tales como ingreso base de cotizaci&oacute;n y dem&aacute;s informaci&oacute;n relacionada con la situaci&oacute;n laboral y empleador y la legitimidad de los datos reportados con los operadores de informaci&oacute;n del PILA. Si se requiere informaci&oacute;n adicional <strong>CREDITOS PANDA</strong> se pondr&aacute; en contacto con el <strong>DEUDOR </strong>para completar la informaci&oacute;n necesaria y requerida para aprobar el pr&eacute;stamo.</li>
+            <li>Si la solicitud del pr&eacute;stamo fue aprobada recibir&aacute; un correo electr&oacute;nico con los documentos legales necesarios para su revisi&oacute;n, aprobaci&oacute;n y posterior firma electr&oacute;nica. La suscripci&oacute;n y la confirmaci&oacute;n se realizar&aacute; sobre la base de un c&oacute;digo individual &uacute;nico recibido a trav&eacute;s de mensaje de texto y/o v&iacute;a correo electr&oacute;nico. </li>
+            <li>Una vez que el DEUDOR haya firmado toda la documentaci&oacute;n electronicamente, el monto del Pr&eacute;stamo se transferir&aacute; a la cuenta bancaria registrada por el DEUDOR. Para todos los prop&oacute;sitos, la confirmaci&oacute;n del Contrato se entender&aacute; como una subscripci&oacute;n del mismo por el DEUDOR.</li>
+            </ul>
+            <ol start="7">
+            <li><strong>EVALUACION DE LA CAPACIDAD DE ENDEUDAMIENTO DEL DEUDOR Y APROBACION DE LA APLICACI&Oacute;N. </strong>
+            <ul>
+            <li>Al recibir la Solicitud, <strong>CREDITOS PANDA</strong> evaluar&aacute; la capacidad crediticia del DEUDOR sobre la informaci&oacute;n real existente y la informaci&oacute;n obtenida del <strong>DEUDOR</strong>, verific&aacute;ndola en la base de datos de los Operadores de Informaci&oacute;n PILA, y a la que puede acceder de forma legal. <strong>CREDITOS PANDA</strong> si ve la necesidad contactara al DEUDOR para confirmar parte de la informaci&oacute;n. Si, como resultado del an&aacute;lisis, <strong>CREDITOS PANDA</strong> rechaza el otorgamiento del Pr&eacute;stamo, <strong>CREDITOS PANDA</strong> informar&aacute; al DEUDOR de forma inmediata y sin costo alguno sobre el resultado de la validaci&oacute;n.</li>
+            <li><strong>CR&Eacute;DITOS PANDA</strong> no comparte informaci&oacute;n de clientes con terceras personas distintas a las autorizadas en el presente contrato y en su pol&iacute;tica de tratamiento de datos personales ni cobra comisiones o gastos por anticipado. No usara intermediarios para diligenciar, estudiar o agilizar la solicitud o desembolsar y procesar el cr&eacute;dito.</li>
+            <li><strong>CREDITOS PANDA</strong> puede, a su criterio, solicitar informaci&oacute;n o documentos adicionales, tener una entrevista con el <strong>DEUDOR</strong>, pedir una copia del documento de identidad presentado por el <strong>DEUDOR </strong>as&iacute; como foto del DEUDOR para realizar procesos de identificaci&oacute;n. La entrega de informaci&oacute;n por parte del <strong>DEUDOR</strong> es voluntaria, sin embargo, la negativa del <strong>DEUDOR</strong> puede afectar la decisi&oacute;n de otorgar el pr&eacute;stamo.</li>
+            <li>Al enviar la Solicitud, el DEUDOR autoriza a <strong>CREDITOS PANDA</strong> a obtener informaci&oacute;n comercial sobre el DEUDOR de los Operadores de Informaci&oacute;n y de los operadores de informaci&oacute;n del PILA. </li>
+            <li>Para los fines del Pr&eacute;stamo que se otorgar&aacute; en virtud de este contrato, el <strong>DEUDOR</strong> declara que en el momento de realizar la Solicitud: El <strong>DEUDOR</strong> no tiene obligaciones econ&oacute;micas pendientes diferentes de aquellas reportadas en las centrales de riesgo e informaci&oacute;n financiera (Datacr&eacute;dito, CIFIN u otras similares), ni oligaciones trubutarias, tampoco tiene obligaciones con su actual o anterior empleador, ni con cualquier persona natural y todos los datos proporcionados en la Cuenta de Cliente, la Solicitud, as&iacute; como en el Contrato y en todos los documentos adicionales son completos y verdaderos. El <strong>DEUDOR </strong>no tiene procesos judiciales existentes o de arbitraje pendientes contra &eacute;l, y no hay razones que puedan llevar a dichos procedimientos.</li>
+            <li>Si el <strong>DEUDOR</strong> proporciona datos falsos, seg&uacute;n cuando ocurra, <strong>CREDITOS PANDA</strong> puede negarse a firmar el Contrato u otorgar el Pr&eacute;stamo, o terminar el Contrato (si est&aacute; firmado) sin previo aviso y demandar el pago anticipado del Pr&eacute;stamo, junto con todos los honorarios, costos e intereses originados hasta la fecha de terminaci&oacute;n.</li>
+            <li>En caso de que el <strong>DEUDOR</strong> haya elegido voluntariamente pagar la Tarifa de Aprobaci&oacute;n r&aacute;pida, la aprobaci&oacute;n puede darse en el instante o a m&aacute;s tardar dentro de las siguientes veinticuatro (24) horas habiles despu&eacute;s de enviar la Solicitud. Si la Solicitud no se aprueba dentro de ese l&iacute;mite de tiempo, el Contrato no se celebrar&aacute; entre <strong>CREDITOS PANDA</strong> y el <strong>DEUDOR</strong>. El horario de <strong>CREDITOS PANDA</strong> es de lunes a viernes, de 8:00 a.m. a 5:00 p.m. Si su Solicitud se envi&oacute; despu&eacute;s de este horario, se analizar&aacute; despu&eacute;s de las 10 a.m. del d&iacute;a h&aacute;bil siguiente.</li>
+            <li><strong>CREDITOS PANDA</strong> tiene el derecho, de negarse a conceder el Pr&eacute;stamo mediante un aviso por escrito al DEUDOR enviado al n&uacute;mero de tel&eacute;fono (texto) o al correo electr&oacute;nico proporcionado por el DEUDOR o por rechazo t&aacute;cito. Se entender&aacute; rechazo t&aacute;cito el caso en el que <strong>CREDITOS PANDA</strong> no suministre una comunicaci&oacute;n de aprobaci&oacute;n del Pr&eacute;stamo al DEUDOR dentro del plazo detallado en el apartado arriba indicado.</li>
+            <li>El contrato se subscribe electr&oacute;nicamente o en papel y las Partes consideran que la fecha del Contrato es el d&iacute;a en que se desembolsa el Pr&eacute;stamo a la cuenta bancaria del DEUDOR.</li>
+            </ul>
+            </li>
+            <li></li>
+            </ol>
+            <p>Aprobado el cr&eacute;dito <strong>CR&Eacute;DITOS PANDA </strong>desembolsar&aacute; el pr&eacute;stamo dentro de las 24 (veinticuatro) horas h&aacute;biles siguientes directamente en la cuenta bancaria indicada por el <strong>DEUDOR </strong>en el formulario de solicitud de pr&eacute;stamo y siempre y cuanto previamente el <strong>DEUDOR </strong>haya suscrito el pagar&eacute; contemplado en el anexo 1 de este contrato. <strong>CREDITOS PANDA</strong> enviara a la direcci&oacute;n de correo electr&oacute;nico los siguientes documentos: i) t&eacute;rminos y condiciones del servicio ii) poder para suscripci&oacute;n de pagar&eacute; y carta de instrucciones y autorizaci&oacute;n de descuento de libranza iii) factura (si hay lugar a ella)</p>
+            <p>No obstante, el otorgamiento del cr&eacute;dito en un t&eacute;rmino mayor no podr&aacute; constituirse en un incumplimiento de las obligaciones que se encuentran a cargo de <strong>CREDITOS PANDA</strong>. La celebraci&oacute;n del contrato se perfeccionar&aacute; una vez <strong>CREDITOS PANDA</strong> autorice y efect&uacute;e la transferencia bancaria a favor del <strong>DEUDOR.&nbsp; </strong></p>
+            <p><strong>CR&Eacute;DITOS PANDA </strong>cuenta con recursos limitados y aclara que no capta dinero del p&uacute;blico, en consecuencia, sus recursos son limitados y puede incurrir en restricciones de liquidez, en cuyo caso informar&aacute; de dicha situaci&oacute;n a sus clientes.</p>
+            <p><strong>CR&Eacute;DITOS PANDA </strong>&nbsp;en ning&uacute;n caso responde por da&ntilde;os o perjuicios en caso de no desembolso, quedando facultado incluso para abstenerse de desembolsar el pr&eacute;stamo cuando detecte que la informaci&oacute;n aportada por el <strong>DEUDOR </strong>es fraudulenta, err&oacute;nea&nbsp; o existen posibles causales de no pago despu&eacute;s de la solicitud, en todo caso, la aprobaci&oacute;n de un cr&eacute;dito, no significa para <strong>CR&Eacute;DITOS PANDA</strong>, la obligaci&oacute;n de hacer al <strong>DEUDOR</strong> pr&eacute;stamos, ni de otorgarle pr&oacute;rrogas de obligaciones vencidas y que hubieren sido contra&iacute;das antes o despu&eacute;s del presente acuerdo.</p>
+            <p>En caso de que el <strong>DEUDOR</strong> inscriba un n&uacute;mero de cuenta de la cual no es titular, el presente contrato se dar&aacute; por inexistente y, por consiguiente, no nacer&aacute;n obligaciones entre el <strong>DEUDOR </strong>y <strong>CR&Eacute;DITOS PANDA.</strong></p>
+            <ol start="9">
+            <li><strong>AUTORIZACIONES Y DECLARACIONES. </strong>
+            <ul>
+            <li>El <strong>DEUDOR</strong> certifica y declara que la informaci&oacute;n suministrada es exacta, veraz y verificable comprometi&eacute;ndose a actualizarla por el tiempo que use los servicios de <strong>CR&Eacute;DITOS PANDA. </strong>Cualquier inconsistencia entre los datos entregados y la realidad, bajo la premisa que, en tal caso, el <strong>DEUDOR</strong> se podr&aacute; convertir en autor de los delitos de estafa y falsedad en documentos, conforme a lo que disponen los art&iacute;culos 246, 289 y 296 del C&oacute;digo Penal Colombiano, y dem&aacute;s normas complementarias y accesorias.</li>
+            <li>El <strong>DEUDOR</strong> autoriza a <strong>CR&Eacute;DITOS PANDA</strong> para realizar consultas, verificaciones, reportes, divulgaci&oacute;n y procesamiento de informaci&oacute;n sobre el comportamiento financiero del <strong>DEUDOR </strong>en las centrales de riesgo autorizadas.</li>
+            <li>El <strong>DEUDOR</strong> acepta el procesamiento de sus datos personales incluidos en el Contrato, as&iacute; como informaci&oacute;n sobre la observancia de las obligaciones en virtud de este Contrato con el fin de analizar la liquidez del <strong>DEUDOR</strong>, por un per&iacute;odo no superior al tiempo que existan obligaciones vigentes entre el DEUDOR y CREDITOS PANDA.</li>
+            <li>El <strong>DEUDOR</strong> se comprometes a notificar a <strong>CR&Eacute;DITOS PANDA</strong>, cualquier cambio en la informaci&oacute;n suministrada en el proceso de aplicaci&oacute;n o durante la vigencia de la relaci&oacute;n entre las partes.</li>
+            <li>En atenci&oacute;n a lo dispuesto en los art&iacute;culos 8&deg; y 13 de la Ley 1581 de 2012, El <strong>DEUDOR</strong> autoriza a LOS OPERADORES DE INFORMACI&Oacute;N PILA para que le haga entrega a <strong>CR&Eacute;DITOS PANDA </strong>o a quien haga sus veces la informaci&oacute;n relativa a sus ingresos y aportes parafiscales. En atenci&oacute;n a lo anterior, mediante el presente contrato el <strong>DEUDOR </strong>otorga poder especial, amplio y suficiente a <strong>CR&Eacute;DITOS PANDA </strong>para recibir dicha informaci&oacute;n cuantas veces esta lo requiera y mientras el presente poder no se revoque por el <strong>DEUDOR</strong> mediante comunicaci&oacute;n escrita dirigida a <strong>CR&Eacute;DITOS PANDA</strong>.</li>
+            <li>El <strong>DEUDOR</strong> autoriza expresamente a <strong>CR&Eacute;DITOS PANDA</strong> para que lo contacte con fines comerciales y/o promocionales ya sea sobre sus propios servicios y productos, o los de terceros con los que <strong>CR&Eacute;DITOS PANDA</strong> tenga relaciones comerciales o alianzas, a trav&eacute;s de correo electr&oacute;nico, tel&eacute;fono o cualquier otro medio conocido o por conocer. Igualmente, en caso de mora, autoriza a <strong>CR&Eacute;DITOS PANDA</strong> para que contacte por llamada o mensaje de texto o v&iacute;a correo electr&oacute;nico o cualquier otro medio conocido o por conocer a las personas que ha registrado como referencias comerciales o personales para facilitar su gesti&oacute;n de cobranza. Declara el<strong> DEUDOR</strong> que tiene autorizaci&oacute;n de dichas personas para entregar a <strong>CR&Eacute;DITOS PANDA</strong> sus datos de contacto.</li>
+            <li>El <strong>DEUDOR</strong> declara que se le ha proporcionado toda la informaci&oacute;n requerida por la ley colombiana sobre los Productos ofrecidos por <strong>CR&Eacute;DITOS PANDA.</strong></li>
+            <li>En el caso de un retraso en el pago de las cuotas adeudadas por el <strong>DEUDOR</strong>, este autoriza a <strong>CR&Eacute;DITOS PANDA </strong>o quien haga sus veces a contactar a su empleador con el fin de informarle el incumplimiento de las obligaciones que tiene con <strong>CR&Eacute;DITOS PANDA.</strong></li>
+            <li>El <strong>DEUDOR</strong> autoriza a <strong>CR&Eacute;DITOS PANDA</strong> y/o sus aliados, filiales o matriz, cesionarios, compradores de cartera, tanto nacionales como extranjeras, a conservar, mantener, compartir, suministrar, remitir, comercializar e intercambiar entre s&iacute; toda informaci&oacute;n sobre las condiciones personales, econ&oacute;micas y/o comerciales, y el comportamiento crediticio del</li>
+            <li>El <strong>DEUDOR </strong>declara que el origen de los recursos que maneja y llegara a manejar en desarrollo de cualquier relaci&oacute;n con <strong>CR&Eacute;DITOS PANDA </strong>o con quien represente sus derechos, provienen de actividades licitas. As&iacute; mismo el <strong>DEUDOR</strong> declara que los recursos solicitados y objeto del contrato ser&aacute;n usados para fines l&iacute;citos y de ninguna manera para la comisi&oacute;n de cualquiera de los actos establecidos como delitos de acuerdo con la legislaci&oacute;n penal.</li>
+            <li><strong>CREDITOS PANDA</strong> tiene el derecho de suministrar informaci&oacute;n sobre las obligaciones del <strong>DEUDOR</strong> a los Operadores de Informaci&oacute;n, lo que podr&iacute;a afectar la calificaci&oacute;n crediticia del <strong>DEUDOR</strong>. La transferencia de datos del DEUDOR a los Operadores de Informaci&oacute;n se hace con base a un acuerdo escrito sobre la provisi&oacute;n de informaci&oacute;n comercial entre <strong>CREDITOS PANDA</strong> y los Operadores de Informaci&oacute;n.</li>
+            <li>La provisi&oacute;n de los datos del <strong>DEUDOR</strong> a los Operadores de Informaci&oacute;n est&aacute; sujeta a la aprobaci&oacute;n del <strong>DEUDOR</strong> expresado en este contrato y en la autorizaci&oacute;n de consulta y reporte en bases de datos</li>
+            <li><strong>EL DEUDOR</strong> reconoce que conoce de las obligaciones que pueden afectar su situaci&oacute;n financiera en relaci&oacute;n con la aprobaci&oacute;n y entrada en vigencia del presente Contrato; que el inter&eacute;s dispuesto por <strong>CR&Eacute;DITOS PANDA</strong> puede ser m&aacute;s alto que el ofrecido por otras compa&ntilde;&iacute;as de cr&eacute;dito al consumo y de microcr&eacute;dito, pero en su opini&oacute;n, est&aacute;n justificados y son consistentes con las condiciones del mercado; que <strong>CR&Eacute;DITOS PANDA</strong>&nbsp; le ha expuesto todas las obligaciones en virtud del Contrato y le ha proporcionado toda la informaci&oacute;n y los documentos exigidos por la ley y el Contrato antes de la entrada en vigencia del Contrato; que el <strong>DEUDOR</strong> no considera que los t&eacute;rminos del Contrato sean inapropiados.</li>
+            <li><strong>EL DEUDOR</strong> autoriza a <strong>CR&Eacute;DITOS PANDA</strong> evaluar mi calificaci&oacute;n crediticia a trav&eacute;s de los Operadores de Informaci&oacute;n y el Banco de la Rep&uacute;blica, el Sistema de Registro Bancario sobre los datos comerciales procesados por esas instituciones.</li>
+            </ul>
+            </li>
+            </ol>
+            <ol>
+            <li><strong>PRODUCTOS </strong></li>
+            </ol>
+        
+            <p>En la P&aacute;gina Web se ofrecen Productos que son una combinaci&oacute;n de varias opciones, montos de pr&eacute;stamos y otros t&eacute;rminos. <strong>CREDITOS PANDA</strong> puede cambiar los t&eacute;rminos del Producto en cualquier momento, incluso agregando o eliminando opciones individuales aplicables al Producto. Estos cambios no aplicar&aacute;n a los Contratos que ya se encuentren en ejecuci&oacute;n.</p>
+            <p>En la p&aacute;gina web se detalla la informaci&oacute;n sobre los t&eacute;rminos de cada producto ofrecido por <strong>CREDITOS PANDA</strong>. En el caso de cambios en los t&eacute;rminos del Producto, los t&eacute;rminos actuales en la fecha de otorgamiento del Pr&eacute;stamo se aplicar&aacute;n al Producto.</p>
+            <p>La Fecha de Pago del Pr&eacute;stamo es la fecha que figura en el Contrato excepto cuando la fecha que surge del Contrato se haya prorrogado por una solicitud de novacion del Pr&eacute;stamo a los que se aplicar&aacute; dicha extensi&oacute;n.</p>
+            <p><strong>CREDITOS PANDA</strong> puede, a su criterio, dar per&iacute;odos de gracia para ciertos Pr&eacute;stamos y para ciertos Productos, as&iacute; como reembolsos para pagos oportunos de las Cuotas de Pr&eacute;stamos.</p>
+            <p><strong>CREDITOS PANDA</strong> tiene el derecho de ofrecer promociones con intereses y tarifas m&aacute;s bajas a los que se encuentran vigentes al momento de la firma del contrato.</p>
+            <ol start="11">
+            <li><strong>GARANT&Iacute;AS</strong></li>
+            </ol>
+            <p>Para garantizar el cumplimiento de todas y cada una de las obligaciones contra&iacute;das, el <strong>DEUDOR</strong>, adem&aacute;s de comprometer su responsabilidad personal, y sin perjuicio de los mecanismos legales que tiene <strong>CR&Eacute;DITOS PANDA </strong>para el cobro del pr&eacute;stamo, otorga en favor de <strong>CR&Eacute;DITOS PANDA </strong>o quien haga sus veces las siguientes garant&iacute;as.</p>
+            <ul>
+            <li>El <strong>DEUDOR </strong>otorgar&aacute; un poder a CREDITOS PANDA para que en su nombre suscriba uno o m&aacute;s pagar&eacute;s en blanco (Anexo 1) para instrumentar sus obligaciones contra&iacute;das con <strong>CR&Eacute;DITOS PANDA</strong>.</li>
+            <li>El DEUDOR firmar&aacute; una Carta de autorizaci&oacute;n de descuento de salarios (Anexo 2) la cual deber&aacute; ser informada al empleador, para lo cual CREDITOS PANDA se encuentra tambi&eacute;n facultado como apoderado para realizar cualquier gesti&oacute;n exigida por el empleador.</li>
+            </ul>
+            <ol>
+            <li><strong>FORMAS DE PAGO</strong></li>
+            </ol>
+        
+            <p><strong>12.1</strong> El pago ser&aacute; realizado por el <strong>DEUDOR </strong>de conformidad al plan de amortizaci&oacute;n dado a conocer a trav&eacute;s de la plataforma de <strong>CR&Eacute;DITOS PANDA </strong>y el pago ser&aacute; en las fechas se&ntilde;aladas en los t&eacute;rminos y condiciones del pr&eacute;stamo mediante transferencia electr&oacute;nica, consignaci&oacute;n en una de las cuentas de <strong>CR&Eacute;DITOS PANDA</strong> publicada en la p&aacute;gina web u otros medios de pago y se&ntilde;aladas a continuaci&oacute;n:</p>
+            <p><strong>Banco:</strong> Banco de las Microfinanzas Bancamia.</p>
+            <p><strong>Tipo de cuenta: </strong>Ahorros</p>
+            <p><strong>A nombre de:</strong> Creditos Panda SAS</p>
+            <p><strong>NIT:</strong> 901.369.753-0</p>
+            <p><strong>Numero de cuenta: </strong>2110065594200011</p>
+        
+            <ul>
+            <li>Todas las transferencias se consideran exitosas una vez que la transferencia se refleja en la cuenta bancaria o pasarela de pagos de <strong>CR&Eacute;DITOS PANDA, </strong>si <strong>CR&Eacute;DITOS PANDA </strong>encuentra que el pago realizado no es identificable, el pago no se considerar&aacute; v&aacute;lido hasta que sea identificado y el <strong>DEUDOR</strong> ser&aacute; responsable de todas las consecuencias del pago atrasado.</li>
+            </ul>
+        
+        
+        
+            <ul>
+            <li>Entiende el <strong>DEUDOR </strong>que todo pago que haga se aplicar&aacute; seg&uacute;n la siguiente prelaci&oacute;n:</li>
+            </ul>
+            <ul>
+            <li>IVA</li>
+            <li>Intereses de mora pendientes de pago.</li>
+            <li>Gasto de cobranza si se generan</li>
+            <li>Tarifa uso plataforma si aplica</li>
+            <li>Tarifa aprobaci&oacute;n R&aacute;pida si aplica</li>
+            <li>Inter&eacute;s remuneratorio.</li>
+            <li>Capital del pr&eacute;stamo.</li>
+            </ul>
+        
+            <ul>
+            <li><strong>Autorizaci&oacute;n d&eacute;bito autom&aacute;tico y control de cuenta bancaria: </strong>Mediante la aceptaci&oacute;n del presente documento el <strong>DEUDOR </strong>de forma irrevocable autoriza a <strong>CR&Eacute;DITOS PANDA </strong>para que a partir del primer d&iacute;a de mora en el pr&eacute;stamo puede este o quien lo represente realizar el d&eacute;bito autom&aacute;tico de la totalidad o parte del monto adeudado por los conceptos descrito en el punto 10.3 de este contrato, de la cuenta d&eacute;bito o tarjeta de cr&eacute;dito reportada por el <strong>DEUDOR </strong>al momento de la solicitud del pr&eacute;stamo y/o cualquier otra cuenta bancaria que llegue a conocer <strong>CR&Eacute;DITOS PANDA </strong>ya sea al momento de la aceptaci&oacute;n de las condiciones de utilizaci&oacute;n de los productos o servicios&nbsp; que ofrece <strong>CR&Eacute;DITOS PANDA </strong>o con posterioridad a trav&eacute;s de la plataforma tecnol&oacute;gica de <strong>CR&Eacute;DITOS PANDA </strong>o de correo electr&oacute;nico u otro medio de informaci&oacute;n.</li>
+            </ul>
+            <p><strong>Cuenta inicial reportada por el</strong> <strong>DEUDOR ________________________________</strong></p>
+        
+            <p>En caso de no poder realizar el debito autom&aacute;tico por falta de fondos, o en el caso de haber debitado &uacute;nicamente un pago parcial por fondos insuficientes que no alcancen a cubrir el total de la obligaci&oacute;n, el <strong>DEUDOR </strong>autoriza a <strong>CR&Eacute;DITOS PANDA </strong>a seguir intentando d&eacute;bitos autom&aacute;ticos a la cuenta, cuentas o tarjetas de cr&eacute;dito de las cuales el <strong>DEUDOR </strong>sea titular hasta el pago total de las obligaciones generadas a trav&eacute;s de este contrato.</p>
+        
+            <p>En los t&eacute;rminos de la ley 1676 de 2013, el DEUDOR manifiesta que otorga una garant&iacute;a mobiliaria a favor de CREDITOS PANDA, consistente en el control de sus cuentas bancarias como se define en los art&iacute;culo 8&deg;, 33 y 34 de la referida ley, de forma que CREDITOS PANDA, ante el incumplimiento de cualquiera de las obligaciones a cargo del DEUDOR, podr&aacute; acudir ante cualquier establecimiento de cr&eacute;dito en que tenga cuentas de ahorro o corrientes para solicitar el control de la misma, bastando para ello la presentaci&oacute;n de estos t&eacute;rminos y condiciones y mi aceptaci&oacute;n electr&oacute;nica mediante mensajes de datos.</p>
+        
+            <p>Con mi aceptaci&oacute;n electr&oacute;nica, otorgo poder a CREDITOS PANDA para que adelante ante cualquier establecimiento bancario, el registro de este acuerdo de control y pueda disponer de los saldos all&iacute; depositados hasta el monto total que le sea adeudado por mi parte por cualquier concepto (capital, intereses remuneratorios o moratorios, tarifas por servicios adicionales y gastos de cobranza entre otros). CREDITOS PANDA estar&aacute; autorizado para registrar este acuerdo de control ante el registro de garant&iacute;as mobiliarias, indicando all&iacute; como valor m&aacute;ximo de la garant&iacute;a mobiliaria el 120% del capital que me fue desembolsado.</p>
+        
+            <p>Si por cualquier motivo los establecimientos de cr&eacute;dito solicitaran documentaci&oacute;n adicional o no aceptaran este acuerdo de control, CREDITOS PANDA estar&aacute; autorizado para solicitar mediante el mecanismo de ejecuci&oacute;n especial ante la C&aacute;mara de Comercio de Bogot&aacute; D.C., o cualquier Notar&iacute;a, para que estas autoridades conforme al procedimiento dispuesto en la ley 1676 de 2013 y sus decretos reglamentarios autoricen la apropiaci&oacute;n de los recursos depositados en las cuentas bancarias de mi titularidad. CREDITOS PANDA podr&aacute; consultar ante centrales de informaci&oacute;n y riesgo financiero (CIFIN y Datacr&eacute;dito u otras similares) la existencia de cuentas de ahorro y corrientes de mi titularidad para dar aplicaci&oacute;n a esta garant&iacute;a mobiliaria.</p>
+        
+            <ol start="13">
+            <li><strong>PREPAGO DEL PRESTAMO</strong></li>
+            </ol>
+            <p>El <strong>DEUDOR</strong> tiene derecho a realizar el pago anticipado total o parcial del pr&eacute;stamo adquirido conforme a este contrato, en consecuencia, el <strong>DEUDOR </strong>no estar&aacute; obligado a pagar inter&eacute;s que no se hayan causado al momento del pago, as&iacute; mismo, no se impondr&aacute;n ning&uacute;n tipo de sanciones debido al pago anticipado. Cabe aclarar que el <strong>DEUDOR </strong>en el caso de pago total o parcial del pr&eacute;stamo deber&aacute; pagar el monto del pr&eacute;stamo, junto con los inter&eacute;s y tarifas causados, pero no pagados a la fecha de pago del pr&eacute;stamo.</p>
+        
+            <p>El DEUDOR se deber&aacute; comunicar con <strong>CREDITOS PANDA</strong> para que este le indique el monto exacto a pagar antes de la fecha de vencimiento del pr&eacute;stamo. <strong>CREDITOS PANDA </strong>no se responsabiliza en caso de que el <strong>DEUDOR </strong>pague un valor distinto por el concepto de pago por adelantado.</p>
+        
+            <ol start="14">
+            <li><strong>GASTOS DE COBRANZA</strong></li>
+            </ol>
+        
+            <p>El<strong> DEUDOR </strong>entiende y acepta con la firma de este contrato de mutuo que pagar&aacute; a favor de <strong>CR&Eacute;DITOS PANDA </strong>los gastos de cobranza que se generen por incumplimiento de sus obligaciones de pago hasta un m&aacute;ximo del 30% del monto del total de las sumas debidas m&aacute;s los impuestos e intereses de mora generados por este concepto.</p>
+        
+            <p>Los gastos de cobranza ocasionados por la gesti&oacute;n de cobranza prejudicial y/o judicial, ser&aacute;n liquidados siempre sobre el valor de los recaudos efectivos, y cobrados en el momento de realizarse el pago por EL <strong>DEUDOR</strong>, y estar&aacute; determinados por el m&eacute;todo de cobranza que se realice siempre que estos costos est&eacute;n debidamente soportados por los documentos de cobro que evidencien que la actividad fue desarrollada.</p>
+        
+            <p><strong>EL PRESTATATRIO</strong> acepta adem&aacute;s que, todas las llamadas llevadas a cabo dentro del proceso de cobranza ser&aacute;n grabadas y las mismas ser&aacute;n conservadas junto con los registros que contengan la informaci&oacute;n de la persona que realiza el cobro, la fecha, hora, lugar del contacto y un resumen de lo hablado, que podr&aacute;n ser usadas como prueba de los compromisos adquiridos y de la calidad de la llamada dentro de los est&aacute;ndares sugeridos por el regulador nacional, para los procesos de cobranza extrajudicial. Estos registros deben conservarse por el tiempo m&iacute;nimo establecido en la ley. Los acuerdos de pago pactados dentro del proceso de cobranza prejur&iacute;dica, podr&aacute;n ser incorporados en una constancia del acuerdo de pago a trav&eacute;s de medio verificable legalmente, en el que consten las condiciones de dicho acuerdo.</p>
+            <p>Los gastos de cobranza ocasionados por la gesti&oacute;n de cobranza prejudicial y/o judicial, ser&aacute;n liquidados siempre sobre el valor de los recaudos efectivos, y cobrados en el momento de realizarse el pago por EL DEUDOR.</p>
+        
+            <ol>
+            <li><strong>USO DE INFORMACI&Oacute;N</strong></li>
+            </ol>
+        
+            <p>El <strong>DEUDOR</strong> faculta de manera expresa a <strong>CR&Eacute;DITOS PANDA</strong> para que los datos personales, documentaci&oacute;n, condiciones de oferta, contenido contractual, condiciones de ejecuci&oacute;n del contrato&nbsp; y en general cualquier informaci&oacute;n obtenida en virtud de la relaci&oacute;n comercial establecida con anterioridad, al mismo tiempo o con posterioridad a este contrato, as&iacute; como aquella que en lo sucesivo sea suministrada,&nbsp; pueda ser objeto de tratamiento, sistematizaci&oacute;n y/o sea compartida por parte del <strong>CR&Eacute;DITOS PANDA</strong> con&nbsp; sus filiales, aliados comerciales y las entidades que pertenecen o llegaren a tener relaciones comerciales con<strong> CR&Eacute;DITOS PANDA</strong> para efectos de que la misma sirva de soporte para la estructuraci&oacute;n de posibles relaciones comerciales y/o de servicios con dichas entidades. La informaci&oacute;n igualmente podr&aacute; ser utilizada para los fines propios de la ejecuci&oacute;n de este contrato, para fines estad&iacute;sticos, tributarios y de registros comerciales, corporativos y contables de<strong> CR&Eacute;DITOS PANDA</strong> y dem&aacute;s tratamientos contemplados en la pol&iacute;tica de protecci&oacute;n de datos de<strong> CR&Eacute;DITOS PANDA </strong>que se encuentra publicada en la p&aacute;gina web <a href="http://www.creditopanda.com">www.creditopanda.com</a> y que el El <strong>DEUDOR</strong> declara conocer. La presente autorizaci&oacute;n permanecer&aacute; vigente mientras est&eacute; vigente cualquier relaci&oacute;n contractual entre el DEUDOR y CR&Eacute;DITOS PANDA</p>
+            <ol>
+            <li><strong>DERECHOS Y OBLIGACIONES DE </strong><strong>CR&Eacute;DITOS PANDA</strong></li>
+            </ol>
+        
+            <p>En virtud del presente contrato, <strong>CR&Eacute;DITOS PANDA</strong> se obliga para con el<strong> DEUDOR</strong> a</p>
+        
+            <ol>
+            <li>Suministrar al <strong>DEUDOR</strong> informaci&oacute;n precontractual y contractual relacionada con el Producto o Pr&eacute;stamo.</li>
+            <li>Desembolsar el Pr&eacute;stamo al <strong>DEUDOR</strong> en la cantidad, en la fecha y en los t&eacute;rminos acordados por las Partes de conformidad a los t&eacute;rminos y condiciones generales de solicitud de cr&eacute;dito.</li>
+            <li>Registrar de manera eficaz y precisa el pago de las Cuotas de Pr&eacute;stamo por parte del</li>
+            <li>Facilitar al <strong>DEUDOR</strong>, en cualquier momento durante la vigencia del Contrato, informaci&oacute;n completa y precisa sobre las Cuotas pagadas hasta la fecha.</li>
+            <li>Proveer al <strong>DEUDOR</strong> todos los documentos necesarios relacionados al servicio del Pr&eacute;stamo.</li>
+            </ol>
+        
+            <p>En virtud del presente contrato, <strong>CR&Eacute;DITOS PANDA</strong> tiene derecho a:</p>
+        
+            <ol>
+            <li>Al cumplimiento absoluto de todas las obligaciones del <strong>DEUDOR</strong> en virtud del Contrato, y conceder o negar la solicitud del Pr&eacute;stamo si considera que se cumplen las condiciones para conceder o negar el mismo.</li>
+            <li>Ser informado directamente por el <strong>DEUDOR</strong> de las situaciones que puedan causar una demora o deterioro de la situaci&oacute;n financiera general del <strong>DEUDOR</strong>.</li>
+            <li>Solicitar que el <strong>DEUDOR</strong> suministre documentos o copias de los documentos necesarios para conceder el Pr&eacute;stamo, para evaluar su capacidad crediticia y para facilitar informaci&oacute;n sobre el servicio de Pr&eacute;stamo.</li>
+            <li>Ceder cuentas por cobrar, incluidos los montos no pagados y pagaderos, originarios del Contrato a terceros sin la aprobaci&oacute;n del <strong>DEUDOR</strong>. Se notificar&aacute; al <strong>DEUDOR</strong> de la cesi&oacute;n con el prop&oacute;sito de que realice los pagos al tercero cesionario;</li>
+            <li>Enviar, incluso a trav&eacute;s de terceros, toda la correspondencia para el <strong>DEUDOR</strong>, realizar llamadas telef&oacute;nicas, enviar correos electr&oacute;nicos, cartas, si el <strong>DEUDOR</strong> no cumple con alguna de las obligaciones pactadas en el Contrato y, por lo tanto, avisarle del incumplimiento, en cualquier caso, cumpliendo con la ley aplicable.</li>
+            </ol>
+        
+        
+        
+        
+        
+            <ol>
+            <li><strong>DERECHOS Y OBLIGACIONES DEL </strong><strong>DEUDOR</strong></li>
+            </ol>
+        
+            <p><strong>El DEUDOR </strong>en virtud del presente contrato, se obliga para con<strong> CR&Eacute;DITOS PANDA</strong> a:</p>
+        
+            <ol>
+            <li>Pagar todas las sumas debidas bajo el Pr&eacute;stamo, incluidos el monto principal, Intereses, servicios adicionales, gastos de cobranza y en general cualquier obligaci&oacute;n que se desprenda del pr&eacute;stamo otorgado.</li>
+            <li>Cumplir con las condiciones y fechas de pago para las Cuotas del pr&eacute;stamo contempladas en los t&eacute;rminos y condiciones del pr&eacute;stamo.</li>
+            <li>Notificar de inmediato a <strong>CR&Eacute;DITOS PANDA</strong> de cualquier cambio de situaci&oacute;n que cause demoras en el pago o que pueda da&ntilde;ar la situaci&oacute;n financiera del <strong>DEUDOR</strong> y cualquier cambio en la informaci&oacute;n dada en la Solicitud del pr&eacute;stamo, incluidos los cambios en los ingresos mensuales, la direcci&oacute;n de residencia y postal, lugar de trabajo, n&uacute;mero de tel&eacute;fono, procedimientos de ejecuci&oacute;n contra el <strong>DEUDOR</strong> o su c&oacute;nyuge, sanciones impuestas al <strong>DEUDOR</strong> o a su c&oacute;nyuge en procedimientos administrativos o penales, procedimientos para incautar activos que son propiedad del <strong>DEUDOR</strong> o de su c&oacute;nyuge y en general cualquier situaci&oacute;n que pueda afectar el pago oportuno de la obligaci&oacute;n contenida en este contrato.</li>
+            <li>Pagar todos los costos respectivos con el incumplimiento por parte del <strong>DEUDOR </strong>de las obligaciones establecidas en el Contrato incluidos, entre otros, los cargos por cobro extra-judicial o judicial del pr&eacute;stamo.</li>
+            </ol>
+        
+            <p>En virtud del presente contrato, el <strong>DEUDOR </strong>tiene derecho a:</p>
+        
+            <ol>
+            <li>Realizar el pago parcial o total del pr&eacute;stamo antes de la fecha de pago. En caso de pago total del pr&eacute;stamo, el costo total del Pr&eacute;stamo ser&aacute; la suma del dinero prestado, m&aacute;s intereses causados hasta el momento del pago del Pr&eacute;stamo. El <strong>DEUDOR </strong>est&aacute; obligado a pagar la tarifa por el uso de la plataforma desde el momento de la concesi&oacute;n del pr&eacute;stamo y hasta el d&iacute;a del pago anticipado, entendiendo igualmente que deber&aacute; cancelar el total adeudado por el servicio de aprobaci&oacute;n R&aacute;pida en caso de que aplique dicho cobro.</li>
+            <li>Si el <strong>DEUDOR</strong> no ha tenido retrasos en los pagos y no ha incumplido las obligaciones en virtud del Contrato, el <strong>DEUDOR</strong> puede recibir un descuento al momento del prepago total de sus obligaciones. El descuento lo establecer&aacute; <strong>CREDITOS PANDA</strong> a su entera discreci&oacute;n.</li>
+            <li>C&oacute;digos de promoci&oacute;n: Estos c&oacute;digos de promoci&oacute;n incluir&aacute;n un c&oacute;digo que se usar&aacute; en el sitio web de <strong>CREDITOS PANDA</strong> para recibir un descuento sobre una o varias tarifas / intereses del Pr&eacute;stamo.</li>
+            </ol>
+        
+        
+            <ol start="18">
+            <li><strong>ACELERACI&Oacute;N DEL PR&Eacute;STAMO</strong></li>
+            </ol>
+        
+            <p><strong>CR&Eacute;DITOS PANDA</strong> podr&aacute; declarar insubsistente los plazos de pago contemplados en los t&eacute;rminos y condiciones del pr&eacute;stamo y exigir el pago inmediato de la totalidad del cr&eacute;dito, judicial y/o extrajudicialmente sobre la base de un aviso unilateral de <strong>CR&Eacute;DITOS PANDA</strong> al <strong>DEUDOR</strong> en los siguientes casos:</p>
+            <ul>
+            <li>Por incumplimiento de cualquiera de las obligaciones por parte del deudor</li>
+            <li>La mora o el simple retardo en uno de los pagos de las cuotas pactadas.</li>
+            <li>Si los bienes del deudor son embargados o perseguidos judicialmente por cualquier persona y en ejercicio de cualquier acci&oacute;n.</li>
+            <li>Si el (los) deudor(es) es (son) declarados en liquidaci&oacute;n forzosa, de car&aacute;cter comercial o administrativo admitidos a proceso concordatario o se adelanta un proceso de insolvencia de persona natural no comerciante.</li>
+            <li>Si las garant&iacute;as que se hayan otorgado para cubrir el cumplimiento de las obligaciones a cargo de los deudores y a favor del acreedor, resultaran insuficientes o se tornaren as&iacute; por deterioro o depreciaci&oacute;n, a juicio del acreedor, o si fueren perseguidas judicialmente por terceras personas.</li>
+            <li>Si el (los) deudor(es) dejaren de asegurar los bienes que fungen como garant&iacute;a a las obligaciones.</li>
+            <li>Si el Deudor fuere vinculado con actividades delictivas en Colombia o en el exterior, o incluido en listas restrictivas para la prevenci&oacute;n del lavado de activos y financiaci&oacute;n del terrorismo, sin necesidad de condena o decisi&oacute;n administrativa en firme.</li>
+            <li>Cuando se evidencie por cualquier medio que EL DEUDOR ha aportado informaci&oacute;n falsa o imprecisa a CREDITOS PANDA S.A.S, para el otorgamiento de los cr&eacute;ditos a mi favor.</li>
+            <li>Si el (los) deudor(es) enajenaren, a cualquier t&iacute;tulo y sin autorizaci&oacute;n del acreedor, los bienes que garantizan el cumplimiento de las obligaciones que por &eacute;ste pagar&eacute; asumen.</li>
+            </ul>
+        
+            <p>El Pr&eacute;stamo se declara pagadero anticipadamente mediante una declaraci&oacute;n de <strong>CR&Eacute;DITOS PANDA</strong>, enviada al n&uacute;mero de tel&eacute;fono proporcionado (mensaje de texto) o al correo electr&oacute;nico dado en la Solicitud del <strong>DEUDOR.</strong></p>
+            <p>En caso de un retraso en el pago o la aceleraci&oacute;n del Pr&eacute;stamo, <strong>CREDITOS PANDA</strong> enviar&aacute; recordatorios al <strong>DEUDOR</strong> por correos electr&oacute;nicos, mensajes de texto, n&uacute;mero de tel&eacute;fono m&oacute;vil, direcci&oacute;n postal y as&iacute; como a la direcci&oacute;n de empleo del <strong>DEUDOR,</strong> conocida por <strong>CREDITOS PANDA</strong>, y en general por cualquier otro medio de comunicaci&oacute;n en cada caso cumpliendo con la ley aplicable.</p>
+            <p>Al firmar el Contrato, el <strong>DEUDOR</strong> autoriza la visita de un empleado de <strong>CREDITOS PANDA</strong> o quien haga sus veces a su lugar de trabajo o residencia del <strong>DEUDOR</strong> al igual que el env&iacute;o de mensajes de texto al n&uacute;mero de contacto, en caso de incumplimiento de las obligaciones que nazcan en conexi&oacute;n con el Contrato, en los t&eacute;rminos permitidos por la ley. En el caso de un retraso en el pago de las Cuotas, y siempre que el DEUDOR lo haya autorizado, <strong>CREDITOS PANDA</strong>, o a quien <strong>CREDITOS PANDA</strong> destine, podr&aacute; contactar al empleador del <strong>DEUDOR</strong> con el fin de avisar el incumplimiento de las obligaciones de &eacute;ste, a trav&eacute;s de llamadas por tel&eacute;fono o documentos escritos, dentro del horario h&aacute;bil, y &uacute;nicamente se informar&aacute;n los d&iacute;as de mora de la obligaci&oacute;n y el saldo debido por el <strong>DEUDOR</strong>.</p>
+            <p>El <strong>DEUDOR</strong> pagar&aacute; los Intereses por el pago tard&iacute;o (del capital y los intereses) desde la fecha del pago acelerado hasta el pago total de la deuda. En el caso del pago acelerado, el<strong> DEUDOR</strong> pagar&aacute; a <strong>CR&Eacute;DITOS PANDA</strong> todos los costos asociados al pr&eacute;stamo incluyendo los costos de cobranza generados en la recuperaci&oacute;n de la deuda. Las Partes admiten incondicionalmente que todos los costos extrajudiciales o judiciales afines con la recuperaci&oacute;n de deudas (incluidas visitas, llamadas telef&oacute;nicas, aranceles judiciales y otros costos) correr&aacute;n a cargo del <strong>DEUDOR.</strong></p>
+        
+            <ol start="19">
+            <li><strong>TERMINACI&Oacute;N ANTICIPADA</strong></li>
+            </ol>
+            <p>Ser&aacute;n justas causas para dar por terminado el contrato, las siguientes:</p>
+            <ol>
+            <li>El prepago total del DEUDOR de las obligaciones que est&eacute;n vigentes con CR&Eacute;DITOS PANDA</li>
+            <li>Por parte de <strong>CR&Eacute;DITOS PANDA </strong>de forma inmediata si evidencia que el <strong>DEUDOR </strong>aporto y/o declaro informaci&oacute;n falsa, inexacta o enga&ntilde;osa.</li>
+            <li>Por parte de <strong>CR&Eacute;DITOS PANDA </strong>de forma inmediata si existe un retraso de m&aacute;s de 30 d&iacute;as por parte del <strong>DEUDOR</strong> en el pago de cualquiera de sus obligaciones a cargo en virtud de este contrato.</li>
+            <li>Por parte de <strong>CR&Eacute;DITOS PANDA </strong>de forma inmediata cuando este no desembolse el pr&eacute;stamo de conformidad a los t&eacute;rminos y condiciones generales de solicitud del pr&eacute;stamo.</li>
+            <li>Por parte de <strong>CR&Eacute;DITOS PANDA </strong>de forma inmediata cuando evidencie que una transacci&oacute;n relacionada con el contrato puede o est&aacute; relacionada con cualquier actividad conexa al lavado de activos o la financiaci&oacute;n del terrorismo de conformidad con la ley aplicable.</li>
+            <li><strong>SARLAFT</strong></li>
+            </ol>
+            <p>Las Partes declaran que sus negocios y los recursos utilizados para la ejecuci&oacute;n y pago de los Servicios contratados, no provienen ni se destinar&aacute;n al ejercicio de ninguna actividad il&iacute;cita, lavado de activos o financiaci&oacute;n del terrorismo. Asimismo, se comprometen a entregar toda la informaci&oacute;n que les sea solicitada para dar cumplimiento a las disposiciones relacionadas con la prevenci&oacute;n del lavado de activos y financiaci&oacute;n del terrorismo y declaran que la misma es veraz y verificable. Las Partes se obligan a realizar todas las actividades encaminadas a asegurar que todos sus socios, empleados, contratistas, administradores, clientes, proveedores y los recursos de &eacute;stos, no se encuentren relacionados o provengan de actividades il&iacute;citas; En todo caso, si durante el plazo de vigencia del presente contrato las Partes o alguno de sus socios, administradores, clientes, proveedores, contratistas o empleados llegar&aacute;n a resultar inmiscuidos en una investigaci&oacute;n de cualquier tipo como penal, administrativa, o de cualquier otra &iacute;ndole, relacionada con actividades il&iacute;citas, lavado de activos o financiaci&oacute;n del terrorismo, o fuesen incluidos en listas de control como las de la ONU, OFAC, etc., cualquiera de las Partes tiene derecho a terminar unilateralmente la relaci&oacute;n entre las Partes.</p>
+            <ol start="21">
+            <li><strong>EVENTOS DE FUERZA MAYOR</strong></li>
+            </ol>
+            <p><strong>CR&Eacute;DITOS PANDA</strong> no es responsable ante el <strong>DEUDOR</strong> por ning&uacute;n retraso o incumplimiento, causado por fuerza mayor.</p>
+            <p>Fuerza mayor es cualquier evento imprevisto que suceda despu&eacute;s de firmar el contrato entre <strong>CR&Eacute;DITOS PANDA</strong> y el <strong>DEUDOR</strong>, y hace improbable que <strong>CR&Eacute;DITOS PANDA</strong> o el<strong> DEUDOR</strong> cumplan con sus obligaciones bajo este contrato, incluidas fallas t&eacute;cnicas en el software o hardware utilizado por <strong>CR&Eacute;DITOS PANDA</strong>, restricciones legales, administrativas o gubernamentales; desastres naturales; disturbios, levantamientos, confrontaciones, guerras, actos de terrorismo, terremotos u otras acciones destructivas de las fuerzas de la naturaleza; huelgas a nivel nacional. No obstante, la existencia de caso fortuito o fuerza mayor no ser&aacute;n motivo para que la parte afectada no pague oportunamente las cantidades o cumpla con las obligaciones consignadas en este contrato, previas a la aparici&oacute;n del caso fortuito o fuerza mayor.</p>
+            <p>En caso de fuerza mayor, <strong>CR&Eacute;DITOS PANDA</strong> y el <strong>DEUDOR</strong> tomar&aacute;n todos los pasos y medidas razonables para mitigar posibles p&eacute;rdidas y da&ntilde;os, y comunicar&aacute;n a la otra parte del contrato dentro de los 7 d&iacute;as siguientes despu&eacute;s de la ocurrencia de un evento de fuerza mayor.</p>
+        
+            <p>La falta de fondos del <strong>DEUDOR</strong> o su disminuci&oacute;n en su capacidad de pago o la existencia de pandemias, p&eacute;rdida de empleo como consecuencia de las mismas o de decisiones de terceros o eventos que disminuyan la capacidad f&iacute;sica o mental del DEUDOR, no se considerar&aacute;n un evento de fuerza mayor.</p>
+        
+        
+            <ol>
+            <li><strong>PODER IRREVOCABLE PARA SUSCRIBIR AUTORIZACIONES DE DESCUENTO, PAGARES Y CARTA DE INSTRUCCIONES. </strong></li>
+            </ol>
+            <p>Mediante el presente aparte el <strong>DEUDOR </strong>otorga un mandato con representaci&oacute;n (poder especial e irrevocable) a favor de <strong>CR&Eacute;DITOS PANDA</strong> o quien represente sus inter&eacute;s para suscribir y firmar en nombre del<strong> DEUDOR </strong>uno o varios pagar&eacute;s mientras existan las obligaciones derivadas de este contrato, y para firmar en nombre del <strong>DEUDOR </strong>una o varias autorizaciones de descuento con el empleador presente o futuro del <strong>DEUDOR, </strong>su fondo de pensiones, o cuenta d&eacute;bito o cr&eacute;dito con su entidad financiera que garanticen el pago de las obligaciones adquiridas por el <strong>DEUDOR</strong> a trav&eacute;s de este contrato.</p>
+            <ol start="23">
+            <li><strong>OTRAS DISPOSICIONES</strong></li>
+            </ol>
+            <p>El presente es un contrato a distancia generado conforme a la ley 527 de 1999 que regula los mensajes de datos, la firma digital y el comercio electr&oacute;nico en Colombia, en consecuencia, el <strong>DEUDOR </strong>acepta que a trav&eacute;s de los mecanismos electr&oacute;nicos y digitales utilizados en la plataforma de <strong>CR&Eacute;DITOS PANDA</strong>, suscribir&aacute; este contrato y por tanto no se puede oponerse a lo aqu&iacute; estipulado una vez lo acepte.</p>
+            <p>Al aceptar los t&eacute;rminos y condiciones del presente documento el <strong>DEUDOR </strong>declara que acepta de manera expresa e inequ&iacute;voca los t&eacute;rminos y condiciones del pr&eacute;stamo y dem&aacute;s condiciones previstas en este acuerdo. Por tanto, declara haber le&iacute;do, entendido y aceptado todo lo anterior.</p>
+            <p>Entienden las partes que el presente contrato es ley para las partes de conformidad con el art&iacute;culo 1602 del C&oacute;digo Civil, en consecuencia, declaran que las disposiciones del contrato y los t&eacute;rminos del pr&eacute;stamo solo pueden cambiarse con la aprobaci&oacute;n mutuo de las Partes, indicadas por escrito o en otro Medio duradero.</p>
+            <p>Con la suscripci&oacute;n de este documento, el <strong>DEUDOR </strong>acepta la cesi&oacute;n de la condici&oacute;n de acreedor de la obligaci&oacute;n que haga <strong>CR&Eacute;DITOS PANDA</strong> a favor de un tercero, de tal manera que la cesi&oacute;n se entender&aacute; que es oponible por el solo hecho de la notificaci&oacute;n que se realice por parte de <strong>CR&Eacute;DITOS PANDA</strong> o el cesionario por cualquiera de los medios de contacto que se indican en</p>
+            <p>el presente documento. El <strong>DEUDOR </strong>aceptas que dicha cesi&oacute;n conlleva compartir datos personales y crediticios seg&uacute;n se contempla en el punto 3.9 de este documento.</p>
+        
+            <p>Todos los impuestos y derechos que se generen con ocasi&oacute;n de la celebraci&oacute;n del presente contrato ser&aacute;n de cargo exclusivo de EL <strong>DEUDOR</strong>.</p>
+        
+            <p><strong>CREDITOS PANDA</strong> modificara el Contrato de acuerdo con las reformas o adopciones de nuevas leyes o instrucciones de las autoridades estatales, pertinentes a el Contrato. <strong>CREDITOS PANDA</strong> comunicar&aacute; al <strong>DEUDOR</strong> sobre los cambios en las disposiciones del Contrato antes de su fecha de vigencia enviando un correo electr&oacute;nico al correo del <strong>DEUDOR</strong> junto con el Contrato modificados en formato. <strong>CREDITOS PANDA</strong> indicar&aacute; las disposiciones modificadas y su nueva redacci&oacute;n, as&iacute; como la fecha de vigencia del Contrato enmendado. Una modificaci&oacute;n del Contrato ser&aacute; vinculante para el <strong>DEUDOR</strong> a menos que el <strong>DEUDOR</strong> finalice el Contrato en los t&eacute;rminos establecidos en el Contrato dentro de los 14 (catorce) d&iacute;as posteriores a la recepci&oacute;n de la notificaci&oacute;n de modificaci&oacute;n mencionada anteriormente.</p>
+        
+            <p>Cualquier disputa que surja de o est&eacute; relacionada con el Contrato o cualquier reclamaci&oacute;n contra <strong>CREDITOS PANDA</strong> ser&aacute; resuelta de conformidad con la ley aplicable. En asuntos no regulados en este Contrato, se aplicar&aacute; la Ley Comercial.</p>
+        
+            <p>Si alguna de las disposiciones del Contrato o su parte se considera inv&aacute;lida o inejecutable, las disposiciones restantes de este Contrato permanecer&aacute;n en plena vigencia y efecto.</p>
+        
+            <p>El servicio de <strong>CREDITOS PANDA</strong> tiene costos asociados. <strong>CREDITOS PANDA</strong> reporta a las centrales de riesgo tu buen comportamiento crediticio, lo que te ayuda a tener una buena calificaci&oacute;n crediticia. Los incumplimientos en los pagos podr&iacute;an afectar tu historia crediticia. Tu atraso genera intereses de mora, gastos de cobranza y reporte en las centrales de riesgo.</p>
+        
+            <ol>
+            <li><strong>ENV&Iacute;O DE COMUNICACIONES</strong></li>
+            </ol>
+            <p><strong>CR&Eacute;DITOS PANDA</strong> recibir&aacute; notificaciones en las siguientes direcciones</p>
+        
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Direcci&oacute;n: Carrera 49B. No. 93-38</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CEL:3212403734</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Direcci&oacute;n de Correo Electr&oacute;nico: <a href="mailto:info@creditospanda.com">info@creditospanda.com</a></p>
+            <p>Ciudad: Bogot&aacute;</p>
+        
+            <p>El Deudor por su parte, recibir&aacute; notificaciones en las direcciones de contacto que para tal efecto haya informado a CR&Eacute;DITOS PANDA en su solicitud de desembolso.</p>
+        
+            <p>La parte que cambiare su direcci&oacute;n, correo o n&uacute;mero de fax para la recepci&oacute;n de las comunicaciones que deban dirigirse en raz&oacute;n del presente acuerdo, deber&aacute; dar aviso por escrito a la otra PARTE con una antelaci&oacute;n no inferior a cinco (5) d&iacute;as h&aacute;biles.</p>
+        
+            <p>El deudor con su firma electr&oacute;nica y aceptaci&oacute;n en la solicitud de cr&eacute;dito y desembolso, declara haber le&iacute;do y aceptar estos t&eacute;rminos y condiciones.</p>
+        
+            <table>
+            <tbody>
+            <tr>
+            <td width="299">
+            <p><strong>CR&Eacute;DITOS PANDA</strong></p>
+        
+            <p>Nombre: CREDITOS PANDA SAS</p>
+            <p>NIT. 901.369.753-0</p>
+        
+            </td>
+            <td width="299">
+            <p><strong>DEUDOR</strong></p>
+        
+            <p>Nombre: _____________________</p>
+            <p>C.C. ________________________</p>
+            <p>Fecha y Hora:_______________</p>
+            </td>
+            </tr>
+            </tbody>
+            </table>
+        
+            <p><br /> </p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default"  (click)="modal.dismiss('Cross click')" data-dismiss="modal" style="background-color: #f36c21;color: white;border-color: #f36c21;">Cerrar</button>
+            </div>
+
+    </ng-template>
+    
+        <!-- PAGARE -->
+        <ng-template #pagare let-modal>
+      
+                <div class="modal-header">
+                  <button type="button"  (click)="modal.dismiss('Cross click')" class="close" data-dismiss="modal">&times;</button>
+                  <!-- <h4 class="modal-title">Modal Header</h4> -->
+                </div>
+                <div class="modal-body" style="max-height: 300px;overflow-y: scroll;">
+                                
+<p><strong>PODER ESPECIAL PARA FIRMA DE PAGAR&Eacute;S</strong></p>
+<p>En mi calidad de DEUDOR, manifiesto que otorgo poder especial irrevocable a favor de CREDITOS PANDA SAS, sociedad identificada con Nit.901.369.753-0, o cualquiera de sus cesionarios a cualquier t&iacute;tulo, para suscribir y firmar en mi nombre y representaci&oacute;n uno o varios pagar&eacute;s y sus cartas de instrucciones cuando sean necesarias, mientras est&eacute;n vigentes obligaciones adquiridas por mi cuenta y a favor de CREDITOS PANDA SAS.</p>
+<p>Como poderdante, manifiesto que no existe conflicto de inter&eacute;s ni impedimento de ninguna clase para que CREDITOS PANDA S.A.S, como apoderado, diligencie a su favor los pagar&eacute;s que instrumenten mis obligaciones crediticias con ellos.</p>
+<p>El poder que por este documento electr&oacute;nico otorgo a CREDITOS PANDA SAS, le faculta para diligenciar en mi nombre uno o m&aacute;s pagar&eacute;s, a su elecci&oacute;n, en los siguientes t&eacute;rminos:</p>
+<p><strong>Pagar&eacute; No</strong><strong>: (Corresponder&aacute; al n&uacute;mero del cr&eacute;dito)</strong></p>
+<p><strong>VALOR</strong><strong>: ($INGRESAR EL VALOR DEL CREDITO) PESOS M/CTE </strong></p>
+<p><strong>INTERES</strong><strong>: XX% EA </strong></p>
+<p><strong>PLAZO DEL CREDITO</strong><strong>: MESES/DIAS</strong></p>
+<p><strong>FECHA DE VENCIMIENTO DEL CREDITO</strong><strong>: </strong></p>
+<p>EL DEUDOR <strong><u>___(nombre del deudor)____</u> </strong>domiciliado en la ciudad de _____________, identificado con C&eacute;dula de Ciudadan&iacute;a No ________ actuando en nombre y cuenta propia en adelante EL DEUDOR, declaro:</p>
+<p><strong>PRIMERO: OBJETO.</strong> Que como DEUDOR pagar&eacute; de forma incondicional en dinero efectivo, a la orden de <strong>CR&Eacute;DITOS PANDA S.A.S. </strong>identificada con Nit.901.369.753-0 o a quien represente sus derechos, la suma de (ESTABLECER EL MONTO EN LETRAS)<strong> PESOS M/CTE ($________________)</strong>, m&aacute;s los intereses se&ntilde;alados en la disposici&oacute;n tercera de este documento<strong> PESOS M/CTE ($________________)</strong>.</p>
+<p><strong>SEGUNDO. VENCIMIENTO.</strong>&nbsp; Que pagar&eacute; la suma indicada en la cl&aacute;usula anterior en la ciudad de __________ el d&iacute;a ______ del mes de _______ del a&ntilde;o ________.</p>
+<p><strong>TERCERO: INTERESES DE MORA.</strong> En caso de incumplimiento o simple retardo en el cumplimiento de las obligaciones a mi cargo, pagar&eacute; a favor de CREDITOS PANDA S.A.S., intereses moratorios que ser&aacute;n liquidados a la tasa m&aacute;xima legal vigente se&ntilde;alada por la Superintendencia Bancaria.</p>
+<p><strong>CUARTO</strong>: <strong>CL&Aacute;USULA ACELERATORIA</strong>. El tenedor leg&iacute;timo de este pagar&eacute;, podr&aacute; declarar insubsistente los plazos de est&aacute; obligaci&oacute;n y exigir el pago inmediato de la totalidad de las obligaciones a mi cargo, judicial o extrajudicialmente en los siguientes casos:</p>
+<ul>
+<li>Por incumplimiento de cualquiera de las obligaciones por parte del deudor</li>
+<li>La mora o el simple retardo en uno de los pagos de las cuotas pactadas.</li>
+<li>Si los bienes del deudor son embargados o perseguidos judicialmente por cualquier persona y en ejercicio de cualquier acci&oacute;n<strong>. </strong></li>
+<li>Si el (los) deudor(es) es (son) declarados en liquidaci&oacute;n forzosa, de car&aacute;cter comercial o administrativo admitidos a proceso concordatario o se adelanta un proceso de insolvencia de persona natural no comerciante.</li>
+<li>Si las garant&iacute;as que se hayan otorgado para cubrir el cumplimiento de las obligaciones a cargo de los deudores y a favor del acreedor, resultaran insuficientes o se tornaren as&iacute; por deterioro o depreciaci&oacute;n, a juicio del acreedor, o si fueren perseguidas judicialmente por terceras personas.</li>
+<li>Si el (los) deudor(es) dejaren de asegurar los bienes que fungen como garant&iacute;a a las obligaciones.</li>
+<li>Si el Deudor fuere vinculado con actividades delictivas en Colombia o en el exterior, o incluido en listas restrictivas para la prevenci&oacute;n del lavado de activos y financiaci&oacute;n del terrorismo, sin necesidad de condena o decisi&oacute;n administrativa en firme.</li>
+<li>Cuando se evidencie por cualquier medio que EL DEUDOR ha aportado informaci&oacute;n falsa o imprecisa a CREDITOS PANDA S.A.S, para el otorgamiento de los cr&eacute;ditos a mi favor.</li>
+<li>Si el (los) deudor(es) enajenaren, a cualquier t&iacute;tulo y sin autorizaci&oacute;n del acreedor, los bienes que garantizan el cumplimiento de las obligaciones que por &eacute;ste pagar&eacute; asumen.</li>
+</ul>
+<p><strong>QUINTA: IMPUESTOS Y GASTOS DE COBRANZA:</strong> Los gastos originados por concepto de impuestos u otra carga tributaria y los dem&aacute;s en que incurran por la ejecuci&oacute;n del presente t&iacute;tulo, tales como honorarios de abogado, honorarios de cobranza extrajudicial y judicial correr&aacute;n a cargo del deudor, sus avalistas y dem&aacute;s garantes. Para efectos legales, se excusa el aviso de rechazo, el protesto y la presentaci&oacute;n para el pago del presente Pagar&eacute;. Se autoriza expresamente para que en el caso de incumplimiento de las obligaciones, sea reportado mi nombre y la informaci&oacute;n relativa a mi incumplimiento a las centrales de informaci&oacute;n financiera destinadas a este fin (DATACR&Eacute;DITO, CIFIN o cualquier otra similar).</p>
+<p>Se otorga este pagar&eacute; a los __________ (___) d&iacute;as del mes de __________ del a&ntilde;o dos mil catorce (20__).</p>
+<p><strong>DEUDOR</strong></p>
+<p><strong>C.C. No.</strong></p>
+<p><strong>Firma por apoderado CREDITOS PANDA S.A.S</strong></p>
+<p><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong></p>
+<p>Los espacios en blanco del texto previamente establecido, ser&aacute;n diligenciados en su totalidad por CREDITOS PANDA S.A.S, siguiendo para ello las siguientes instrucciones:</p>
+<ol>
+<li>La cuant&iacute;a ser&aacute; igual al monto de todas las sumas que por cualquier concepto que EL DEUDOR le est&eacute;(n) debiendo a CREDITOS PANDA S.A.S, o sus cesionarios o por el valor de una o algunas de tales obligaciones, a elecci&oacute;n de CREDITOS PANDA S.A.S, o sus cesionarios, incluyendo sin limitarse al valor de capital, intereses, comisiones, dep&oacute;sitos, cargos, sanciones, multas o cualquier otra suma a cargo del DEUDOR. Los pagos se realizar&aacute;n libre de grav&aacute;menes, impuestos o tasas, los cuales ser&aacute;n asumidos por el (los) Deudor(es).</li>
+</ol>
+<ol>
+<li>Los intereses corrientes ser&aacute;n los acordados entre el DEUDOR y CREDITOS PANDA S.A.S para cada obligaci&oacute;n y para los intereses de mora, se aplicar&aacute; la tasa moratoria m&aacute;s alta permitida en Colombia seg&uacute;n certificaci&oacute;n expedida por la Superintendencia Financiera de Colombia o cualquier autoridad a la que le sea asignada dicha funci&oacute;n.</li>
+</ol>
+<ol>
+<li>La fecha de vencimiento de las obligaciones se incorporen en el pagar&eacute; ser&aacute; la del d&iacute;a en que el t&iacute;tulo sea llenado</li>
+</ol>
+<ol>
+<li>El lugar de pago de las obligaciones ser&aacute; la ciudad de Bogot&aacute; D.C., o cualquier otra indicada por CREDITOS PANDA S.A.S. La fecha de creaci&oacute;n del t&iacute;tulo ser&aacute; la de su diligenciamiento. El lugar de creaci&oacute;n ser&aacute; aquel en que se entreg&oacute; el documento con espacios en blanco o el de cumplimiento de las obligaciones, tambi&eacute;n a elecci&oacute;n de <strong>CR&Eacute;DITOS PANDA S.A.S.</strong></li>
+</ol>
+<p>El pagar&eacute; as&iacute; llenado ser&aacute; exigible inmediatamente y prestar&aacute; m&eacute;rito ejecutivo sin m&aacute;s requerimientos.</p>
+<p>Las anteriores son las instrucciones que CREDITOS PANDA S.A.S como apoderado deber&aacute; acatar en el diligenciamiento de uno o m&aacute;s pagar&eacute;s que instrumenten las obligaciones a mi cargo y a favor de CR&Eacute;DITOS PANDA S.A.S.</p>
+<p>Ese poder se otorga de forma irrevocable a favor de CREDITOS PANDA S.A.S., permanecer&aacute; vigente mientras existan obligaciones a mi cargo y a favor de CREDITOS PANDA S.A.S, y es firmado de forma electr&oacute;nica, por lo cual reconozco plena validez a los mensajes de datos que contienen estas instrucciones y el poder conferido para que CREDITOS PANDA S.A.S suscriba en mi nombre uno o m&aacute;s pagar&eacute;s para su cobro prejudicial o judicial a su criterio.</p>
+<p><strong>DEUDOR</strong></p>
+<p><strong>C.C. No.</strong></p>
+<p><strong>Firma por apoderado CREDITOS PANDA S.A.S</strong></p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button"  (click)="modal.dismiss('Cross click')" class="btn btn-default" data-dismiss="modal" style="background-color: #f36c21;color: white;border-color: #f36c21;">Cerrar</button>
+                </div>
+     
+      </ng-template>
+    
+          <!-- Modal -->
+      <ng-template #aprobacion let-modal>
+
+            <div class="modal-header">
+              <button type="button"  (click)="modal.dismiss('Cross click')" class="close" data-dismiss="modal">&times;</button>
+              <!-- <h4 class="modal-title">Modal Header</h4> -->
+            </div>
+            <div class="modal-body" style="max-height: 300px;overflow-y: scroll;">
+                <p><strong>Tarifa Aprobaci&oacute;n R&aacute;pida (opcional): </strong>El <strong>DEUDOR </strong>tiene a su elecci&oacute;n el uso o no de la aprobaci&oacute;n r&aacute;pida de <strong>CR&Eacute;DITOS PANDA, </strong>no obstante, en caso de uso de la aprobaci&oacute;n r&aacute;pida el <strong>DEUDOR </strong>deber&aacute; sufragar los costos de utilizaci&oacute;n de la misma conforme al valor informado en los t&eacute;rminos y condiciones del pr&eacute;stamo se&ntilde;alados en este documento y se causar&aacute; al momento en el que el <strong>DEUDOR </strong>reciba el monto del pr&eacute;stamo otorgado, no obstante, por comodidad del <strong>DEUDOR, </strong>este monto ser&aacute; diferido en igual cantidad de cuotas mensuales a las acordadas para el pr&eacute;stamo.</p>
+                <p>Pago diferido que desde ya acepta el <strong>DEUDOR </strong>que se realice.</p>
+                <p>En caso de pago anticipado del pr&eacute;stamo antes de la fecha de vencimiento, el <strong>DEUDOR </strong>deber&aacute; pagar a <strong>CR&Eacute;DITOS PANDA </strong>el monto restante que se deba de la tarifa de aprobaci&oacute;n R&aacute;pida.</p>
+                <p>El uso de la aprobaci&oacute;n r&aacute;pida de <strong>CR&Eacute;DITOS PANDA </strong>permitir&aacute; al <strong>DEUDOR:</strong></p>
+                <ol>
+                <li>Tener respuesta dentro de las 24 horas h&aacute;biles siguientes a su solicitud de cr&eacute;dito.</li>
+                <li>Hacer uso de una metodolog&iacute;a &aacute;gil en el estudio de la solicitud de cr&eacute;dito o de su eventual novaci&oacute;n presentada por el DEUDOR, metodolog&iacute;a que utiliza desarrollos tecnol&oacute;gicos especializados que aceleran el proceso y facilita no exigir documentos y garant&iacute;as adicionales tales como, pero sin limitarse a un codeudor con finca ra&iacute;z no hipotecada, certificado de tradici&oacute;n y libertad del inmueble del co-deudor y pagar&eacute; firmado por el codeudor debidamente notariado.</li>
+                </ol>
+                <p>Si decides no pagar la Tarifa de Aprobaci&oacute;n R&aacute;pida, pero si la tarifa de plataforma tu solicitud ser&aacute; revisada en un plazo de hasta 15 d&iacute;as h&aacute;biles, despu&eacute;s de ser recibidos via correo electr&oacute;nico los siguientes documentos: A. Certificado de tradici&oacute;n y libertad del inmueble del co-deudor, con fecha no mayor de 30 d&iacute;as a la fecha de presentaci&oacute;n del documento. B. certificaciones laborales del codeudor solidario &lt; 30 d&iacute;as que acredite m&iacute;nimo 6 meses de historia laboral en la empresa. C. Certificado de ingresos, expedido por contador acreditado. D. pagar&eacute; y carta de instrucciones firmados por el codeudor solidario debidamente notarizados.</p>
+                <p>Se entender&aacute; el cobro de la tarifa de aprobaci&oacute;n R&aacute;pida cuando el <strong>DEUDOR </strong>as&iacute; lo haya aceptado en el formulario de solicitud dentro de la p&aacute;gina web y la firma electr&oacute;nica del presente documento implica aceptaci&oacute;n del <strong>DEUDOR </strong>de los cargos de la tarifa aprobaci&oacute;n r&aacute;pida.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button"  (click)="modal.dismiss('Cross click')" class="btn btn-default" data-dismiss="modal" style="background-color: #f36c21;color: white;border-color: #f36c21;">Cerrar</button>
+            </div>
+     
+    </ng-template>
+    
+     <!-- PLATAFORMA -->
+     <ng-template #_plataforma let-modal>
+
+        <div class="modal-header">
+          <button type="button"  (click)="modal.dismiss('Cross click')" class="close" data-dismiss="modal">&times;</button>
+          <!-- <h4 class="modal-title">Modal Header</h4> -->
+        </div>
+        <div class="modal-body" style="max-height: 300px;overflow-y: scroll;">
+         <p><strong>Tarifa uso de la plataforma:&nbsp; </strong>El <strong>PRESTATARIO </strong>tiene a su elecci&oacute;n el uso o no de la plataforma tecnol&oacute;gica de <strong>CR&Eacute;DITOS PANDA, </strong>no obstante, en caso de uso de la plataforma el <strong>PRESTATARIO </strong>deber&aacute; sufragar los costos de utilizaci&oacute;n de la misma conforme al valor informado arriba en los t&eacute;rminos y condiciones del pr&eacute;stamo, aclarando que la tarifa se calcular&aacute; el primer d&iacute;a h&aacute;bil de cada mes hasta el pago total del pr&eacute;stamo otorgado. Para conveniencia del Prestatario esta tarifa ser&aacute; distribuida en pagos mensuales iguales hechos por el Prestatario. En caso de pago anticipado del pr&eacute;stamo la tarifa se calcular&aacute; hasta el momento en que se us&oacute; la plataforma.</p>
+         <p>La tarifa no ser&aacute; cobrada en el caso que el <strong>PRESTARARIO</strong> decida presentar toda la informaci&oacute;n necesaria para obtener el pr&eacute;stamo en medio f&iacute;sico directamente en las oficinas de <strong>CR&Eacute;DITOS PANDA</strong>o donde est&aacute; designe.</p>
+         <p>El uso de la plataforma de <strong>CR&Eacute;DITOS PANDA</strong>permitir&aacute;:</p>
+         <ol>
+         <li>Acceso a un perfil en l&iacute;nea espec&iacute;ficamente designado para &eacute;ste en la p&aacute;gina web de <strong>CREDITOS PANDA</strong></li>
+         <li>Agilizar y automatizar el proceso de estudio del pr&eacute;stamo.</li>
+         <li>Organizaci&oacute;n de informaci&oacute;n (capital, intereses, comisiones, etc.) del pr&eacute;stamo.</li>
+         <li>Firma digital de documentos.</li>
+         <li>Pagos Electr&oacute;nicos.</li>
+         <li>Seguimiento del progreso del pr&eacute;stamo del <strong>PRESTATARIO</strong> en tiempo real a trav&eacute;s de plataformas omni-canales (computador, tel&eacute;fono celular)</li>
+         <li>Consulta de pagos y saldos.</li>
+         <li>Recepci&oacute;n de notificaciones en relaci&oacute;n con promociones y otras actividades de mercadeo;</li>
+         <li>Ahorro de gastos extras como son:</li>
+         </ol>
+         <ul>
+         <li>env&iacute;o de documentos por correo certificado.</li>
+         <li>Tarifas e impuestos notariales de registro de documentos.</li>
+         </ul>
+         <p>&nbsp;</p>
+         <p>El solo uso de la plataforma tecnol&oacute;gica de <strong>CR&Eacute;DITOS PANDA</strong> y la firma del presente documento a trav&eacute;s de la misma, implica aceptaci&oacute;n del <strong>PRESTATARIO </strong>de los cargos por uso de la plataforma.</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button"  (click)="modal.dismiss('Cross click')" class="btn btn-default" data-dismiss="modal" style="background-color: #f36c21;color: white;border-color: #f36c21;">Cerrar</button>
+    </div>
+
+</ng-template>
+<!-- PILA -->
+<ng-template #pila let-modal>
+
+<div class="modal-header">
+  <button type="button"  (click)="modal.dismiss('Cross click')" class="close" data-dismiss="modal">&times;</button>
+  <!-- <h4 class="modal-title">Modal Header</h4> -->
+</div>
+<div class="modal-body" style="max-height: 300px;overflow-y: scroll;">
+    <p>Yo, ____________________________ (Titular), identificado(a) como aparece al pie de mi firma, autorizo de manera expresa, inequ&iacute;voca, voluntaria y suficiente a Cr&eacute;ditos Panda SAS. (&ldquo;Cr&eacute;ditos Panda&rdquo;) para solicitar a los Operadores de Informaci&oacute;n del PILA, y a &eacute;stos a su vez para que le suministren a Cr&eacute;ditos Panda por el medio que consideren pertinente y seguro, mis datos personales relacionados con la afiliaci&oacute;n y pago de los aportes al Sistema de Seguridad Social Integral, tales como el ingreso base de cotizaci&oacute;n, informaci&oacute;n relacionada con mi situaci&oacute;n laboral, mi empleador, as&iacute; como mis datos personales de contenido patrimonial, de ubicaci&oacute;n y contacto, y dem&aacute;s datos que sobre m&iacute; reposen en la Planilla Integrada de Liquidaci&oacute;n de Aportes &ndash; PILA , excluyendo los datos personales de naturaleza sensible definidos en la Ley 1581 de 2012 y el Decreto 1377 de 2013.</p>
+        <p>Cr&eacute;ditos Pandapodr&aacute; conocer, consultar, acceder, divulgar y procesar dicha informaci&oacute;n cuantas veces lo requiera y en cualquier tiempo, mantenerla actualizada y en general tratarla, directamente o trav&eacute;s de un encargado, con la finalidad de analizar mi perfil crediticio en aras de conocer mi desempe&ntilde;o como deudor, mi capacidad de pago, y para evaluar la viabilidad de establecer y/o mantener una relaci&oacute;n comercial y/o de servicios conmigo, as&iacute; como para la gesti&oacute;n del riesgo financiero y crediticio, esto es, la iniciaci&oacute;n, mantenimiento y recuperaci&oacute;n de cartera, actividades relacionadas con la prevenci&oacute;n del lavado de activos y financiaci&oacute;n del terrorismo y la prevenci&oacute;n del fraude, y para ofrecerme productos o servicios que se adecuen a mi perfil crediticio.</p>
+        <p>La anterior autorizaci&oacute;n no impedir&aacute; a Cr&eacute;ditos Pandacorroborar en cualquier tiempo que los datos conocidos, consultados y tratados sobre m&iacute; sean veraces, completos, exactos y actualizados.</p>
+        <p>En todo caso, declaro expresamente conocer el car&aacute;cter facultativo de la presente autorizaci&oacute;n, los derechos que me asisten como titular de la informaci&oacute;n, y entender que el uso y manejo que se dar&aacute; a los datos personales se efectuar&aacute; de forma responsable y respetando las normas y principios generales establecidos en la Ley 1581 de 2012 y sus decretos reglamentarios, as&iacute; como la Ley 1266 de 2008 en lo que resulte aplicable. En tal virtud, declaro que conozco que Cr&eacute;ditos Panda cuenta con un Manual de Pol&iacute;ticas y Procedimientos para el tratamiento de datos, que se encuentra publicado en el siguiente sitio web <a href="http://www.creditospanda.com">www.creditospanda.com</a></p>
+        <p>He sido suficientemente informado del contenido del alcance de esta autorizaci&oacute;n, y por ende manifiesto mi consentimiento para el tratamiento de mis datos personales.</p>
+        <p>[Nombre]</p>
+        <p>[Firma]</p>
+        <p>[Identificaci&oacute;n]</p>
+</div>
+<div class="modal-footer">
+<button type="button"  (click)="modal.dismiss('Cross click')" class="btn btn-default" data-dismiss="modal" style="background-color: #f36c21;color: white;border-color: #f36c21;">Cerrar</button>
+</div>
+
+</ng-template>
+
+<ng-template #empleador let-modal>
+
+<div class="modal-header">
+<button type="button"  (click)="modal.dismiss('Cross click')" class="close" data-dismiss="modal">&times;</button>
+<!-- <h4 class="modal-title">Modal Header</h4> -->
+</div>
+<div class="modal-body" style="max-height: 300px;overflow-y: scroll;">
+   
+<p><strong>AUTORIZACI&Oacute;N DE DESCUENTO POR NOMINA</strong></p>
+<p>En virtud de la ley 1527 de 2012 de Libranzas y aquellas que la sustituyan o modifiquen, yo como <strong>DEUDOR</strong>autorizo expresa e irrevocablementea CREDITOS PANDA SAS, sociedad identificada con Nit.901.369.753-0, o cualquiera de sus cesionarios a cualquier t&iacute;tulo, a informar a mi empleador actual o futuro o entidad que administre mi pensi&oacute;n la presente libranza y descontar de mi salario, bonificaciones, prestaciones sociales, pensi&oacute;n o de cualquier suma de dinero que se vaya generando a mi favor, el valor del capital adeudado equivalente a $________ y gastos adeudados, m&aacute;s el valor de los intereses de mora que se causen hasta la fecha que <strong>CREDITOS PANDA SAS o sus cesionarios</strong>reciban el pago total, as&iacute; como los gastos de cobro judicial o extrajudicial de la deuda.</p>
+<p>Igualmente autorizo expresa e irrevocablemente adescontar las cuotas que debo pagarle a <strong>CREDITOS PANDA SAS</strong> durante el tiempo que permanezca en vacaciones o licencia. En caso de que finalice mi relaci&oacute;n laboral por cualquier causa, autorizo para que, de los valores resultantes de mi liquidaci&oacute;n de contrato por concepto de salario, se descuenten las cuotas restantes para pagar el saldo de mi obligaci&oacute;n hasta el monto disponible y sean giradas a CREDITOS PANDA SAS o sus cesionariosy se descuenten de las prestaciones sociales, salarios, indemnizaciones, pensi&oacute;n etc., a que tengo derecho. As&iacute; mismo como firmante de este formato de autorizaci&oacute;n de descuento por nomina como <strong>DEUDOR</strong> autorizo expresamente al pagador de la empresa y/o a los fondos de cesant&iacute;as y pensiones, para que, en el caso de realizarse la liquidaci&oacute;n definitiva o parcial de &eacute;stas, de la suma que resulte, sea descontada y girada directamente a <strong>CREDITOS PANDA</strong> el saldo a mi cargo.</p>
+<p>Para estos efectos, y con el fin de registro de la cuota mensual a descontar y saldo total de mi deuda ante mi empleador y/o fondos de administradores de pensi&oacute;n, declaro suficiente la certificaci&oacute;n emitida por<strong>CREDITOS PANDA SAS</strong> indique sobre el saldo debido a mi cargo y el valor de la cuota respectivas y la fecha de pago de la misma. De encontrarse vencido el cr&eacute;dito, autorizo para que <strong>CREDITOS PANDA SAS</strong>, informe al empleador y/o fondo administrador de pensiones, que se deber&aacute; incrementar la cuota a descontar por conceptos como intereses moratorios, gastos de cobranza entre otros debidamente certificados por CREDITOS PANDAS SAS. Como <strong>DEUDOR</strong> acepto por lo tanto adelantar las gestiones y coordinar lo que haya lugar con la pagadur&iacute;a de la empresa (o entidad) de la cual devengo mi salario o pensi&oacute;n.</p>
+<p>La presente autorizaci&oacute;n es firmada utilizando mecanismos electr&oacute;nicos, por lo que reconozco como DEUDOR que CREDITOS PANDA SAS podr&aacute; presentar en este mismo formato la presente autorizaci&oacute;n, reconociendo plena validez a su contenido.</p>
+<p>En el evento de que mi empresa pagadora o entidad administradora de mis fondos de pensiones, requiera que esta autorizaci&oacute;n conste por escrito f&iacute;sico o que se diligencie cualquier otro documento adicional a la misma para efectuar el descuento de libranza que he autorizado, declaro que por este mismo documento electr&oacute;nico otorgo poder especial de car&aacute;cter irrevocable a favor de CREDITOS PANDA SAS sociedad identificada con Nit.901.369.753-0, o cualquiera de sus cesionarios a cualquier t&iacute;tulo, para que en mi nombre y representaci&oacute;n adelante todos los tr&aacute;mites necesarios ante mi empleador o entidad administradora de fondos de pensiones, para que se lleve a cabo el descuento autorizado, estando CREDITOS PANDA SAS autorizado para suscribir cualquier documento f&iacute;sico o electr&oacute;nico que le sea exigido para tal fin, inclusive para que suscriba por mi cuenta y representaci&oacute;n una autorizaci&oacute;n de descuento f&iacute;sica en los t&eacute;rminos aqu&iacute; se&ntilde;alados, incluyendo en la misma el valor concreto a descontar.&nbsp; El poder que por este documento electr&oacute;nico se otorga permanecer&aacute; vigente mientras existan obligaciones o saldos pendientes a mi cargo y a favor de CREDITOS PANDA S.A.S.</p>
+
+</div>
+<div class="modal-footer">
+<button type="button"  (click)="modal.dismiss('Cross click')" class="btn btn-default" data-dismiss="modal" style="background-color: #f36c21;color: white;border-color: #f36c21;">Cerrar</button>
+</div>
+
+</ng-template>
+

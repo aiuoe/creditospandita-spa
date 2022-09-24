@@ -1,0 +1,94 @@
+<div class="container-fluid">
+  <div class="row align-items-end">
+    <div class="col-xs-12">
+      <div class="card formula mt3em">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>
+             Informacion Adicional
+            </h2>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-content">
+            <form [formGroup]="formBlog">
+              <div class="form-row align-items-end">
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="email">Nombre del documento</label>
+                    <input
+                      type="mail"
+                      class="form-control"
+                      formControlName="nombre"
+                      id="nombre"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="password">Archivo</label>
+                    <input
+                      type="file"
+                      class="form-control"
+                      formControlName="imagen"
+                      id="imagen"
+                      (change)="onFileChange($event)"
+                    />
+                  </div>
+                </div>
+                <img *ngIf="isResize1" src="/assets/img/resize.gif" width="30" height="30">
+                <div *ngIf="isResize1">
+                  <p><small>Espere para continuar...</small></p>
+
+              </div>
+              <img *ngIf="urlImagen" [src]="urlImagen" width="70" height="auto">
+
+              </div>
+           
+              <div class="row">
+                <div
+                  class="col-auto my-2"
+                  *ngIf="(blogToEdit$ | async)?.id; else noEditMode"
+                >
+                  <button
+                    type="button"
+                    class="btn btn-raised btn-primary"
+                    [disabled]="formBlog.invalid"
+                    (click)="edit()"
+                  >
+                    Editar
+                  </button>
+                </div>
+                <ng-template #noEditMode>
+                  <div class="col-auto my-2">
+                    <button
+                      type="button"
+                      class="btn btn-raised btn-primary"
+                      [disabled]="formBlog.invalid"
+                      (click)="add()"
+                    >
+                      Guardar
+                    </button>
+                  </div>
+                </ng-template>
+
+                <div class="col-auto my-2">
+                  <button
+                    type="button"
+                    class="btn btn-raised btn-warning"
+                    [disabled]="!formBlog.dirty"
+                    (click)="formBlog.reset()"
+                  >
+                    Limpiar
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

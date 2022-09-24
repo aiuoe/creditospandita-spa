@@ -1,0 +1,84 @@
+<div class="container-fluid padding-mv-0">
+  <div class="row  margin-mv-0">
+    <div class="col-12 padding-mv-0">
+      <div class="card formula mt3em">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>Solicitudes Pre Aprobadas</h2>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12">
+              
+            </div>
+            <div class="col-12 table-responsive">
+              <table
+                class="table table-striped"
+                
+              >
+                <thead class="thead-inverse">
+                  <tr>
+                    
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                    <th>Interés</th>
+                    <th>Duración</th>
+                    <th>Monto</th>
+                    <th>Tipo de crédito</th>
+            
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="
+                  let c of (preaprobados$ | async)['data']
+                    | paginate
+                      : {
+                          itemsPerPage: itemsPerPage,
+                          currentPage: p,
+                          totalItems: (preaprobados$ | async)['total']
+                        }; 
+                      index as i
+                ">
+                    <td> {{c.estatus}}</td>
+                    <td> {{ c.created_at}}</td>
+                    <td>$ {{ c.tasaInteres | number:'1.0-0':'es'}}</td>
+                    <td>{{ c.plazo}}</td>
+                    <td>$ {{ c.montoSolicitado | number:'1.0-0':'es'}}</td>
+                    <td > {{ c.tipoCredito == 'm' ? 'Panda Meses' : 'Panda Dias'}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row aling-items-end">
+            <div class="col-3">
+              <div class="form-group">
+                <!-- <label for="page">Items por Página</label> -->
+                <select
+                  class="form-control"
+                  name="page"
+                  id="page"
+                  (change)="perPage($event.target.value, p)"
+                >
+                  <option value="5">5</option>
+                  <option value="15">15</option>
+                  <option value="50">50</option>
+                </select>
+              </div>
+            </div>
+            <div class="col">
+              <pagination-controls
+              (pageChange)="perPage(itemsPerPage,$event)"
+                previousLabel="Anterior"
+                nextLabel="Siguiente"
+              ></pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- {{ users$ | async | json }} -->
+    </div>
+  </div>
+</div>
+

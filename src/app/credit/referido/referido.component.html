@@ -1,0 +1,213 @@
+<div class="container-fluid padding-mv-0">
+  <div class="row margin-mv-0">
+    <div class="col-12 padding-mv-0">
+      <div class="card formula mt3em">
+        <div class="card-header">
+          <div class="card-title">
+            <h2><b>¡Empieza ahora y gana $10,000 por cada referido!</b></h2>
+          </div>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="form">
+          <div class="row">
+            <div class="col-12">
+
+              <div class="row mb10">
+              
+              <div ><span class="grey">1</span>
+              
+              </div>
+              <div class="col-md-11">
+                <p>
+                  Invita a todos tus amigos, familiares y conocidos a solicitar su préstamo en CréditosPanda.com
+  vía correo electrónico.
+                </p>
+              </div>
+
+            </div>
+
+
+            <div class="row mb10">
+              
+              <div ><span class="grey">2</span>
+              
+              </div>
+              <div class="col-md-11">
+                <p>
+                  En el campo quien te recomendó, tus amigos deben ingresar el correo que tienes registrado en la
+plataforma.
+                </p>
+              </div>
+
+            </div>
+
+
+
+            <div class="row mb10">
+              
+              <div ><span class="grey">3</span>
+              
+              </div>
+              <div class="col-md-11">
+                <p>
+                  Tu referido recibe su crédito solicitado.
+                </p>
+              </div>
+
+            </div>
+
+
+            
+            <div class="row mb10">
+              
+              <div ><span class="grey">4</span>
+              
+              </div>
+              <div class="col-md-11">
+                <p>
+                  
+                  Tu recibes $10,000 por cada referido que reciba un crédito. Este dinero se te abonara a tu cuenta
+bancaria.
+
+                </p>
+              </div>
+
+            </div>
+
+              
+            </div>
+          
+          </div>
+
+          <div class="row">
+            <div class="col-md-6  ">
+              <div class="col-md-10 recuadro tamano">
+                <h3 class="claseh3">Envía este mensaje a tus amigos</h3><br>
+                <textarea class="textarea" disable="true">
+¡Hola!
+{{this.nombre_completo | titlecase}} ha tomado un crédito con CréditosPanda.com y quiere invitarte a que hagas lo mismo.
+Créditos Panda realiza dos tipos de préstamos: Panda Días desde $110,000 hasta $1,000,000
+entre 8 y 35 días. Panda Meses desde $250,000 hasta $3,000,000 entre 2 y 12 meses.
+Desembolsamos en tu cuenta bancaria, sin filas. 100% online.
+Por favor introduce el correo de {{this.nombre_completo}}, al hacer tu solicitud en el campo 
+¿Quién te Recomendó? en el formulario de solicitud.
+{{this.correo}}
+                </textarea>
+              </div>
+              
+            </div>
+        
+            <div class="col-md-6 ">
+
+              <div class="col-md-10 recuadro tamano">
+                <h3 class="claseh3">Selecciona a tus amigos</h3>
+                <p>Escribe el E-mail de tus amigos  o familiares , y les enviaremos una invitación</p><br>
+            
+                <div class="col-md-12">
+                  <div class="form-group">
+
+                      <label>Email </label>
+                      <input type="text" formControlName="emailp" name="emailp" id="emailp" value="" class="form-control " placeholder="">            
+          
+                      <div *ngIf="submitted && f.emailp.errors" class="error">
+                          <div *ngIf="f.emailp.errors.required"><small>Email</small></div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-12">
+                <label style="text-align: center;">ó</label>
+              </div>
+              <div class="col-md-12">
+                <div class="form-group">
+
+                    <label>Comparte tu link para referir </label>
+                    <input type="text"  name="compartir" id="compartir" #userinput value="{{rutaWeb}}/registro/{{codigo}}" class="form-control " placeholder="" readonly>            
+                   <p>Tú Créditos Panda código de referencia. Copia y compartelo en redes sociales, por correos electronicos, whatsapp, etc y empieza a ganar dinero.</p>
+                    <button
+           
+               
+                      type="button"
+                      class="btn btn-success"
+                      (click)="copyInputMessage(userinput)"
+                    >
+                      <a class="ft-file" style="color:white"></a>
+                    </button><br>
+                    <label *ngIf="msgHideAndShow" style="float: center;">{{textMessage}}</label>   
+                   
+                </div>
+            </div>
+  
+              </div>
+              
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12" style="text-align: center;"><br>
+              <div class="form-group margin-b-0">
+
+                <label class="fw-600">
+                    <input type='checkbox' formControlName="datos" name='dato' class=''  /> He leido y acepto voluntariamente los <a class="term_generales" (click)="open(terminos)" data-toggle="modal" data-target="#terminos">Términos Generales y Condiciones</a>
+                </label>
+                <div *ngIf="submitted && f.datos.errors" class="error">
+                    <div *ngIf="f.datos.errors.required"><small>Acepta terminos y condiciones</small></div>
+                </div> 
+            </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12" style="text-align: center;"><br>
+             
+                <input type="submit"  [disabled]="msjSubmit" name="calc" value="¡Enviar invitaciones!" (click)="add()" class="tamanores" style="border-width: 0;cursor:pointer;font-weight: 800;">
+           
+            </div>
+          </div>
+        </form>
+        </div>
+      </div>
+      <!-- {{ users$ | async | json }} -->
+    </div>
+  </div>
+
+     <!-- Modal -->
+     <ng-template #terminos let-modal>
+
+      <div class="modal-header">
+        <button type="button"  (click)="modal.dismiss('Cross click')" class="close" data-dismiss="modal">&times;</button>
+        <!-- <h4 class="modal-title">Modal Header</h4> -->
+      </div>
+      <div class="modal-body" style="max-height: 300px;overflow-y: scroll;">
+        <p><strong>T&Eacute;RMINOS Y CONDICIONES DEL PLANDE REFERIDOS</strong></p>
+            
+        <p>Podr&aacute;n participar en el Plan de Referidos cualquier persona natural (en adelante <strong>participantes</strong>), que hayan solicitado su registro como tal ante CREDITOS PANDA SAS sociedad comercial con domicilio en Bogot&aacute; D.C., identificada Nit.901.369.753-0, en adelante Cr&eacute;ditos Panda.</p>
+        <p>Los participantes deben ser colombianos, mayores de edad que cuenten con c&eacute;dula de ciudadan&iacute;a, registrados en las bases de datos de Cr&eacute;ditos Panda como Participantes y contar con una cuenta bancaria ante una entidad vigilada por la Superintendencia Financiera de Colombia.</p>
+        <p>Los <strong>referidos</strong> deben ser colombianos, mayores de edad, tener ingresos iguales o superiores a un salario m&iacute;nimo mensual vigente, contar con una cuenta bancaria, un celular a su nombre, estar domiciliados en Colombia y deber&aacute;n <strong>aplicar al cr&eacute;dito dentro de los 30 d&iacute;as siguientes a la fecha que lo refieran.</strong> No se pueden referir clientes ya existentes, s&oacute;lo ser&aacute;n tenidos en cuenta para efectos del Plan de Referidos, clientes nuevos que sean personas naturales sin productos en Cr&eacute;ditos Panda. La informaci&oacute;n del referido debe ser ver&iacute;dica.</p>
+        <p>La presente campa&ntilde;a estar&aacute; vigente hasta que Cr&eacute;ditos Panda exprese lo contrario en su portal web. Cr&eacute;ditos Panda podr&aacute; dar por terminada dicha campa&ntilde;a en cualquier momento. La invitaci&oacute;n a los referidos puede realizarse en nuestra plataforma web en la secci&oacute;n referidos o a trav&eacute;s de cualquier medio de comunicaci&oacute;n que considere el Participante. El Participante no podr&aacute; usar la marca de Cr&eacute;ditos Panda en piezas publicitarias, ni podr&aacute; cobrar al referido por intermediar en la solicitud. El participante recibir&aacute; por cada referido y por una sola vez por referido, la suma de<strong> DIEZ MIL PESOS M/L ($10.000)*impuestos incluidos (en adelante &ldquo;el incentivo&rdquo;), </strong>los cuales se depositar&aacute;n en la cuenta bancaria del titular que tenga registrada en Cr&eacute;ditos Panda y la cual debe estar a su nombre.</p>
+        <p>Para que haya lugar al pago del Incentivo, la solicitud de cr&eacute;dito del referido deber&aacute; haber sido pagada en su totalidad a Cr&eacute;ditos Panda a tiempo y sin retrasos. No se realizar&aacute; pago de Incentivo alguno por referidos cuyas solicitudes de cr&eacute;dito no hayan sido aprobadas o que luego de aprobadas, el referido haya desistido de su desembolso.</p>
+        <p>Tampoco se realizar&aacute; el pago cuando el cliente referido no haya registrado o indicado en el formulario correspondiente el correo electr&oacute;nico o c&oacute;digo del Participante pues no existe forma de asociar la gesti&oacute;n del Participante en este caso o cuando el Participante se encuentre en mora de cualquier obligaci&oacute;n adquirida con Cr&eacute;ditos Panda.</p>
+        <p>Cr&eacute;ditos Panda NO girar&aacute; recursos a personas distintas a la registrada en nuestro sistema por lo que el incentivo otorgado no podr&aacute; ser endosado ni cedido de forma alguna. Durante los primeros cinco d&iacute;as h&aacute;biles de cada mes Cr&eacute;ditos Panda evaluar&aacute; los referidos de cada Participante que exitosamente hayan pagado a tiempoel cr&eacute;dito en el mes inmediatamente anterior. Con base en el resultado de esta evaluaci&oacute;n, Cr&eacute;ditos Panda realizar&aacute; el pago del Incentivo, el d&iacute;a quince de cada mes y o el siguiente d&iacute;a h&aacute;bil, si est&aacute; fecha cae en fin de semana o festivo. Cr&eacute;ditos Pandareconoce pago alguno por referidos cuando el cr&eacute;dito del referido se encuentro al d&iacute;a. En caso de que el participante tenga un cr&eacute;dito, entonces ambos cr&eacute;ditos tantodel referido como delparticipante deben estar al d&iacute;a.&nbsp;</p>
+        <p>Al participar en el Plan de Referidos, los participantes declaran conocer y aceptar las condiciones aqu&iacute; expresadas. Cualquier cambio en los t&eacute;rminos y condiciones de este Plan, ser&aacute; informado en la p&aacute;gina web de Cr&eacute;ditos Panda para nuevos participantes, y para aquellos ya inscritos en el plan, se les har&aacute; llegar una comunicaci&oacute;n v&iacute;a correo electr&oacute;nico para que consulten la modificaci&oacute;n.</p>
+        <p>Cualquier duda o reclamo sobre los alcances e interpretaci&oacute;n de las presentes condiciones podr&aacute; ser atendida a trav&eacute;s de nuestro correo electr&oacute;nico info@Cr&eacute;ditospanda.com o a trav&eacute;s de nuestro chat, sin que la respuesta implique bajo ninguna circunstancia una modificaci&oacute;n parcial, total o una excepci&oacute;n de su cumplimiento.</p>
+        <p>El Participante, reconoce y acepta que no existe dependencia ni relaci&oacute;n laboral alguna entre el Participante y Cr&eacute;ditos Panda ni tampoco se ha pretendido ni se ha pactado la configuraci&oacute;n de un contrato de agencia comercial, por lo que expresamente el Participante reconoce que no tendr&aacute; derecho a ninguna suma o prima o cesant&iacute;a comercial diferente del Incentivo pactado.</p>
+        <p><strong>MEC&Aacute;NICA </strong></p>
+        <ul>
+        <li>El participante registra sus referidos en nuestra p&aacute;gina www.Cr&eacute;ditospanda.com opci&oacute;n &ldquo;Plan Referidos&rdquo;, dentro de la secci&oacute;n &ldquo;Ingresa a tu cuenta&rdquo;. Igualmente puede invitarlos por otros medios a que registren su correo electr&oacute;nico (el de quien refiere) en el campo para tal fin en el formulario de solicitud de cr&eacute;dito (del referido).</li>
+        <li>El referido debe ser un cliente nuevo que no posea ning&uacute;n tipo de producto con Cr&eacute;ditos Panda.</li>
+        <li>El referido ser&aacute; contactado a trav&eacute;s de su correo electr&oacute;nico para ofrecerle nuestro sistema de cr&eacute;ditos r&aacute;pidos por internet.</li>
+        <li>Si el cr&eacute;dito del Referido es aprobado y firmado, este ser&aacute; desembolsado en los t&eacute;rminos y condiciones de Cr&eacute;ditos Panda.</li>
+        <li>El cliente de Cr&eacute;ditos Panda que refiri&oacute; al nuevo cliente recibir&aacute; un pago <strong>de DIEZ MIL PESOS ($10,000) impuestos incluidos</strong>los cuales ser&aacute;n consignados a su cuenta bancaria seg&uacute;n los t&eacute;rminos y condiciones del plan.</li>
+        <li>El pago por referidos no implica una relaci&oacute;n laboral entre quien refiere y Cr&eacute;ditos Panda.</li>
+        <li>Cr&eacute;ditos Panda estar&aacute; facultado para abstenerse de realizar pago de Incentivo alguno al Participante, cuando este resulte incluido en listas restrictivas para la prevenci&oacute;n del lavado de activos o financiaci&oacute;n del terrorismo o vinculado de forma p&uacute;blica con actividades delictivas en Colombia o en el exterior.</li>
+        </ul>
+        <p><strong>AUTORIZACI&Oacute;N PARA LA UTILIZACI&Oacute;N DE LOS DATOS PERSONALES (LEY 1581 DE 2012)</strong>&nbsp;</p>
+        <p>Autorizo a CREDITOS PANDA SAS para que utilice los datos que he incluido en los presentes formularios, y aquellos que sean suministrados a trav&eacute;s de los canales de atenci&oacute;n f&iacute;sicos, telef&oacute;nicos y virtuales puestos a mi disposici&oacute;n, con el fin de desarrollar y ejecutar el Plan de Referidos al que me inscribo. CREDITOS PANDA S.A.S, podr&aacute; usar mis datos personales para contactarme, remitirme informaci&oacute;n sobre el Plan de Referidos o cualquier otro producto o servicio ofrecido por CREDITOS PANDA S.A.S, consultar mi identificaci&oacute;n en listas preventivas de lavado de activos o financiaci&oacute;n del terrorismo, y en general para cualquier otra finalidad relacionada en la pol&iacute;tica de tratamiento de datos personales de CREDITOS PANDA S.A.S que se encuentra disponible en el sitio web:&nbsp;<a href="http://www.constructorabolivar.com/">http://www.creditospanda.com</a>.</p>
+        <p>As&iacute; mismo, conozco que como Titular de los datos cuento con los siguientes derechos: acceso, actualizaci&oacute;n, rectificaci&oacute;n y supresi&oacute;n; para ello, la Compa&ntilde;&iacute;a ha establecido los siguientes canales de atenci&oacute;n correo electr&oacute;nico:&nbsp;<a href="mailto:info@creditospanda.com">info@creditospanda.com</a></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button"  (click)="modal.dismiss('Cross click')" class="btn btn-default" data-dismiss="modal" style="background-color: #f36c21;color: white;border-color: #f36c21;">Cerrar</button>
+      </div>
+
+</ng-template>
+  
+</div>
+

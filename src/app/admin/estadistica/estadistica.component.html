@@ -1,0 +1,262 @@
+<div class="container-fluid padding-mv-0">
+  <div class="row margin-mv-0">
+    <div class="col-12 padding-mv-0">
+      <div class="card formula mt3em">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>Estadisticas</h2>
+          </div>
+        </div>
+        <div class="card-body">
+
+          <div class="row">
+            <div class="col-12">
+              <label>Tipo de filtro</label>
+              <app-filter-type (onFilter)="onFilter($event)"></app-filter-type>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <h3>Resumen</h3>
+              <table class="table table-striped">
+                <thead class="thead-inverse">
+                <tr>
+                  <th>Nº Visitantes</th>
+                  <th>Nº Clientes registrados</th>
+                  <th>Nº Aplicaciones</th>
+                  <th>Nº Aplicaciones incompletas</th>
+                  <th>Nº prestamos aprobados</th>
+                  <th>Nº Prestamos	negados	</th>
+                  <th>Nº Prestamos desembolsados</th>
+                  <!-- <th>Nº Prestamos	incompletos	formulario</th> -->
+                  <!-- <th>Nº Prestamos	aprobados	evaluacion	interna</th> -->
+                  <!-- <th>Nº Prestamos	negados	evaluacion	interna</th> -->
+                  
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{totalVisitantes}}</td>
+                  <td>{{totalRegistrados}}</td>
+                  <td>{{totalValidado}}</td>
+                  <td>{{totalIncompleto}}</td>
+                  <td>{{aprobadosFormulario}}</td>
+                  <td>{{negadoFormulario}}</td>
+                  <td> {{ creditosDesembolsados }} </td>
+                  <!-- <td>{{incompletoFormulario}}</td> -->
+                  <!-- <td>{{aprobadoInterno}}</td> -->
+                  <!-- <td>{{negadoInterno}}</td> -->
+          
+                </tr>
+              </tbody>
+              </table>
+            </div>
+
+
+            <div class="col-md-12">
+              <table class="table table-striped">
+                <thead class="thead-inverse">
+                <tr>
+    
+                  <!-- <th style="width: 27%;">Nº Prestamos	pendientes	por	evaluar	en	evaluacion	interna	 </th> -->
+                  <!-- <th>%	aprobacion</th> -->
+                  <th>Nº clientes	que	retornan</th>
+                  <th>%	retorno</th>
+                  <th> </th>
+                  <th> </th>
+                  <th> </th>
+                  <th> </th>
+               
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <!-- <td>{{faltaEvaluacion}}</td> -->
+                  <!-- <td>{{percentajeAprobacion}} %</td> -->
+                  <td>{{clientesRetornan}}</td>
+                  <td>{{percentajeRetorno}} %</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                
+                </tr>
+              </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <h3>Creditos desembolsados</h3>
+              <table class="table table-striped">
+                <thead class="thead-inverse">
+                <tr>
+                  <th>Créditos PM</th>
+                  <th>Créditos PD</th>
+                  <th>Total créditos</th>
+                  <th>Capital desembolsado PM</th>
+                  <th>Capital desembolsado PD</th>
+                  <th>Total desembolsado</th>
+                 
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td> {{ creditosPm }} </td>
+                  <td>{{creditosPd}}</td>
+                  <td>{{totalcreditos | number:'1.0-0':'es'}}</td>
+                  <td>${{capitalCreditosPm | number:'1.0-0':'es'}}</td>
+                  <td>${{capitalCreditosPd | number:'1.0-0':'es'}}</td>
+                  <td>${{ totalCapitalCreditos | number:'1.0-0':'es'}} </td>
+                </tr>
+              </tbody>
+              </table>
+            </div>
+          </div>
+
+
+          <div class="row">
+            <div class="col-12">
+              <h3>Creditos abiertos</h3>
+              <table class="table table-striped">
+                <thead class="thead-inverse">
+                  <tr>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Creditos abiertos</th>
+                    <th scope="col">Total pendiente por pagar</th>
+                    <th scope="col">Capital</th>
+                    <th scope="col">Interes</th>
+                    <th scope="col">Plataforma</th>
+                    <th scope="col">Aprobación</th>
+                    <th scope="col">IVA</th>
+                    <th scope="col">Gastos de cobranza</th>
+                    <th scope="col">IVA gastos de cobranza</th>
+                    <th scope="col">Interes mora pendiente</th>
+
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Panda meses</td>
+                    <td>{{creditosAbiertosPm}}</td>
+                    <td>${{totalPxpM | number:'1.0-0':'es'}}</td>
+                    <td>${{capitalpxpM | number:'1.0-0':'es'}}</td>
+                    <td>${{interespxpM | number:'1.0-0':'es'}}</td>
+                    <td>${{plataformapxpM | number:'1.0-0':'es'}}</td>
+                    <td>${{aprobacionpxpM | number:'1.0-0':'es'}}</td>
+                    <td>${{ivapxpM | number:'1.0-0':'es'}}</td>
+
+                    <td>${{gastosCobranzapxpM | number:'1.0-0':'es'}}</td>
+                    <td>${{ivaGastosCobranzapxpM | number:'1.0-0':'es'}}</td>
+                    <td>${{interesMoraPendientepxpM | number:'1.0-0':'es'}}</td>
+                  </tr>
+                  <tr>
+                    <td>Panda días</td>
+                    <td>{{creditosAbiertosPd}}</td>
+                    <td>${{totalPxpD | number:'1.0-0':'es'}}</td>
+                    <td>${{capitalpxpD | number:'1.0-0':'es'}}</td>
+                    <td>${{interespxpD | number:'1.0-0':'es'}}</td>
+                    <td>${{plataformapxpD | number:'1.0-0':'es'}}</td>
+                    <td>${{aprobacionpxpD | number:'1.0-0':'es'}}</td>
+                    <td>${{ivapxpD | number:'1.0-0':'es'}}</td>
+                    
+                    <td>${{gastosCobranzapxpD | number:'1.0-0':'es'}}</td>
+                    <td>${{ivaGastosCobranzapxpD | number:'1.0-0':'es'}}</td>
+                    <td>${{interesMoraPendientepxpD | number:'1.0-0':'es'}}</td>
+                  </tr>
+                  <tr>
+                    <th>Total</th>
+                    <th scope="col"> {{totalCreditosAbiertos}} </th>
+                    <th scope="col"> ${{totalPxp | number:'1.0-0':'es'}} </th>
+                    <th scope="col"> ${{totalCapital | number:'1.0-0':'es'}} </th>
+                    <th scope="col"> ${{totalInteres | number:'1.0-0':'es'}} </th>
+                    <th scope="col"> ${{totalPlataforma | number:'1.0-0':'es'}} </th>
+                    <th scope="col"> ${{totalAprobacion | number:'1.0-0':'es'}} </th>
+                    <th scope="col"> ${{totalIva | number:'1.0-0':'es'}} </th>
+                    <td>${{totalGastosCobranzapxp | number:'1.0-0':'es'}}</td>
+                    <td>${{totalIvaGastosCobranzapxp | number:'1.0-0':'es'}}</td>
+                    <td>${{totalInteresMoraPendientepxp | number:'1.0-0':'es'}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <h3>Creditos Morosos</h3>
+              <table class="table table-striped">
+                <thead class="thead-inverse">
+                  <tr>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Nro. Creditos morosos</th>
+                    <th scope="col">Total en mora</th>
+                    <th scope="col">Promedio días en mora</th>
+                    <th scope="col">1-15</th>
+                    <th scope="col">16-30</th>
+                    <th scope="col">31-60</th>
+                    <th scope="col">61-90</th>
+                    <th scope="col">91-120</th>
+                    <th scope="col">121-180</th>
+                    <th scope="col">181-360</th>
+                    <th scope="col">Mayor a 360</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Panda meses</td>
+                    <td>{{totalCreditosMorososPm}}</td>
+                    <td>${{totalMoraPm | number:'1.0-0':'es'}}</td>
+                    <td>{{diasMoraPm | number:'1.0-0':'es'}}</td>
+                    <td>${{diasMora15Pm | number:'1.0-0':'es'}}</td>
+                    <td>${{diasMora30Pm | number:'1.0-0':'es'}}</td>
+                    <td>${{diasMora60Pm | number:'1.0-0':'es'}}</td>
+                    <td>${{diasMora90Pm | number:'1.0-0':'es'}}</td>
+                    <td>${{diasMora120Pm | number:'1.0-0':'es'}}</td>
+                    <td>${{diasMora180Pm | number:'1.0-0':'es'}}</td>
+                    <td>${{diasMora360Pm | number:'1.0-0':'es'}}</td>
+                    <td>${{diasMoraMayor360Pm | number:'1.0-0':'es'}}</td>
+                    
+                  </tr>
+                  <tr>
+                    <td>Panda días</td>
+                    <td>{{totalCreditosMorososPd}}</td>
+                    <td>${{totalMoraPd | number:'1.0-0':'es'}}</td>
+                    <td>{{diasMoraPd | number:'1.0-0':'es'}}</td>
+                    <td>${{diasMora15Pd | number:'1.0-0':'es'}}</td>
+                    <td>${{diasMora30Pd | number:'1.0-0':'es'}}</td>
+                    <td>${{diasMora60Pd | number:'1.0-0':'es'}}</td>
+                    <td>${{diasMora90Pd | number:'1.0-0':'es'}}</td>
+                    <td>${{diasMora120Pd | number:'1.0-0':'es'}}</td>
+                    <td>${{diasMora180Pd | number:'1.0-0':'es'}}</td>
+                    <td>${{diasMora360Pd | number:'1.0-0':'es'}}</td>
+                    <td>${{diasMoraMayor360Pd | number:'1.0-0':'es'}}</td>
+                  </tr>
+                  <tr>
+                    <th>Total</th>
+                    <td>{{totalCreditosMorosos}}</td>
+                    <td>${{totalMora | number:'1.0-0':'es'}}</td>
+                    <td>{{totalDiasMora | number:'1.0-0':'es'}}</td>
+                    <td>${{totalMora15 | number:'1.0-0':'es'}}</td>
+                    <td>${{totalMora30 | number:'1.0-0':'es'}}</td>
+                    <td>${{totalMora60 | number:'1.0-0':'es'}}</td>
+                    <td>${{totalMora90 | number:'1.0-0':'es'}}</td>
+                    <td>${{totalMora120 | number:'1.0-0':'es'}}</td>
+                    <td>${{totalMora180 | number:'1.0-0':'es'}}</td>
+                    <td>${{totalMora360 | number:'1.0-0':'es'}}</td>
+                    <td>${{totalMoraMayor360 | number:'1.0-0':'es'}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              
+            </div>
+          </div>
+      
+        </div>
+      </div>
+      <!-- {{ users$ | async | json }} -->
+    </div>
+  </div>
+</div>

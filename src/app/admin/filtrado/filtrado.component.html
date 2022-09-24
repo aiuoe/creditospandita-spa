@@ -1,0 +1,122 @@
+<div class="container-fluid">
+  <div class="row align-items-end">
+    <div class="col-xs-12">
+      <div class="card formula mt3em">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>
+              {{ (blogToEdit$ | async)?.id ? 'Edición' : 'Registro' }} de
+              Filtro
+            </h2>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-content">
+            <form [formGroup]="formBlog">
+              <div class="form-row align-items-end">
+                <div class="col-12">
+                  <div class="form-group">
+                    <label for="email">Variable</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="variable"
+                      id="variable"
+                      required
+                    />
+                  </div>
+                </div>
+                  <div class="col-12">
+                    <div class="form-group">
+                      <label for="email">Signo</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        formControlName="signo"
+                        id="signo"
+                        required
+                      />
+                    </div>
+                  <!-- <div class="form-group" >
+                    <label>Selecciona tu Variable</label> -->
+                    <!-- <select formControlName="ciudad" name="ciudad" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" id="ciudad" class="form-control select-dropdown" required="true">      
+                      <option *ngFor="let c of countries">{{ c.name }}</option>
+                    </select> -->
+                    <!-- <ngx-select-dropdown
+                    formControlName="ciudads"
+                    [multiple]="false"
+                    [config]="clientSelectConfig"
+                    [options]="variables"
+                    (change)="clientSelected($event.value)"
+                    class="form-control"
+                    ></ngx-select-dropdown>
+             
+                    </div> -->
+                    
+                </div>
+
+          
+                <div class="col-12
+                ">
+                  <!-- <label for="descripcion_larga">Descripcion Larga</label> -->
+                  <!-- <div >Hello, Froala!</div>                   -->
+                  <div class="form-group">
+                    <label for="descripcion_larga">Valor</label>
+                    <input
+                    type="text"
+                    class="form-control"
+                    formControlName="valor"
+                    id="valor"
+                    required
+                  />
+                  </div>
+                </div>
+            
+              </div>
+
+              <div class="row">
+                <div
+                  class="col-auto my-2"
+                  *ngIf="editar==1; else noEditMode"
+                >
+                  <button
+                    type="button"
+                    class="btn btn-raised btn-primary"
+                    [disabled]="formBlog.invalid"
+                    (click)="edit()"
+                  >
+                    Editar
+                  </button>
+                </div>
+                <ng-template #noEditMode>
+                  <div class="col-auto my-2">
+                    <button
+                      type="button"
+                      class="btn btn-raised btn-primary"
+                      [disabled]="formBlog.invalid"
+                      (click)="add()"
+                    >
+                      Guardar
+                    </button>
+                  </div>
+                </ng-template>
+
+                <div class="col-auto my-2">
+                  <button
+                    type="button"
+                    class="btn btn-raised btn-warning"
+                    [disabled]="!formBlog.dirty"
+                    (click)="formBlog.reset()"
+                  >
+                    Limpiar
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

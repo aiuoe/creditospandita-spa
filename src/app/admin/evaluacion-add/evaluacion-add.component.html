@@ -1,0 +1,2848 @@
+<div class="container-fluid padding-mv-0">
+  <div class="row margin-mv-0">
+    <div class="col-md-12 padding-mv-0">
+      <div class="card formula mt3em">
+        <div class="card-header">
+          <div class="card-title">
+            <button
+              *ngIf="external"
+              type="button"
+              class="close"    
+              (click)="closeExternal()"           
+              >
+              &times;
+            </button>
+            <h2 *ngIf="user && solicituds">Verificación del credito Nº {{solicituds.numero_credito}}</h2>
+          </div>
+          <div class="pull-left">
+            <h5>Tipo de credito: {{ solicituds && solicituds.tipoCredito == "m" ? "Panda Meses" : "Panda Dias" }}</h5>
+            <h5>Monto Solicitado: ${{ (solicituds ? solicituds.montoSolicitado : 0) | number:'1.0-0':'es' }}</h5>
+            <h5>Plazo de credito: {{solicituds ? solicituds.plazo : 0}} {{ solicituds && solicituds.tipoCredito == "m" ? "Meses" : "Dias" }}</h5>
+            <h5 *ngIf="solicituds && solicituds.ofertaEnviada == 0">Oferta Enviada: Oferta Minima</h5>
+            <h5 *ngIf="solicituds && solicituds.ofertaEnviada == 1">Oferta Enviada: Oferta Maxima</h5>
+            <h5 *ngIf="solicituds && solicituds.ofertaEnviada == 2">Oferta Enviada: Solicitud Original</h5>
+          </div>
+          <div class="pull-right">
+            <button
+            *ngIf="!external"
+              type="button"
+              class="btn btn-raised btn-success"                  
+              (click)="enviarCO(0,solicituds.id,solicituds.tipoCredito)">
+              Contra oferta minima
+            </button>
+            <button
+            *ngIf="!external"
+              type="button"
+              class="btn btn-raised btn-success"                  
+              (click)="enviarCO(1,solicituds.id,solicituds.tipoCredito)">
+              Contra oferta maxima
+            </button>
+            <button
+            *ngIf="!external"
+              type="button"
+              class="btn btn-raised btn-success"                  
+              (click)="firmarDoc(solicituds.id)">
+              Firmar Contrato
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row" *ngIf="user">
+  
+            <div class="col-md-12">
+              <ngb-tabset [justify]="currentJustify">
+                <ngb-tab>
+                  <ng-template ngbTabTitle>
+                    Filtro
+                    
+                    <img *ngIf="filtroEstatus=='negado'" style="width: 20px;margin-left: 10px;" src="/assets/img/close.png"> 
+                    <img *ngIf="filtroEstatus=='aprobado'" style="width: 20px;margin-left: 10px;" src="/assets/img/correct.png" >
+                  </ng-template>
+                  <ng-template ngbTabContent>
+                    <div class="row" >
+                      <div class="col-md-12">
+                        <table class="table table-striped">
+                          <thead>
+                            <th>Filtro</th>
+                            <th>Estatus</th>
+                            <th>Respuesta</th>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let f of filtroAnalisis">
+                              <td>{{f.nombre}}</td>
+                              <td>{{ f.estatus }}</td>
+                              <td>{{ f.respuesta ? f.respuesta : '' }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </ng-template>
+                </ngb-tab>
+              
+                <ngb-tab>
+                  <ng-template ngbTabTitle>
+                    Matriz calculo
+                    
+                    <img *ngIf="revisionBalance=='rechazado'" style="width: 20px;margin-left: 10px;" src="/assets/img/close.png"> 
+                    <img *ngIf="revisionBalance=='aprobado'" style="width: 20px;margin-left: 10px;" src="/assets/img/correct.png" >
+                  </ng-template>
+                  <ng-template ngbTabContent>
+                    <div class="row" >
+                      <div class="col-md-12">
+                        <table class="table table-striped">
+                          <thead>
+                            <th>Totales</th>
+                            <th></th>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>Total Egresos</td>
+                              <td>${{ gastoMonetario.totalEgresos | number:'1.0-0':'es' }}</td>
+                            </tr>
+                            <tr>
+                              <td>Total Egresos con Personas Activas Economicamente</td>
+                              <td>${{ gastoMonetario.totalEgresosPAE | number:'1.0-0':'es' }}</td>
+                            </tr>
+                            <tr>
+                              <td>Total Ingresos</td>
+                              <td>${{ (financieras && financieras.ingresoTotalMensual ? financieras.ingresoTotalMensual : 0) | number:'1.0-0':'es' }}</td>
+                            </tr>
+                            <tr>
+                              <td>Total Egresos Aproximados</td>
+                              <td>${{ gastoMonetario.totalEgresosPAE | number:'1.0-0':'es' }}</td>
+                            </tr>
+                            <tr>
+                              <td>Total Egresos Usuario</td>
+                              <td>${{ financieras.egresoTotalMensual | number:'1.0-0':'es' }}</td>
+                            </tr>
+                            <tr>
+                              <td>Total deudas financieras</td>
+                              <td>${{ (financieras.pagandoActual && financieras.pagandoActual != " " ? financieras.pagandoActual : 0 ) | number:'1.0-0':'es' }}</td>
+                            </tr>
+                            <tr>
+                              <td>Total Disponible Mensual</td>
+                              <td>${{ gastoMonetario.totalDisponible | number:'1.0-0':'es' }}</td>
+                            </tr>
+                            <tr>
+                              <td>Disponible Endeudamento</td>
+                              <td>${{ gastoMonetario.diponibleEndeudamiento | number:'1.0-0':'es' }}</td>
+                            </tr>
+                            <tr>
+                              <td>Balance de caja dias minimo</td>
+                              <td>{{ gastoMonetario.balanceCajaDiasMinimo ? 'Balance suficiente' : 'Balance insuficiente' }}</td>
+                            </tr>
+                            <tr>
+                              <td>Balance de caja dias maximo</td>
+                              <td>{{ gastoMonetario.balanceCajaDiasMaximo ? 'Balance suficiente' : 'Balance insuficiente' }}</td>
+                            </tr>
+                            <tr>
+                              <td>Balance de caja meses minimo</td>
+                              <td>{{ gastoMonetario.balanceCajaMesesMinimo ? 'Balance suficiente' : 'Balance insuficiente' }}</td>
+                            </tr>
+                            <tr>
+                              <td>Balance de caja meses maximo</td>
+                              <td>{{ gastoMonetario.balanceCajaMesesMaximo ? 'Balance suficiente' : 'Balance insuficiente' }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="col-md-12">
+                        <table class="table table-striped">
+                          <tbody>
+                            <tr>
+                              <th>Ingresos Actividad Principal</th>
+                              <td></td>
+                              <td>${{ financieras.ingresoTotalMensual | number:'1.0-0':'es' }}</td>
+                            </tr>
+                            <tr>
+                              <td>Alojamiento</td>
+                              <td>{{ calculoIngreso.alojamiento.porcentaje | number:'1.2-2':'es' }}%</td>
+                              <td>${{ calculoIngreso.alojamiento.total | number:'1.0-0':'es' }}</td>
+                            </tr>
+                            <tr>
+                              <td>Alimentos</td>
+                              <td>{{ calculoIngreso.alimentos.porcentaje | number:'1.2-2':'es' }}%</td>
+                              <td>${{ calculoIngreso.alimentos.total | number:'1.0-0':'es' }}</td>
+                            </tr>
+                            <tr>
+                              <td>Servicios publicos</td>
+                              <td>{{ calculoIngreso.servicios_publicos.porcentaje | number:'1.2-2':'es' }}%</td>
+                              <td>${{ calculoIngreso.servicios_publicos.total | number:'1.0-0':'es' }}</td>
+                            </tr>
+                            <tr>
+                              <td>Transporte</td>
+                              <td>{{ calculoIngreso.transporte.porcentaje | number:'1.2-2':'es' }}%</td>
+                              <td>${{ calculoIngreso.transporte.total | number:'1.0-0':'es' }}</td>
+                            </tr>
+                            <tr>
+                              <td>Vestido</td>
+                              <td>{{ calculoIngreso.vestido.porcentaje | number:'1.2-2':'es' }}%</td>
+                              <td>${{ calculoIngreso.vestido.total | number:'1.0-0':'es' }}</td>
+                            </tr>
+                            <tr>
+                              <td>Recreación</td>
+                              <td>{{ calculoIngreso.recreacion.porcentaje | number:'1.2-2':'es' }}%</td>
+                              <td>${{ calculoIngreso.recreacion.total | number:'1.0-0':'es' }}</td>
+                            </tr>
+                            <tr>
+                              <td>Muebles</td>
+                              <td>{{ calculoIngreso.muebles.porcentaje | number:'1.2-2':'es' }}%</td>
+                              <td>${{ calculoIngreso.muebles.total | number:'1.0-0':'es' }}</td>
+                            </tr>
+                            <tr>
+                              <td>Bebidas alcoholicas</td>
+                              <td>{{ calculoIngreso.bebidas_alcoholicas.porcentaje | number:'1.2-2':'es' }}%</td>
+                              <td>${{ calculoIngreso.bebidas_alcoholicas.total | number:'1.0-0':'es' }}</td>
+                            </tr>
+                            <tr>
+                              <td>Salud</td>
+                              <td>{{ calculoIngreso.salud.porcentaje | number:'1.2-2':'es' }}%</td>
+                              <td>${{ calculoIngreso.salud.total | number:'1.0-0':'es' }}</td>
+                            </tr>
+                            <tr>
+                              <td>Total</td>
+                              <td>{{ calculoIngreso.total.porcentaje | number:'1.2-2':'es' }}%</td>
+                              <td>${{ calculoIngreso.total.total | number:'1.0-0':'es' }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="col-md-12">
+                        <table class="table table-striped">
+                          <tbody>
+                            <tr>
+                              <td>Ciudad</td>
+                              <td></td>
+                              <td>{{ basicas.ciudad }}</td>
+                            </tr>
+                            <tr>
+                              <td>Estrato</td>
+                              <td></td>
+                              <td>{{ basicas.estrato }}</td>
+                            </tr>
+                            <tr>
+                              <td>Cuantas personas económicamente activas o que laboran viven contigo? * (fuera de ti)</td>
+                              <td></td>
+                              <td>{{ personasaCargo }}</td>
+                            </tr>
+                            <tr>
+                              <td>Cuantas personas dependen de ti economicamente</td>
+                              <td>{{ nroPersonasDependenEconomicamente }}</td>
+                              <td>{{ nroPersonasDependenEconomicamente + 1 }}</td>
+                            </tr>
+                            <tr>
+                              <td>Situacion laboral</td>
+                              <td></td>
+                              <td>{{ financieras.situacionLaboral }}</td>
+                            </tr>
+                            <tr>
+                              <td>Tipo de vivienda</td>
+                              <td></td>
+                              <td>{{ basicas.tipoVivienda }}</td>
+                            </tr>
+                            <tr>
+                              <td>Tipo de afiliacion</td>
+                              <td></td>
+                              <td>{{ basicas.tipoAfiliacion }}</td>
+                            </tr>
+                            <tr>
+                              <td>Total Renta</td>
+                              <td></td>
+                              <td>${{ totalRenta | number:'1.0-0':'es' }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="col-md-12">
+                        <table class="table table-striped">
+                          <thead>
+                            <th>Renta</th>
+                            <th></th>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>Nro de personas</td>
+                              <td>{{ nroPersonasDependenEconomicamente + 1 }}</td>
+                            </tr>
+                            <tr>
+                              <td>Total</td>
+                              <td>${{ gastoMonetario.renta | number:'1.0-0':'es' }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="col-md-12">
+                        <table class="table table-striped">
+                          <thead>
+                            <th>Alimentacion</th>
+                            <th></th>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>Nro de personas</td>
+                              <td>{{ nroPersonasDependenEconomicamente + 1 }}</td>
+                            </tr>
+                            <tr>
+                              <td>Per capita</td>
+                              <td>${{ gastoMonetario.alimentacion.per_capita | number:'1.0-0':'es' }}</td>
+                            </tr>
+                            <tr>
+                              <td>Total</td>
+                              <td>${{ gastoMonetario.alimentacion.total | number:'1.0-0':'es' }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="col-md-12">
+                        <table class="table table-striped">
+                          <thead>
+                            <th>Servicios</th>
+                            <th></th>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>Nro de personas</td>
+                              <td>{{ nroPersonasDependenEconomicamente + 1 }}</td>
+                            </tr>
+                            <tr>
+                              <td>Per capita</td>
+                              <td>${{ gastoMonetario.servicios.per_capita | number:'1.0-0':'es' }}</td>
+                            </tr>
+                            <tr>
+                              <td>Total</td>
+                              <td>${{ gastoMonetario.servicios.total | number:'1.0-0':'es' }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="col-md-12">
+                        <table class="table table-striped">
+                          <thead>
+                            <th>Transporte</th>
+                            <th></th>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>Nro de personas</td>
+                              <td>{{ nroPersonasDependenEconomicamente + 1 }}</td>
+                            </tr>
+                            <tr>
+                              <td>Per capita</td>
+                              <td>${{ gastoMonetario.transporte.per_capita | number:'1.0-0':'es' }}</td>
+                            </tr>
+                            <tr>
+                              <td>Total</td>
+                              <td>${{ gastoMonetario.transporte.total | number:'1.0-0':'es' }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="col-md-12">
+                        <table class="table table-striped">
+                          <thead>
+                            <th>Vestido</th>
+                            <th></th>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>Nro de personas</td>
+                              <td>{{ nroPersonasDependenEconomicamente + 1 }}</td>
+                            </tr>
+                            <tr>
+                              <td>Per capita</td>
+                              <td>${{ gastoMonetario.vestido.per_capita | number:'1.0-0':'es' }}</td>
+                            </tr>
+                            <tr>
+                              <td>Total</td>
+                              <td>${{ gastoMonetario.vestido.total | number:'1.0-0':'es' }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="col-md-12">
+                        <table class="table table-striped">
+                          <thead>
+                            <th>Cotizacion a salud</th>
+                            <th></th>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>Total</td>
+                              <td>${{ gastoMonetario.cotizacion_salud | number:'1.0-0':'es' }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </ng-template>
+                </ngb-tab>
+                <ngb-tab>
+                  <ng-template ngbTabTitle>
+                    Telefono
+                    
+                    <img *ngIf="telefonoEstatus=='negado'" style="width: 20px;margin-left: 10px;" src="/assets/img/close.png"> 
+                    <img *ngIf="telefonoEstatus=='aprobado'" style="width: 20px;margin-left: 10px;" src="/assets/img/correct.png" >
+                  </ng-template>
+                  <ng-template ngbTabContent>
+                    <div class="row" >
+                      <div class="col-md-12 text-center">
+                        <h3>{{user.phone_number}}</h3>
+                        <p>{{resultadoTelefonoAnalisis}}</p>
+                      </div>
+                    </div>
+                  </ng-template>
+                </ngb-tab>
+                <ngb-tab>
+                  <ng-template ngbTabTitle>
+                    Email
+                  
+                    <img *ngIf="emailEstatus=='negado'" style="width: 20px;margin-left: 10px;" src="/assets/img/close.png"> 
+                    <img *ngIf="emailEstatus=='aprobado'" style="width: 20px;margin-left: 10px;" src="/assets/img/correct.png" >
+                    <img *ngIf="emailEstatus=='pendiente manual'" style="width: 20px;margin-left: 10px;" src="/assets/img/close.png" >
+                  </ng-template>
+                  <ng-template ngbTabContent>
+                    <div class="row" >
+                      <div class="col-md-12 text-center">
+                        <h3>{{user.email}}</h3>
+                        <!-- <p>{{resultadoEmailAnalisis}}</p> -->
+                        <div class="row" *ngIf="emailAnalisis">
+                          <div class="col-md-12">
+                            <table class="table table-striped">
+                              <thead>
+                                <th>Nombre</th>
+                                <th>Resultado</th>
+                              </thead>
+                              <tbody>
+                                <tr *ngFor="let s of emailAnalisis | keyvalue;">
+                                  <td>{{ s.key }}</td>
+                                  <!-- <td *ngIf="s.key=='adresInformation'">
+                                    <div class="row" *ngFor="let a of s.value | keyvalue;">
+                                      <p>{{a.key}} {{a.value}}</p>
+                                    </div>
+                                  </td> -->
+                                  <td *ngIf="s.value">
+                                    {{ s.value }}
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+
+                        <button
+                            *ngIf="emailEstatus=='pendiente manual'"
+                            ngbTooltip="Aprobación manual de email"
+                            type="button"
+                            class="btn btn-danger"
+                            style="background-color: #dc3545; border-color: #dc3545;"
+                            (click)="openApprove('approve')"
+                          >
+                            <a class="ft-bell" style="color:white"></a>
+                        </button>  
+                      </div>
+                    </div>
+                  </ng-template>
+                </ngb-tab>
+                
+                <ngb-tab>
+                  <ng-template ngbTabTitle>
+                    Web Scrapping
+                    
+                    <img *ngIf="scrappingEstatus=='negado'" style="width: 20px;margin-left: 10px;" src="/assets/img/close.png"> 
+                    <img *ngIf="scrappingEstatus=='aprobado'" style="width: 20px;margin-left: 10px;" src="/assets/img/correct.png" >
+                  </ng-template>
+                  <ng-template ngbTabContent>
+                    <div class="row" *ngIf="scrappingAnalisis">
+                      <div class="col-md-12">
+                        <table class="table table-striped">
+                          <thead>
+                            <th>Nombre</th>
+                            <th>Resultado</th>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let s of scrappingAnalisis | keyvalue;">
+                              <td>{{ s.key }}</td>
+                              <td *ngIf="s.key=='adresInformation'">
+                                <div class="row" *ngFor="let a of s.value | keyvalue;">
+                                  <p>{{a.key}} {{a.value}}</p>
+                                </div>
+                              </td>
+                              <td *ngIf="s.key!='adresInformation'">
+                                {{ s.value }}
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </ng-template>
+                </ngb-tab>
+                <!-- <ngb-tab >
+                  <ng-template ngbTabTitle>Verificación de selfies 
+                    <img *ngIf="selfieEstatus=='rechazado'" style="width: 20px;margin-left: 10px;" src="/assets/img/close.png"> 
+                    <img *ngIf="selfieEstatus=='aprobado'" style="width: 20px;margin-left: 10px;" src="/assets/img/correct.png" >
+                  </ng-template>
+                  <ng-template ngbTabContent >
+
+                
+
+                    <div class="row" *ngIf="revisionBalance=='aprobado'; else alerta ">
+                      
+                      <div class="col-md-12">
+                        <div class="row" >
+                          <div class="col-md-4 img-zoom">
+                            <small><strong>Anverso</strong></small><br> 
+                            <div clas="zoomimg">
+                            <ngx-image-zoom 
+                              *ngIf="imgAnverso"
+                              [thumbImage]=imgAnverso
+                              [magnification]="3"
+                              [enableScrollZoom]="false"
+                              [enableLens]="false"
+                              [lensWidth]="80"
+                              [lensHeight]="80"
+                              [zoomMode]="click"                                       
+                            ></ngx-image-zoom>  
+                          </div>
+                             <a  (click)="open(pagare)">
+                              <img  [src]="imgAnverso"  style="width: 100%;" >
+
+                        
+                            </a> 
+                            
+                          </div>
+                          
+                             MODAL DE ANVERSO 
+                            <ng-template #pagare let-modal>
+                          
+                              <div class="modal-header">
+                                <button type="button"  (click)="modal.dismiss('Cross click')" class="close" data-dismiss="modal">&times;</button>
+                                 <h4 class="modal-title">Modal Header</h4> 
+                              </div>
+                              <div class="modal-body" >
+                                <img class="zoom"  [src]="imgAnverso"  style="width: 100%;" >
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button"  (click)="modal.dismiss('Cross click')" class="btn btn-default" data-dismiss="modal" style="background-color: #f36c21;color: white;border-color: #f36c21;">Cerrar</button>
+                              </div>
+
+                              </ng-template>
+
+                          <div class="col-md-4">
+                            <small><strong>Reverso</strong></small><br> 
+                            <div clas="zoomimg">
+                              <ngx-image-zoom 
+                                *ngIf="imgReverso"
+                                [thumbImage]=imgReverso
+                                [magnification]="3"
+                                [enableScrollZoom]="false"
+                                [enableLens]="false"
+                                [lensWidth]="80"
+                                [lensHeight]="80"
+                                [zoomMode]="click"                                       
+                              ></ngx-image-zoom>  
+                            </div>         
+                             <a (click)="open(reverso)"><img [src]="imgReverso"  style="width: 100%;" ></a> 
+                          </div>
+                            MODAL DE REVERSO 
+                           <ng-template #reverso let-modal>
+                          
+                            <div class="modal-header">
+                              <button type="button"  (click)="modal.dismiss('Cross click')" class="close" data-dismiss="modal">&times;</button>
+                               <h4 class="modal-title">Modal Header</h4> 
+                            </div>
+                            <div class="modal-body" >
+                              <img [src]="imgReverso"  style="width: 100%;" >
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button"  (click)="modal.dismiss('Cross click')" class="btn btn-default" data-dismiss="modal" style="background-color: #f36c21;color: white;border-color: #f36c21;">Cerrar</button>
+                            </div>
+
+                            </ng-template>
+                          <div class="col-md-4"> 
+                            <small><strong>Selfie</strong></small><br> 
+                            <div clas="zoomimg">
+                              <ngx-image-zoom 
+                                *ngIf="imgSelfie"
+                                [thumbImage]=imgSelfie
+                                [magnification]="3"
+                                [enableScrollZoom]="false"
+                                [enableLens]="false"
+                                [lensWidth]="80"
+                                [lensHeight]="80"
+                                [zoomMode]="click"                                       
+                              ></ngx-image-zoom>  
+                            </div>     
+                             <a (click)="open(selfie)"><img [src]="imgSelfie"  style="width: 100%;"></a> 
+                          </div>
+                                MODAL DE REVERSO 
+                               <ng-template #selfie let-modal>
+                          
+                                <div class="modal-header">
+                                  <button type="button"  (click)="modal.dismiss('Cross click')" class="close" data-dismiss="modal">&times;</button>
+                                   <h4 class="modal-title">Modal Header</h4> 
+                                </div>
+                                <div class="modal-body" >
+                                  <img [src]="imgSelfie"  style="width: 100%;" >
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button"  (click)="modal.dismiss('Cross click')" class="btn btn-default" data-dismiss="modal" style="background-color: #f36c21;color: white;border-color: #f36c21;">Cerrar</button>
+                                </div>
+    
+                                </ng-template>
+
+                           
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12">
+              
+              
+                            <ngb-tabset [justify]="currentJustify">
+                              <ngb-tab title="Información Básica">
+                                <ng-template ngbTabContent>
+                                  <div class="row" *ngIf="user">
+                                    <div class="col-md-3">
+                                      <div class="row" >
+                                        <div class="col-md-12">
+                                          <small><strong>Anverso</strong></small><br>  
+                                          
+                                          <img *ngIf="imgAnverso" [src]="imgAnverso" style="width: 100%;" >
+                                        </div>
+                                        <div class="col-md-12">
+                                          <small><strong>Reverso</strong></small><br>          
+                                          <img *ngIf="imgReverso" [src]="imgReverso" style="width: 100%;" >
+                                        </div>
+                                        <div class="col-md-12"> 
+                                          <small><strong>Selfie</strong></small><br>      
+                                          <img  *ngIf="imgSelfie" [src]="imgSelfie" style="width: 100%;">
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-md-9">
+                                      <div class="row fondogris">
+                                        <div class="col-md-6 txt-cntr" >
+                                          <label>Nombres y Apellidos</label>
+                                          <p *ngIf="user">{{user.first_name}} {{user.second_name}} {{user.last_name}} {{user.second_last_name}}</p>
+                                        </div>
+                                        <div class="col-md-6 txt-cntr" >
+                                          <label>Correo electrónico</label>
+                                          <p *ngIf="user">{{user.email}}</p>
+                                        </div>
+                                       
+                                      </div>
+                                      <div class="row">
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Teléfono</label>
+                                          <p *ngIf="user">{{user.phone_number}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Dirección</label>
+                                          <p *ngIf="basicas">{{basicas.direccion}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Ciudad</label>
+                                          <p *ngIf="basicas">{{basicas.ciudad}}</p>
+                                        </div>
+                                      </div>
+              
+                                      <div class="row fondogris">
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Tipo de vivienda</label>
+                                          <p *ngIf="basicas">{{basicas.tipoVivienda}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Tiempo en esta vivienda</label>
+                                          <p *ngIf="basicas">{{basicas.tienmpoVivienda}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>¿Con quien vive?</label>
+                                          <p *ngIf="basicas">{{basicas.conquienVives}}</p>
+                                        </div>
+                                      </div>
+              
+                                      <div class="row">
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>
+                                            Cuantas personas económicamente activas o que laboran viven contigo? (fuera de ti)</label>
+                                          <p *ngIf="basicas">{{basicas.personasaCargo}}</p>
+                                        </div>
+                                        <div class="col-md-2 txt-cntr" >
+                                          <label>Fecha de nacimiento</label>
+                                          <p *ngIf="basicas">{{basicas.fechaNacimiento}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Genero</label>
+                                          <p *ngIf="basicas">{{basicas.genero}}</p>
+                                        </div>
+                                        <div class="col-md-2 txt-cntr" >
+                                          <label>Estrato</label>
+                                          <p *ngIf="basicas">{{basicas.estrato}}</p>
+                                        </div>
+                                      </div>
+              
+                                      <div class="row fondogris">
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Estado civil</label>
+                                          <p *ngIf="basicas">{{basicas.estadoCivil}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Cuantas personas dependen de ti economicamente</label>
+                                          <p *ngIf="basicas">{{basicas.nroPersonasDependenEconomicamente}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Número de hijos</label>
+                                          <p *ngIf="basicas">{{basicas.nHijos}}</p>
+                                        </div>
+                                   
+                                      </div>
+              
+                                      <div class="row">
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Nº de cedula</label>
+                                          <p *ngIf="basicas">{{basicas.nCedula}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Fecha de expedición</label>
+                                          <p *ngIf="basicas">{{basicas.fechaExpedicionCedula}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Tipo de plan movil</label>
+                                          <p *ngIf="basicas">{{basicas.tipoPlanMovil}}</p>
+                                        </div>
+                                   
+                                      </div>
+                                      <div class="row fondogris">
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Nivel de estudios</label>
+                                          <p *ngIf="basicas">{{basicas.nivelEstudio}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Estado de estudio</label>
+                                          <p *ngIf="basicas">{{basicas.estadoEstudio}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>¿Reportado en central de riesgo?</label>
+                                          <p *ngIf="basicas">{{basicas.centralRiesgo}}</p>
+                                        </div>
+                                   
+                                      </div>
+                                      <div class="row" *ngIf="basicas.centralRiesgo=='Si'">
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Entidad que te ha reportado</label>
+                                          <p *ngIf="basicas">{{basicas.entidadReportado}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Cual?</label>
+                                          <p *ngIf="basicas">{{basicas.cualEntidadReportado}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Valor mora</label>
+                                          <p *ngIf="basicas">{{basicas.valorMora}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Estado del reporte</label>
+                                          <p *ngIf="basicas">{{basicas.estadoReportado}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Tiempo reportado</label>
+                                          <p *ngIf="basicas">{{basicas.tiempoReportado}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Motivo del reporte</label>
+                                          <p *ngIf="basicas">{{basicas.motivoReportado}}</p>
+                                        </div>
+                                   
+                                      </div>
+                                      <div class="row">
+                                        <div class="col-md-4 txt-cntr" *ngIf="basicas.centralRiesgo=='Si'">
+                                          <label>Estado reportado</label>
+                                          <p *ngIf="basicas">{{basicas.estadoReportado}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" *ngIf="basicas.centralRiesgo=='Si'">
+                                          <label>Valor en mora</label>
+                                          <p *ngIf="basicas">{{basicas.valorMora}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>¿Tiene vehiculo propio?</label>
+                                          <p *ngIf="basicas">{{basicas.vehiculo}}</p>
+                                        </div>
+                                       
+                                     
+                                   
+                                      </div>
+                                      <div class="row fondogris">
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Placa</label>
+                                          <p *ngIf="basicas">{{basicas.placa}}</p>
+                                        </div>
+                                     
+                                        <div class="col-md-6 txt-cntr" >
+                                          <label>
+                                            ¿Cotizas a Seguridad Social?</label>
+                                          <p *ngIf="basicas">{{basicas.cotizasSeguridadSocial}}</p>
+                                        </div>
+              
+                                      </div>
+                                      <div class="row" >
+                                        <div class="col-md-4 txt-cntr" *ngIf="basicas.cotizasSeguridadSocial=='Si'">
+                                          <label>
+                                            Tipo de afiliacion</label>
+                                          <p *ngIf="basicas">{{basicas.tipoAfiliacion}}</p>
+                                        </div>
+                            
+                                        <div class="col-md-4 txt-cntr" *ngIf="basicas.cotizasSeguridadSocial=='Si'">
+                                          <label>
+                                            EPS</label>
+                                          <p *ngIf="basicas">{{basicas.eps}}</p>
+                                        </div>
+              
+                                        <div class="col-md-4 txt-cntr">
+                                          <label>
+                                            Como se entero de nosotros?</label>
+                                          <p *ngIf="basicas">{{basicas.comoEnterasteNosotros}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr">
+                                          <label>
+                                            IP</label>
+                                          <p *ngIf="user">{{user.ip}}</p>
+                                        </div>
+                                      </div>
+
+
+                                       ---------------aqui --
+                                      
+                                    </div>
+                                </div>
+                                </ng-template>
+                              </ngb-tab>
+
+
+
+
+                             
+                              <ngb-tab title="Referencias Personales">
+                                <ng-template ngbTabContent>
+                                  <div class="row" *ngIf="user">
+                                   
+                                    <div class="col-md-12">
+                                      <div class="row fondogris">
+                                        <div class="col-md-6 txt-cntr" >
+                                          <label>Referencia Personal Nombres</label>
+                                          <p *ngIf="user">{{referencias.ReferenciaPersonalNombres}}</p>
+                                        </div>
+                                        <div class="col-md-6 txt-cntr" >
+                                          <label>Referencia Personal Apellidos</label>
+                                          <p *ngIf="user">{{referencias.ReferenciaPersonalApellidos}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Referencia Personal Ciudad</label>
+                                          <p *ngIf="user">{{referencias.ReferenciaPersonalCiudadFk}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Referencia Personal Telefono</label>
+                                          <p *ngIf="user">{{referencias.ReferenciaPersonalTelefono}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Referencia Personal Email</label>
+                                          <p *ngIf="user">{{referencias.emailp}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Relación</label>
+                                          <p *ngIf="user">{{referencias.relacionp}}</p>
+                                        </div>
+                                      </div>
+                                      <div class="row">
+                                        <div class="col-md-6 txt-cntr" >
+                                          <label>Referencia Familiar Nombres</label>
+                                          <p *ngIf="user">{{referencias.ReferenciaFamiliarNombres}}</p>
+                                        </div>
+                                        <div class="col-md-6 txt-cntr" >
+                                          <label>Referencia Familiar Apellidos</label>
+                                          <p *ngIf="user">{{referencias.ReferenciaFamiliarApellidos}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Referencia Familiar Ciudad</label>
+                                          <p *ngIf="user">{{referencias.ReferenciaFamiliarCiudadFk}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Referencia Familiar Telefono</label>
+                                          <p *ngIf="user">{{referencias.ReferenciaFamiliarTelefono}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Referencia Familiar Email</label>
+                                          <p *ngIf="user">{{referencias.emailf}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Relación</label>
+                                          <p *ngIf="user">{{referencias.relacionf}}</p>
+                                        </div>
+                                      </div>
+              
+                          
+
+
+                                       ---------------aqui --
+                                      
+                                    </div>
+                                </div>
+                                </ng-template>
+                              </ngb-tab>
+              
+              
+
+
+                              <ngb-tab title="Informacion Financiera">
+                                <ng-template ngbTabContent>
+                                  <div class="row" *ngIf="user">
+                                   
+                                    <div class="col-md-12">
+                                      <div class="row fondogris">
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Banco</label>
+                                          <p *ngIf="user">{{financieras.banco}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Tipo de Cuenta</label>
+                                          <p *ngIf="user">{{financieras.tipoCuenta}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Número de cuenta</label>
+                                          <p *ngIf="user">{{financieras.nCuenta}}</p>
+                                        </div>
+                                       
+                                       
+                                      </div>
+                                      <div class="row">
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Mi salario</label>
+                                          <p *ngIf="user">{{financieras.ingresoTotalMensual}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Lo que gasto al mes</label>
+                                          <p *ngIf="user">{{financieras.egresoTotalMensual}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Otros Ingresos Mensuales</label>
+                                          <p *ngIf="user">{{financieras.otroIngreso}}</p>
+                                        </div>
+
+                                      </div>
+                                      <div class="row fondogris">
+                                        
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>¿De donde proviene?</label>
+                                          <p *ngIf="user">{{financieras.proviene}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Total otros ingresos mensuales</label>
+                                          <p *ngIf="user">{{financieras.total_otro_ingr_mensual}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>¿Como te pagan?</label>
+                                          <p *ngIf="user">{{financieras.comoTePagan}}</p>
+                                        </div>
+                                      </div>
+                                      <div class="row">
+                                        
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Periodo de pago de Nómina</label>
+                                          <p *ngIf="user">{{financieras.periodoPagoNomina}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Dias de pago</label>
+                                          <p *ngIf="user">{{financieras.diasPago}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Tienes tarjeta de Credito</label>
+                                          <p *ngIf="user">{{financieras.tarjetasCredito}}</p>
+                                        </div>
+
+                                      </div>
+                                      <div class="row fondogris">
+                                        
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Tienes o has tenido una obligación (crédito) con una entidad financiera ?</label>
+                                          <p *ngIf="user">{{financieras.creditosBanco}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Tienes otras cuentas de ahorro o corriente?</label>
+                                          <p *ngIf="user">{{financieras.otrasCuentas}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Situación Laboral</label>
+                                          <p *ngIf="user">{{financieras.situacionLaboral}}</p>
+                                        </div>
+                                      </div>
+                                      <div class="row" *ngIf="financieras.situacionLaboral!='Pensionado' || financieras.situacionLaboral!='Estudiante'" >
+                                        
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Actividad</label>
+                                          <p *ngIf="user">{{financieras.actividad}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Tipo de empresa</label>
+                                          <p *ngIf="user">{{financieras.tipoEmpresa}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Antiguedad Laboral</label>
+                                          <p *ngIf="user">{{financieras.antiguedadLaboral}}</p>
+                                        </div>
+
+                                      </div>
+                                      <div class="row fondogris" *ngIf="financieras.situacionLaboral!='Pensionado' || financieras.situacionLaboral!='Estudiante'" >
+                                        
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Nombre de la empresa</label>
+                                          <p *ngIf="user">{{financieras.nombreEmpresa}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Nombre del Cargo</label>
+                                          <p *ngIf="user">{{financieras.nombreCargo}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Teléfono de la empresa</label>
+                                          <p *ngIf="user">{{financieras.telefonoEmpresa}}</p>
+                                        </div>
+                                      </div>
+                                      <div class="row" *ngIf="financieras.situacionLaboral!='Pensionado' || financieras.situacionLaboral!='Estudiante'" >
+                                        
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Ciudad donde trabajas</label>
+                                          <p *ngIf="user">{{financieras.ciudadTrabajas}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Direccion de la empresa</label>
+                                          <p *ngIf="user">{{financieras.direccionEmpresa}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Sector Economico que se dedica</label>
+                                          <p *ngIf="user">{{financieras.sectorEconomico}}</p>
+                                        </div>
+
+                                      </div>
+                                      <div class="row fondogris">
+                                        <div class="col-md-4 txt-cntr" *ngIf="financieras.situacionLaboral=='Pensionado'">
+                                          <label>¿Cual es tu fondo de pension ?</label>
+                                          <p *ngIf="user">{{financieras.fondoPension}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" *ngIf="financieras.situacionLaboral=='Pensionado'">
+                                          <label>Banco donde recibes tu pension</label>
+                                          <p *ngIf="user">{{financieras.bancoPension}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" *ngIf="financieras.situacionLaboral=='Estudiante'">
+                                          <label>Cual es tu fuente de ingreso ?</label>
+                                          <p *ngIf="user">{{financieras.fuenteIngreso}}</p>
+                                        </div>
+
+                                        <div class="col-md-4 txt-cntr" *ngIf="financieras.situacionLaboral!='Pensionado' || financieras.situacionLaboral!='Estudiante'" >
+                                          <label>Tamaño de la empresa donde laboras</label>
+                                          <p *ngIf="user">{{financieras.tamanoEmpresa}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" *ngIf="financieras.situacionLaboral!='Pensionado' || financieras.situacionLaboral!='Estudiante'" >
+                                          <label>Teléfono de la empresa</label>
+                                          <p *ngIf="user">{{financieras.telefonoEmpresa}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>¿En qué usarás el crédito?</label>
+                                          <p *ngIf="user">{{financieras.usoCredito}}</p>
+                                        </div>
+                                     
+                                      </div>
+                                      <div class="row">
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Tienes créditos o deudas que estas pagando en este momento?</label>
+                                          <p *ngIf="user">{{financieras.deudaActual}}</p>
+                                        </div>
+                                        <div class="col-md-4 txt-cntr" >
+                                          <label>Cual es la cuota total mensual de todos los creditos que estas pagando?</label>
+                                          <p *ngIf="user">${{financieras.pagandoActual | number:'1.0-0':'es' }}</p>
+                                        </div>
+                                      </div>
+                          
+
+
+                                       ---------------aqui --
+                                      
+                                    </div>
+                                </div>
+                                </ng-template>
+                              </ngb-tab>
+                            
+              
+                             
+              
+                              
+                            </ngb-tabset>
+                            
+                       
+              
+                            
+                            
+                          </div>
+                      
+                        </div>
+                        <div class="row">
+                        
+                          <div class="col-md-12">
+                          
+                            <form [formGroup]="formConfig">
+                               <div class="form-group">
+                                <label for="contenido">Comentario</label>
+                                <textarea  class="form-control"
+                                formControlName="comentario_selfie"
+                                id="comentario_selfie"></textarea>
+                              </div> 
+                              <br>
+                               <div class="col-md-12 txt-cntr"><h4>Comentarios</h4></div> 
+                    
+                               <p ><strong>{{c.usuario}}</strong><br> {{c.comentario}} <br> {{c.archivo}}</p> 
+                            </form>
+                            <div class="col-md-12 txt-cntr" style="margin-top: 3em;">
+                                <button
+                                  type="button"
+                                  class="btn btn-raised btn-success"
+                                  [disabled]="estatusSolicitud=='abierto' || estatusSolicitud == 'pagado' || estatusSolicitud == 'castigado' || estatusSolicitud=='novado'"
+                                  (click)="aceptarSelfie(revisionSelfie)"
+                                >
+                                  Aceptar
+                                </button>
+                               
+                                <button
+                                  type="button"
+                                  class="btn btn-raised btn-warning"
+                                  [disabled]="estatusSolicitud=='abierto' || estatusSolicitud == 'pagado' || estatusSolicitud == 'castigado' || estatusSolicitud=='novado'"
+                                  (click)="rechazarSelfie(revisionSelfie)"
+                                >
+                                  Rechazar
+                                </button>
+                                <button
+                                  type="button"
+                                  class="btn btn-raised btn-success"
+                               
+                                  (click)="requerirSelfie(revisionSelfie.id)"
+                                >
+                                  Requerir
+                                </button>
+                                <button
+                                type="button"
+                                class="btn btn-raised btn-info"
+                              
+                                [routerLink]="['/admin/comentarios/', revisionSelfie.id,'selfie']"
+
+                              >
+                                Agregar comentario
+                              </button>
+                            </div>
+
+                            <div class="row">
+                              <div class="col-md-12 " *ngFor="let c of comentSelfie">
+                                <div class="row fondoComent">
+                                  <div class="col-md-6">
+                                    <strong>{{c.usuario}}</strong>
+                                  </div>
+                                  <div class="col-md-6" style="text-align: right;">
+                                    <p>{{c.created_at}}</p>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <p>{{c.comentario}}</p>
+                                  </div>
+                                  <div class="col-md-6"></div>
+                                  <div class="col-md-6">
+                                    <p><a href="{{ruta}}{{c.archivo}}" target="_blank" download="{{c.archivo}}">{{c.archivo}}</a></p>
+                                  </div>
+                                  <div class="col-md-6" style="text-align: right;">
+                                    <div class="row">
+                                      <div class="col-md-9" style="text-align: right;"><p><a [routerLink]="['/admin/comentarios/', c.id]">Editar</a></p></div>
+                                      <div class="col-md-3" style="text-align: left;"><p><a style="color: #f4c269;" (click)="borrarComentario(c)">Borrar</a></p></div>
+                                    </div>
+                                   
+                                    
+
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+                  </ng-template>
+                  <ng-template #alerta>
+                    <div class="col-md-12 txt-cntr">
+                      <p><h3>Para seguir en este paso debe aprobar el anterior</h3>
+                    </div>
+                  </ng-template>
+                </ngb-tab> -->
+                <ngb-tab>
+                  <ng-template ngbTabTitle>Verifiquese
+                    <img *ngIf="identidadEstatus=='negado'" style="width: 20px;margin-left: 10px;" src="/assets/img/close.png"> 
+                    <img *ngIf="identidadEstatus=='aprobado'" style="width: 20px;margin-left: 10px;" src="/assets/img/correct.png">
+                    <img *ngIf="identidadEstatus=='pendiente manual'" style="width: 20px;margin-left: 10px;" src="/assets/img/close.png">
+                  </ng-template>
+                  <ng-template ngbTabContent>
+                    <div class="row" *ngIf="identidadEstatus!=''; else alerta ">
+                      <div class="col-sm-12 text-center">
+
+                        <button
+                          *ngIf="identidadEstatus=='pendiente manual'"
+                          ngbTooltip="Aprobación manual de verifiquese"
+                          type="button"
+                          class="btn btn-danger"
+                          style="background-color: #dc3545; border-color: #dc3545;"
+                          (click)="openApprove('approveVerifiquese')"
+                        >
+                        <a class="ft-bell" style="color:white"></a>
+                        </button>  
+                      </div>
+                      <div class="col-md-12">
+                        <h3>Datos Creditos Panda</h3>
+                      </div>
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Nombres y Apellidos</label>
+                        <p *ngIf="user">{{user.first_name}} {{user.second_name}} {{user.last_name}} {{user.second_last_name}}</p>
+                      </div>
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Nº de cedula</label>
+                        <p *ngIf="user">{{basicas.nCedula}}</p>
+                         <!-- <img *ngIf="estatusCedula==0" style="width: 20px;margin-left: 10px;" src="/assets/img/close.png">
+                         <img *ngIf="estatusCedula==1" style="width: 20px;margin-left: 10px;" src="/assets/img/correct.png">  -->
+                      </div>
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Genero</label>
+                        <p *ngIf="user">{{basicas.genero}}</p>
+                         <!-- <img *ngIf="genero==0" style="width: 20px;margin-left: 10px;" src="/assets/img/close.png"> 
+                        <img *ngIf="genero==1" style="width: 20px;margin-left: 10px;" src="/assets/img/correct.png">  -->
+                      </div>
+                      <div class="col-md-4 txt-cntr" >
+                        <label>eps</label>
+                        <p *ngIf="user">{{basicas.eps}}</p>
+                         <!-- <img *ngIf="eps==0" style="width: 20px;margin-left: 10px;" src="/assets/img/close.png"> 
+                        <img *ngIf="eps==1" style="width: 20px;margin-left: 10px;" src="/assets/img/correct.png">  -->
+                      </div>
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Regimen</label>
+                        <p></p>
+                         <!-- <img *ngIf="regimen==0" style="width: 20px;margin-left: 10px;" src="/assets/img/close.png"> 
+                        <img *ngIf="regimen==1" style="width: 20px;margin-left: 10px;" src="/assets/img/correct.png">  -->
+                      </div>
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Estado de Afiliacion</label>
+                        <p></p>
+                         <!-- <img *ngIf="estadoAfiliado==0" style="width: 20px;margin-left: 10px;" src="/assets/img/close.png"> 
+                        <img *ngIf="estadoAfiliado==1" style="width: 20px;margin-left: 10px;" src="/assets/img/correct.png">  -->
+                      </div>
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Tipo de Afiliacion</label>
+                        <p *ngIf="user">{{basicas.tipoAfiliacion}}</p>
+                         <!-- <img *ngIf="tipoAfiliado==0" style="width: 20px;margin-left: 10px;" src="/assets/img/close.png"> 
+                        <img *ngIf="tipoAfiliado==1" style="width: 20px;margin-left: 10px;" src="/assets/img/correct.png">  -->
+                      </div>
+                      <div class="col-md-12">
+                        <div class="col-md-12">
+                          <h3>Datos de servicio</h3>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <h4 >BDUA</h4>
+                          </div>
+                          <div *ngIf="informacion" class="row width-100">
+                          <div class="col-md-6">
+                            <div *ngIf="bdua && bdua.fuenteFallo == 'NO'">
+                              <p><strong>Numero de documento :</strong> {{ bdua && bdua.fuenteFallo == 'NO' && bdua.personaVO.numeroDocumento ? bdua.personaVO.numeroDocumento : '' }}</p>
+                              <p><strong>Primer nombre :</strong> {{ bdua && bdua.fuenteFallo == 'NO' && bdua.personaVO.nombres.BDUA.primerNombre ? bdua.personaVO.nombres.BDUA.primerNombre : '' }}</p>
+                              <p><strong>Primer apellido :</strong> {{ bdua && bdua.fuenteFallo == 'NO' && bdua.personaVO.nombres.BDUA.primerApellido ? bdua.personaVO.nombres.BDUA.primerApellido : '' }}</p>
+                              <p><strong>Estado :</strong> {{ bdua && bdua.fuenteFallo == 'NO' && bdua.estado ? bdua.estado : '' }}</p>
+                              <p><strong>Entidad :</strong> {{ bdua && bdua.fuenteFallo == 'NO' && bdua.entidad ? bdua.entidad : '' }}</p>
+                              <p><strong>regimen :</strong> {{ bdua && bdua.fuenteFallo == 'NO' && bdua.regimen ? bdua.regimen : '' }}</p>
+                              <p><strong>fechaAfiliacion :</strong> {{ bdua && bdua.fuenteFallo == 'NO' && bdua.fechaAfiliacion ? bdua.fechaAfiliacion : '' }}</p>
+                              <p><strong>fechaFinalAfiliacion :</strong> {{ bdua && bdua.fuenteFallo == 'NO' && bdua.fechaFinalAfiliacion ? bdua.fechaFinalAfiliacion : '' }}</p>
+                              <p><strong>departamento :</strong> {{ bdua && bdua.fuenteFallo == 'NO' && bdua.departamento ? bdua.departamento : '' }}</p>
+                              <p><strong>ciudad :</strong> {{ bdua && bdua.fuenteFallo == 'NO' && bdua.ciudad ? bdua.ciudad : '' }}</p>
+                              <p><strong>tipoAfiliado :</strong> {{ bdua && bdua.fuenteFallo == 'NO' && bdua.tipoAfiliado ? bdua.tipoAfiliado : '' }}</p>
+                              
+                            </div>
+                            <div *ngIf="bdua && bdua.fuenteFallo != 'NO'">
+                              <p><strong>La fuente fallo</strong></p>
+                            </div>
+                            <div *ngIf="bdua == false || bdua==''">
+                              <p><strong>Error en la consulta</strong></p>
+                            </div>
+                          </div>
+                          <!--<div class="col-md-6">
+                          <label class="text-underline">Salud</label>
+                          <div *ngIf="ruaf && ruaf.fuenteFallo == 'NO' && ruaf.reportVO.lstPensionados.lstPensionadosDetailsGroup[0].tblSL.tblSLGrpSLCollection.tblSLGrpSL.length > 0">
+                            <div *ngFor="let s of ruaf.reportVO.lstPensionados.lstPensionadosDetailsGroup[0].tblSL.tblSLGrpSLCollection.tblSLGrpSL; index as i">
+                              <p><strong>{{i+1}}. Regimen SL :</strong> {{ s.regimenSL }}</p>
+                              <p><strong>Administradora SL :</strong> {{ s.administradoraSL }}</p>
+                              <p><strong>Fecha Afiliacion SL :</strong> {{ s.fechaAfiliacionSL }}</p>
+                              <p><strong>Estado Afiliado SL :</strong> {{ s.estadoAfiliadoSL }}</p>
+                              <p><strong>Tipo Afiliado SL :</strong> {{ s.tipoAfiliadoSL }}</p>
+                              <p><strong>Ubicacion Afiliacion :</strong> {{ s.ubicacionAfiliacion }}</p>
+                            </div>
+                          </div>
+                          <div *ngIf="ruaf && ruaf.fuenteFallo == 'NO' && ruaf.reportVO.lstPensionados.lstPensionadosDetailsGroup[0].tblSL.tblSLGrpSLCollection.tblSLGrpSL.length == 0">
+                            <p><strong>No hay datos a mostrar</strong></p>
+                          </div>
+                          <div *ngIf="ruaf && ruaf.fuenteFallo != 'NO'">
+                            <p><strong>La fuente fallo</strong></p>
+                          </div>
+                          <div *ngIf="ruaf == false || ruaf==''">
+                            <p><strong>Error en la consulta</strong></p>
+                          </div>
+                          </div>
+                          <div class="col-md-6">
+                          <label class="text-underline">Pensiones</label>
+                          <div *ngIf="ruaf && ruaf.fuenteFallo == 'NO' && ruaf.reportVO.lstPensionados.lstPensionadosDetailsGroup[0].tblPensiones.tblPensionesGrpPensionesCollection.tblPensionesGrpPensiones.length > 0">
+                            <div *ngFor="let p of ruaf.reportVO.lstPensionados.lstPensionadosDetailsGroup[0].tblPensiones.tblPensionesGrpPensionesCollection.tblPensionesGrpPensiones; index as i">
+                              <p><strong>{{i+1}}. Regimen :</strong> {{ p.regimen }}</p>
+                              <p><strong>Administradora :</strong> {{ p.administradora }}</p>
+                              <p><strong>Estado Afiliacion :</strong> {{ p.estadoAfiliacion }}</p>
+                              <p><strong>Fecha Afiliacion :</strong> {{ p.fechaAfiliacion }}</p>
+                              <p><strong>Afiliacion Subsidiada :</strong> {{ p.afiliacionSubsidiada }}</p>
+                            </div>
+                          </div>
+                          <div *ngIf="ruaf && ruaf.fuenteFallo == 'NO' && ruaf.reportVO.lstPensionados.lstPensionadosDetailsGroup[0].tblPensiones.tblPensionesGrpPensionesCollection.tblPensionesGrpPensiones.length == 0">
+                            <p><strong>No hay datos a mostrar</strong></p>
+                          </div>
+                          <div *ngIf="ruaf && ruaf.fuenteFallo != 'NO'">
+                            <p><strong>La fuente fallo</strong></p>
+                          </div>
+                          <div *ngIf="ruaf == false || ruaf==''">
+                            <p><strong>Error en la consulta</strong></p>
+                          </div>
+                          </div>
+                          <div class="col-md-6">
+                            <label class="text-underline">Riesgos Profesionales</label>
+                            <div *ngIf="ruaf && ruaf.fuenteFallo == 'NO' && ruaf.reportVO.lstPensionados.lstPensionadosDetailsGroup[0].tblRiesgosProfesionales.tblRiesgosProfesionalesGrpRiegosProfesionalesCollection.tblRiesgosProfesionalesGrpRiegosProfesionales.length > 0">
+                              <div *ngFor="let rp of ruaf.reportVO.lstPensionados.lstPensionadosDetailsGroup[0].tblRiesgosProfesionales.tblRiesgosProfesionalesGrpRiegosProfesionalesCollection.tblRiesgosProfesionalesGrpRiegosProfesionales; index as i">
+                                <p><strong>{{i+1}}. Administradora :</strong> {{ rp.administradora }}</p>
+                                <p><strong>Fecha Afiliacion :</strong> {{ rp.fechaAfiliacion }}</p>
+                                <p><strong>Actividad Economica Riesgo :</strong> {{ rp.actividadEconomicaRiesgo }}</p>
+                                <p><strong>Departamento Laboral RP :</strong> {{ rp.departamentoLaboralRP }}</p>
+                                <p><strong>Estado Afiliacion :</strong> {{ rp.estadoAfiliacion }}</p>
+                                <p><strong>Regimen :</strong> {{ rp.regimen }}</p>
+                              </div>
+                            </div>
+                            <div *ngIf="ruaf && ruaf.fuenteFallo == 'NO' && ruaf.reportVO.lstPensionados.lstPensionadosDetailsGroup[0].tblRiesgosProfesionales.tblRiesgosProfesionalesGrpRiegosProfesionalesCollection.tblRiesgosProfesionalesGrpRiegosProfesionales.length == 0">
+                              <p><strong>No hay datos a mostrar</strong></p>
+                            </div>
+                            <div *ngIf="ruaf && ruaf.fuenteFallo != 'NO'">
+                              <p><strong>La fuente fallo</strong></p>
+                            </div>
+                            <div *ngIf="ruaf == false || ruaf==''">
+                              <p><strong>Error en la consulta</strong></p>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                          <label class="text-underline">Compensacion Familiar</label>
+                          <div *ngIf="ruaf && ruaf.fuenteFallo == 'NO' && ruaf.reportVO.lstPensionados.lstPensionadosDetailsGroup[0].tblCompensacionFamiliar.tblCompensacionFamiliarGrpCompensacionFamiliarCollection.tblCompensacionFamiliarGrpCompensacionFamiliar.length > 0">
+                            <div *ngFor="let cf of ruaf.reportVO.lstPensionados.lstPensionadosDetailsGroup[0].tblCompensacionFamiliar.tblCompensacionFamiliarGrpCompensacionFamiliarCollection.tblCompensacionFamiliarGrpCompensacionFamiliar; index as i">
+                              <p><strong>{{i+1}}. Tipo Afiliado CF :</strong> {{ cf.tipoAfiliadoCF }}</p>
+                              <p><strong>Departamento Laboral CF :</strong> {{ cf.departamentoLaboralCF }}</p>
+                              <p><strong>Fecha Afiliacion :</strong> {{ cf.fechaAfiliacion }}</p>
+                              <p><strong>Estado Afiliacion :</strong> {{ cf.estadoAfiliacion }}</p>
+                              <p><strong>Administradora :</strong> {{ cf.administradora }}</p>
+                              <p><strong>Tipo MPCCF :</strong> {{ cf.tipoMPCCF }}</p>
+                            </div>
+                          </div>
+                          <div *ngIf="ruaf && ruaf.fuenteFallo == 'NO' && ruaf.reportVO.lstPensionados.lstPensionadosDetailsGroup[0].tblCompensacionFamiliar.tblCompensacionFamiliarGrpCompensacionFamiliarCollection.tblCompensacionFamiliarGrpCompensacionFamiliar.length == 0">
+                            <p><strong>No hay datos a mostrar</strong></p>
+                          </div>
+                          <div *ngIf="ruaf && ruaf.fuenteFallo != 'NO'">
+                            <p><strong>La fuente fallo</strong></p>
+                          </div>
+                          <div *ngIf="ruaf == false || ruaf==''">
+                            <p><strong>Error en la consulta</strong></p>
+                          </div>
+                          </div>
+                          <div class="col-md-6">
+                          <label class="text-underline">Cesantias</label>
+                          <div *ngIf="ruaf && ruaf.fuenteFallo == 'NO' && ruaf.reportVO.lstPensionados.lstPensionadosDetailsGroup[0].tblCesantias.tblCesantiasGrpCesantiasCollection.tblCesantiasGrpCesantias.length > 0">
+                            <div *ngFor="let ce of ruaf.reportVO.lstPensionados.lstPensionadosDetailsGroup[0].tblCesantias.tblCesantiasGrpCesantiasCollection.tblCesantiasGrpCesantias; index as i">
+                              <p><strong>{{i+1}}. Regimen :</strong> {{ ce.regimen }}</p>
+                              <p><strong>Administradora :</strong> {{ ce.administradora }}</p>
+                              <p><strong>Fecha Afiliacion :</strong> {{ ce.fechaAfiliacion }}</p>
+                              <p><strong>Estado Afiliacion :</strong> {{ ce.estadoAfiliacion }}</p>
+                              <p><strong>Ubicacion Laboral :</strong> {{ ce.ubicacionLaboral }}</p>
+                            </div>
+                          </div>
+                          <div *ngIf="ruaf && ruaf.fuenteFallo == 'NO' && ruaf.reportVO.lstPensionados.lstPensionadosDetailsGroup[0].tblCesantias.tblCesantiasGrpCesantiasCollection.tblCesantiasGrpCesantias.length == 0">
+                            <p><strong>No hay datos a mostrar</strong></p>
+                          </div>
+                          <div *ngIf="ruaf && ruaf.fuenteFallo != 'NO'">
+                            <p><strong>La fuente fallo</strong></p>
+                          </div>
+                          <div *ngIf="ruaf == false || ruaf==''">
+                            <p><strong>Error en la consulta</strong></p>
+                          </div>
+                          </div>
+                          <div class="col-md-6">
+                          <label class="text-underline">Asistencia Social</label>
+                          <div *ngIf="ruaf && ruaf.fuenteFallo == 'NO' && ruaf.reportVO.lstPensionados.lstPensionadosDetailsGroup[0].tblAsistenciaSocial.tblAsistenciaSocialGrpPersonaCollection.tblAsistenciaSocialGrpPersona[0].tblAsistenciaSocialGrpAsistenciaSocialCollection.tblAsistenciaSocialGrpAsistenciaSocial.length > 0">
+                            <div *ngFor="let asis of ruaf.reportVO.lstPensionados.lstPensionadosDetailsGroup[0].tblAsistenciaSocial.tblAsistenciaSocialGrpPersonaCollection.tblAsistenciaSocialGrpPersona[0].tblAsistenciaSocialGrpAsistenciaSocialCollection.tblAsistenciaSocialGrpAsistenciaSocial; index as i">
+                              <p><strong>{{i+1}}. Fecha Entrega Ultimo Beneficio AS :</strong> {{ asis.fechaEntregaUltimoBeneficioAS }}</p>
+                              <p><strong>Ubicacion Entrega Beneficio :</strong> {{ asis.ubicacionEntregaBeneficio }}</p>
+                              <p><strong>Valor Beneficio AS :</strong> {{ asis.valorBeneficioAS }}</p>
+                              <p><strong>Tipo Subsidio :</strong> {{ asis.tipoSubsidio }}</p>
+                              <p><strong>Estado Beneficio :</strong> {{ asis.estadoBeneficio }}</p>
+                              <p><strong>Tipo Beneficio :</strong> {{ asis.tipoBeneficio }}</p>
+                              <p><strong>Administradora :</strong> {{ asis.administradora }}</p>
+                              <p><strong>Programa :</strong> {{ asis.programa }}</p>
+                              <p><strong>Fecha Vinculacion :</strong> {{ asis.fechaVinculacion }}</p>
+                              <p><strong>Estado  Vinculacion AS :</strong> {{ asis.estadoVinculacionAS }}</p>
+                            </div>
+                          </div>
+                          <div *ngIf="ruaf && ruaf.fuenteFallo == 'NO' && ruaf.reportVO.lstPensionados.lstPensionadosDetailsGroup[0].tblAsistenciaSocial.tblAsistenciaSocialGrpPersonaCollection.tblAsistenciaSocialGrpPersona[0].tblAsistenciaSocialGrpAsistenciaSocialCollection.tblAsistenciaSocialGrpAsistenciaSocial.length == 0">
+                            <p><strong>No hay datos a mostrar</strong></p>
+                          </div>
+                          <div *ngIf="ruaf && ruaf.fuenteFallo != 'NO'">
+                            <p><strong>La fuente fallo</strong></p>
+                          </div>
+                          <div *ngIf="ruaf == false || ruaf==''">
+                            <p><strong>Error en la consulta</strong></p>
+                          </div>
+                          </div>
+                          <div class="col-md-6">
+                          <label class="text-underline">Pensionados</label>
+                          <div *ngIf="ruaf && ruaf.fuenteFallo == 'NO' && ruaf.reportVO.lstPensionados.lstPensionadosDetailsGroup[0].tblPensionados.tblPensionadosGroup1Collection.tblPensionadosGroup1.length > 0">
+                            <div *ngFor="let p of ruaf.reportVO.lstPensionados.lstPensionadosDetailsGroup[0].tblPensionados.tblPensionadosGroup1Collection.tblPensionadosGroup1; index as i">
+                              <p><strong>{{i+1}}. Numero Resolucion Pension PG :</strong> {{ p.numeroResolucionPensionPG }}</p>
+                              <p><strong>Pension Compartida PG :</strong> {{ p.pensionCompartidaPG }}</p>
+                              <p><strong>Estado Pension :</strong> {{ p.estadoPension }}</p>
+                              <p><strong>Tipo Pension :</strong> {{ p.tipoPension }}</p>
+                              <p><strong>Tipo Pensionado :</strong> {{ p.tipoPensionado }}</p>
+                              <p><strong>Pagador :</strong> {{ p.pagador }}</p>
+                              <p><strong>Fecha Resolucion :</strong> {{ p.fechaResolucion }}</p>
+                              <p><strong>Modalidad Pension PG :</strong> {{ p.modalidadPensionPG }}</p>
+                            </div>
+                          </div>
+                          <div *ngIf="ruaf && ruaf.fuenteFallo == 'NO' && ruaf.reportVO.lstPensionados.lstPensionadosDetailsGroup[0].tblPensionados.tblPensionadosGroup1Collection.tblPensionadosGroup1.length == 0">
+                            <p><strong>No hay datos a mostrar</strong></p>
+                          </div>
+                          <div *ngIf="ruaf && ruaf.fuenteFallo != 'NO'">
+                            <p><strong>La fuente fallo</strong></p>
+                          </div>
+                          <div *ngIf="ruaf == false || ruaf==''">
+                            <p><strong>Error en la consulta</strong></p>
+                          </div>
+                          </div>-->
+                          </div>
+                          <div *ngIf="!informacion">
+                            <p><strong>No hay datos a mostrar</strong></p>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <h4 >OFAC</h4>
+                          </div>
+                          <div *ngIf="informacion" class="row width-100">
+                          <div class="col-md-6">
+                            <div *ngIf="ofac && ofac.fuenteFallo == 'NO'">
+                              <p><strong>Numero de documento :</strong> {{ ofac && ofac.fuenteFallo == 'NO' && ofac.personaVO.numeroDocumento ? ofac.personaVO.numeroDocumento : '' }}</p>
+                              <p><strong>Primer nombre :</strong> {{ ofac && ofac.fuenteFallo == 'NO' && ofac.personaVO.nombres.OFAC.primerNombre ? ofac.personaVO.nombres.OFAC.primerNombre : '' }}</p>
+                              <p><strong>Tiene Riesgo :</strong> {{ ofac && ofac.fuenteFallo == 'NO' && ofac.tieneRegistro ? ofac.tieneRegistro : '' }}</p>
+                              <p><strong>Fecha de Consulta :</strong> {{ ofac && ofac.fuenteFallo == 'NO' && ofac.fechaConsulta ? ofac.fechaConsulta : '' }}</p>
+                            </div>
+                            <div *ngIf="ofac && ofac.fuenteFallo != 'NO'">
+                              <p><strong>La fuente fallo</strong></p>
+                            </div>
+                            <div *ngIf="ofac == false || ofac==''">
+                              <p><strong>Error en la consulta</strong></p>
+                            </div>
+                          </div>
+                        </div>
+                        <div *ngIf="!informacion">
+                          <p><strong>No hay datos a mostrar</strong></p>
+                        </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <h4>ESTADO DE CEDULA</h4>
+                          </div>
+                          <div *ngIf="informacion" class="row width-100">
+                          <div class="col-md-6">
+                            <div *ngIf="estadoCedula && estadoCedula.fuenteFallo == 'NO'">
+                              <p><strong>Numero de documento :</strong> {{ estadoCedula && estadoCedula.fuenteFallo == 'NO' && estadoCedula.personaVO.numeroDocumento ? estadoCedula.personaVO.numeroDocumento : '' }}</p>
+                              <p><strong>Primer nombre :</strong> {{ estadoCedula && estadoCedula.fuenteFallo == 'NO' && estadoCedula.personaVO.nombres['ESTADO-CEDULA-COLOMBIA'].primerNombre ? estadoCedula.personaVO.nombres['ESTADO-CEDULA-COLOMBIA'].primerNombre : '' }}</p>
+                              <p><strong>Fecha Expedicion :</strong> {{ estadoCedula && estadoCedula.fuenteFallo == 'NO' && estadoCedula.fechaExpedicion ? estadoCedula.fechaExpedicion : '' }}</p>
+                              <p><strong>Lugar Expedicion :</strong> {{ estadoCedula && estadoCedula.fuenteFallo == 'NO' && estadoCedula.lugarExpedicion ? estadoCedula.lugarExpedicion : '' }}</p>
+                              <p><strong>Estado :</strong> {{ estadoCedula && estadoCedula.fuenteFallo == 'NO' && estadoCedula.estado ? estadoCedula.estado : '' }}</p>
+                              <p><strong>Resolucion :</strong> {{ estadoCedula && estadoCedula.fuenteFallo == 'NO' && estadoCedula.resolucion ? estadoCedula.resolucion : '' }}</p>
+                              <p><strong>Fecha de Resolucion :</strong> {{ estadoCedula && estadoCedula.fuenteFallo == 'NO' && estadoCedula.fechaResolucion ? estadoCedula.fechaResolucion : '' }}</p>
+                              <p><strong>Fecha de Consulta :</strong> {{ estadoCedula && estadoCedula.fuenteFallo == 'NO' &&  estadoCedula.fechaConsulta ? estadoCedula.fechaConsulta : '' }}</p>
+                            </div>
+                            <div *ngIf="estadoCedula && estadoCedula.fuenteFallo != 'NO'">
+                              <p><strong>La fuente fallo</strong></p>
+                            </div>
+                            <div *ngIf="estadoCedula == false || estadoCedula==''">
+                              <p><strong>Error en la consulta</strong></p>
+                            </div>
+                          </div>
+                        </div>
+                        <div *ngIf="!informacion">
+                          <p><strong>No hay datos a mostrar</strong></p>
+                        </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <h4>ANTECEDENTES DE POLICIALES</h4>
+                          </div>
+                          <div *ngIf="informacion" class="row width-100">
+                          <div class="col-md-6">
+                            <div *ngIf="antecedentesPenales && antecedentesPenales.fuenteFallo == 'NO'">
+                              <p><strong>Numero de documento :</strong> {{ antecedentesPenales && antecedentesPenales.fuenteFallo == 'NO' && antecedentesPenales.personaVO.numeroDocumento ? antecedentesPenales.personaVO.numeroDocumento : '' }}</p>
+                              <p><strong>Primer nombre :</strong> {{ antecedentesPenales && antecedentesPenales.fuenteFallo == 'NO' && antecedentesPenales.personaVO.nombres['ANTECEDENTES-POLICIA'].primerNombre ? antecedentesPenales.personaVO.nombres['ANTECEDENTES-POLICIA'].primerNombre : '' }}</p>
+                              <p><strong>Antecedentes :</strong> {{ antecedentesPenales && antecedentesPenales.fuenteFallo == 'NO' && antecedentesPenales.antecedentes ? antecedentesPenales.antecedentes : '' }}</p>
+                              <p><strong>Fecha de Consulta :</strong> {{ antecedentesPenales && antecedentesPenales.fuenteFallo == 'NO' && antecedentesPenales.fechaConsulta ? antecedentesPenales.fechaConsulta : '' }}</p>
+                            </div>
+                            <div *ngIf="antecedentesPenales && antecedentesPenales.fuenteFallo != 'NO'">
+                              <p><strong>La fuente fallo</strong></p>
+                            </div>
+                            <div *ngIf="antecedentesPenales == false || antecedentesPenales==''">
+                              <p><strong>Error en la consulta</strong></p>
+                            </div>
+                          </div>
+                        </div>
+                        <div *ngIf="!informacion">
+                          <p><strong>No hay datos a mostrar</strong></p>
+                        </div>
+                        </div>
+                      </div>
+                      <!-- <div class="col-md-12" style="margin-top: 1em;">
+                    
+                        <form [formGroup]="formIdentidad">
+                           <div class="form-group">
+                            <label for="contenido">Comentario</label>
+                            <textarea  class="form-control"
+                            formControlName="comentario_identidad"
+                            id="comentario_identidad"></textarea>
+                          </div> 
+                           <p><strong>Comentario registrado por:</strong> {{revisionSelfie.usuarioResIdentidad}} ,  {{revisionSelfie.fechaComentIdentidad}}</p> 
+                           <div class="col-12 txt-cntr"><h4>Comentarios</h4></div> 
+                     
+                        </form>
+                        <div *ngIf="submittedConsulta" class="row w-100">
+                          <div class="col-md-12 text-center">
+                              <img src="/assets/img/load.gif" width="150" height="100"><br>
+                              <p>Consultando espere...</p>
+                          </div>
+                      </div>
+                      </div>
+                      <div class="col-md-12 txt-cntr " style="margin-top:3em">
+                        <button
+                            type="button"
+                            class="btn btn-raised btn-info"
+                            [disabled] = "submittedConsulta"
+                            (click)="obtenerInformacion(cedula,fechaNacimiento)"
+                          >
+                            Consulta de servicios
+                          </button>
+                          <button
+                            type="button"
+                            class="btn btn-raised btn-success"
+                            [disabled]="estatusSolicitud=='abierto' || estatusSolicitud == 'pagado' || estatusSolicitud == 'castigado' || estatusSolicitud=='novado'"
+                            (click)="aceptarIdentidad(revisionSelfie,solicituds)"
+                          >
+                            Aceptar
+                          </button>
+                         
+                          <button
+                            type="button"
+                            class="btn btn-raised btn-warning"
+                            [disabled]="estatusSolicitud=='abierto' || estatusSolicitud == 'pagado' || estatusSolicitud == 'castigado' || estatusSolicitud=='novado'"
+                            (click)="rechazarIdentidad(revisionSelfie.id)"
+                          >
+                            Rechazar
+                          </button>
+                          <button
+                          type="button"
+                          class="btn btn-raised btn-info"
+                        
+                          [routerLink]="['/admin/comentarios/', revisionSelfie.id,'identidad']"
+
+                        >
+                          Agregar comentario
+                        </button>
+                          <button
+                            type="button"
+                            class="btn btn-raised btn-success"
+                         
+                            (click)="requerirCertificado(revisionSelfie.id)"
+                          >
+                          Requerir Certificado bancario
+                          </button>
+                          <button
+                          type="button"
+                          class="btn btn-raised btn-success"
+                       
+                          (click)="requerirCertificadoLaboral(revisionSelfie.id)"
+                        >
+                        Requerir Certificacion laboral
+                        </button>
+                        <button
+                        type="button"
+                        class="btn btn-raised btn-success"
+                     
+                        (click)="requerirDesprendible(revisionSelfie.id)"
+                      >
+                      Requerir desprendible de nomina
+                      </button>
+                      <button
+                      type="button"
+                      class="btn btn-raised btn-success"
+                   
+                      (click)="requerirExtracto(revisionSelfie.id)"
+                    >
+                    Requerir extracto bancario
+                    </button>
+                     <button
+                    type="button"
+                    class="btn btn-raised btn-success"
+                 
+                    (click)="requerirVerificacion(revisionSelfie.id)"
+                  >
+                  Verificacion Reportado
+                  </button> 
+                      </div>
+
+                      <div class="row" style="width: 100%;">
+                        <div class="col-md-12 " *ngFor="let c of comentIdentidad">
+                          <div class="row fondoComent">
+                            <div class="col-md-6">
+                              <strong>{{c.usuario}}</strong>
+                            </div>
+                            <div class="col-md-6" style="text-align: right;">
+                              <p>{{c.created_at}}</p>
+                            </div>
+                            <div class="col-md-6">
+                              <p>{{c.comentario}}</p>
+                            </div>
+                            <div class="col-md-6"></div>
+                            <div class="col-md-6">
+                              <p><a href="{{ruta}}{{c.archivo}}" target="_blank" download="{{c.archivo}}">{{c.archivo}}</a></p>
+                            </div>
+                            <div class="col-md-6" style="text-align: right;">
+                              <div class="row">
+                                <div class="col-md-9" style="text-align: right;"><p><a [routerLink]="['/admin/comentarios/', c.id]">Editar</a></p></div>
+                                <div class="col-md-3" style="text-align: left;"><p><a style="color: #f4c269;" (click)="borrarComentario(c)">Borrar</a></p></div>
+                              </div>
+                             
+                              
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>-->
+                     
+                    </div>
+                  </ng-template>
+                  <ng-template #alerta>
+                    <div class="col-md-12 txt-cntr">
+                      <p><h3>No hay datos para mostrar</h3>
+                    </div>
+                  </ng-template>
+                </ngb-tab>
+                <ngb-tab>
+                  <ng-template ngbTabTitle>
+                    Analizer
+                    
+                    <img *ngIf="analizerEstatus=='negado'" style="width: 20px;margin-left: 10px;" src="/assets/img/close.png"> 
+                    <img *ngIf="analizerEstatus=='aprobado'" style="width: 20px;margin-left: 10px;" src="/assets/img/correct.png" >
+                  </ng-template>
+                  <ng-template ngbTabContent>
+                    <div class="row" >
+                      <div class="col-md-12 text-center">
+                        <!-- <h3>{{user.email}}</h3> -->
+                        <!-- <p>{{resultadoEmailAnalisis}}</p> -->
+                        <div class="row" *ngIf="analizerAnalisis">
+                          <div class="col-md-12">
+                            <table class="table table-striped">
+                              <thead>
+                                <th>Nombre</th>
+                                <th>Resultado</th>
+                              </thead>
+                              <tbody>
+                                <tr *ngFor="let s of analizerAnalisis | keyvalue;">
+                                  <td>{{ s.key }}</td>
+                                  <td *ngIf="isObject(s.value)">
+                                    <div class="row" *ngFor="let a of s.value | keyvalue;">
+                                      <div *ngIf="isObject(a.value)">{{a.key}}: 
+                                        <ul>
+                                          <li *ngFor="let b of a.value | keyvalue;">
+                                            <div *ngIf="isObject(b.value)">{{b.key}}: 
+                                              <ul>
+                                                <li *ngFor="let c of b.value | keyvalue;">
+                                                  {{c.key}}: {{c.value}}
+                                                </li>
+                                              </ul>
+                                            </div>
+                                            <div *ngIf="!isObject(b.value)">{{b.key}}: {{b.value}}</div>
+                                          </li>
+                                        </ul>
+                                      </div>
+                                      <div *ngIf="!isObject(a.value)">{{a.key}}: {{a.value}}</div>
+                                    </div>
+                                  </td>
+                                  <td *ngIf="!isObject(s.value)">
+                                    {{ s.value }}
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-template>
+                </ngb-tab>
+                <!-- <ngb-tab *ngIf="situacion_laboral == 'Independiente' || situacion_laboral == 'Pensionado' || situacion_laboral == 'Empleado/a por servicios' || situacion_laboral == 'Empleado/a temporal'">
+                  <ng-template ngbTabTitle>Información adicional 
+                    <img *ngIf="adicionalesEstatus=='rechazado'" style="width: 20px;margin-left: 10px;" src="/assets/img/close.png"> 
+                    <img *ngIf="adicionalesEstatus=='aprobado'" style="width: 20px;margin-left: 10px;" src="/assets/img/correct.png" >
+                  </ng-template>
+                  <ng-template ngbTabContent>
+                    <div class="row" *ngIf="identidadEstatus=='aprobado'; else alerta ">
+                      <div class="col-md-12" *ngIf="adicionales.length > 0; else branOffices">
+
+
+                      <div class="col-md-12 txt-cntr"  *ngFor="let c of adicionales">
+                        <img style="width: 100%;" src="{{ruta}}{{c.nombre}}"/>
+                        <p><a href="{{ruta}}{{c.nombre}}" target="_blank" download="{{c.nombre}}"><i class="ft-download"></i>Descargar</a></p>
+                      </div>
+                      <div class="col-md-12" style="margin-top: 1em;">
+                       
+                        <form [formGroup]="formAdicionales">
+                           <div class="form-group">
+                            <label for="contenido">Comentario</label>
+                            <textarea  class="form-control"
+                            formControlName="comentario_adicionales"
+                            id="comentario_adicionales"></textarea>
+                          </div>
+                          <p><strong>Comentario registrado por:</strong> {{revisionSelfie.usuarioResAdicional}} ,  {{revisionSelfie.fechaComentAdicional}}</p> 
+                           <div class="col-md-12 txt-cntr"><h4>Comentarios</h4></div> 
+                       
+                        </form>
+                      </div>
+                      <div class="col-md-12 txt-cntr" style="margin-top:3em">
+                          <button
+                            type="button"
+                            class="btn btn-raised btn-success"
+                            [disabled]="estatusSolicitud=='abierto' || estatusSolicitud == 'pagado' || estatusSolicitud == 'castigado' || estatusSolicitud=='novado'"
+                            (click)="aceptarAdicionales(revisionSelfie)"
+                          >
+                            Aceptar
+                          </button>
+                         
+                          <button
+                            type="button"
+                            class="btn btn-raised btn-warning"
+                            [disabled]="estatusSolicitud=='abierto' || estatusSolicitud == 'pagado' || estatusSolicitud == 'castigado' || estatusSolicitud=='novado'"
+                            (click)="rechazarAdicionales(revisionSelfie)"
+                          >
+                            Rechazar
+                          </button>
+                          <button
+                            type="button"
+                            class="btn btn-raised btn-success"
+                         
+                            (click)="requerirAdicionales()"
+                          >
+                            Requerir
+                          </button>
+                          <button
+                          type="button"
+                          class="btn btn-raised btn-info"
+                        
+                          [routerLink]="['/admin/comentarios/', revisionSelfie.id,'adicional']"
+
+                        >
+                          Agregar comentario
+                        </button>
+                      </div>
+                      <div class="row" style="width: 100%;">
+                        <div class="col-md-12 " *ngFor="let c of comentAdicional">
+                          <div class="row fondoComent">
+                            <div class="col-md-6">
+                              <strong>{{c.usuario}}</strong>
+                            </div>
+                            <div class="col-md-6" style="text-align: right;">
+                              <p>{{c.created_at}}</p>
+                            </div>
+                            <div class="col-md-6">
+                              <p>{{c.comentario}}</p>
+                            </div>
+                            <div class="col-md-6"></div>
+                            <div class="col-md-6">
+                              <p><a href="{{ruta}}{{c.archivo}}" target="_blank" download="{{c.archivo}}">{{c.archivo}}</a></p>
+                            </div>
+                            <div class="col-md-6" style="text-align: right;">
+                              <div class="row">
+                                <div class="col-md-9" style="text-align: right;"><p><a [routerLink]="['/admin/comentarios/', c.id]">Editar</a></p></div>
+                                <div class="col-md-3" style="text-align: left;"><p><a style="color: #f4c269;" (click)="borrarComentario(c)">Borrar</a></p></div>
+                              </div>
+                             
+                              
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      </div>
+                      <ng-template #branOffices>
+                        <div class="col-md-12 txt-cntr">
+                          <p><h3>No se ha adjuntado información extra</h3>
+                            <button
+                            type="button"
+                            class="btn btn-raised btn-success"
+                         
+                            (click)="requerirAdicionales()"
+                          >
+                            Requerir
+                          </button>
+                        </div>
+                      </ng-template>
+                      <ng-template #alerta>
+                        <div class="col-md-12 txt-cntr">
+                          <p><h3>Para seguir en este paso debe aprobar el anterior</h3>
+                        </div>
+                      </ng-template>
+                      
+                    </div>
+                  </ng-template>
+                </ngb-tab>
+                <ngb-tab>
+                  <ng-template ngbTabTitle>Extracto Bancario 
+                    <img *ngIf="ExtratosBancarios=='rechazado'" style="width: 20px;margin-left: 10px;" src="/assets/img/close.png"> 
+                    <img *ngIf="ExtratosBancarios=='aprobado'" style="width: 20px;margin-left: 10px;" src="/assets/img/correct.png" >
+                  </ng-template>
+                  <ng-template ngbTabContent >
+                    <div class="row width-100">
+                      <form [formGroup]="formExtractoBancario" class="width-100">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="row width-100">
+                              <h5><strong>Extractos Bancarios</strong></h5>
+                            </div>
+                            <div class="row width-100">
+                              <div class="col-md-6">
+                                <div class="col-md-12">
+                                  <div class="form-group">
+                                    <label>Saldo anterior</label>
+                                    <input [value]="saldo_anterior_eb" (change)="total_saldo_anterior_eb($event.target.value)" type="text" id="saldoAnterior" formControlName="saldoAnterior" class="form-control " placeholder="">
+                                  </div>
+                                </div>
+                                <div class="col-md-12">
+                                  <div class="form-group">
+                                    <label>Total abonos</label>
+                                    <input [value]="total_abonos_eb" (change)="total_total_abonos_eb($event.target.value)" type="text" id="totalAbonos" formControlName="totalAbonos" class="form-control " placeholder="">
+                                  </div>
+                                   {{total_abonos_eb_3}} 
+                                </div>
+                                <div class="col-md-12">
+                                  <div class="form-group">
+                                    <label>Total abono menusal</label>
+                                    <input [value]="total_abonos_eb_3" type="text" id="totalAbonosMensual" class="form-control " placeholder="">
+                                  </div>
+                                   {{total_abonos_eb_3}} 
+                                </div>
+                                <div class="col-md-12">
+                                  <div class="form-group">
+                                    <label>Total cargos</label>
+                                    <input [value]="total_cargos_eb" (change)="total_total_cargos_eb($event.target.value)" type="text" id="totalCargos" formControlName="totalCargos" class="form-control " placeholder="">
+                                  </div>
+                                   {{total_cargos_eb_3}} 
+                                </div>
+                                <div class="col-md-12">
+                                  <div class="form-group">
+                                    <label>Total cargos mensual</label>
+                                    <input [value]="total_cargos_eb_3" type="text" id="totalCargosMensual" class="form-control " placeholder="">
+                                  </div>
+                                   {{total_cargos_eb_3}} 
+                                </div>
+                                <div class="col-md-12">
+                                  <div class="form-group">
+                                    <label>Saldo actual</label>
+                                    <input [value]="saldo_actual_eb" (change)="total_saldo_actual_eb($event.target.value)" type="text" formControlName="saldoActual" id="saldoActual" class="form-control " placeholder="">
+                                  </div>
+                                </div>
+                                <div class="col-md-12">
+                                  <div class="form-group">
+                                    <label>Saldo promedio</label>
+                                    <input [value]="saldo_promedio_eb" (change)="total_saldo_promedio_eb($event.target.value)" formControlName="saldoPromedio" type="text" id="saldoPromedio" class="form-control " placeholder="">
+                                  </div>
+                                </div>
+                                <div class="col-md-12">
+                                  <div class="form-group">
+                                    <label>Salario</label>
+                                    <input [value]="salario_eb" (change)="total_salario_eb($event.target.value)" formControlName="salario" type="text" id="salario" class="form-control " placeholder="">
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="col-md-12">
+                                  <div class="form-group">
+                                    <label>Periodo de pago de nomina</label>
+                                    <input formControlName="diasPago" type="text" id="diasPago" class="form-control " placeholder="">
+                                  </div>
+                                </div>
+                                <div class="col-md-12">
+                                  <div class="form-group">
+                                    <label>Nombre de empresa</label>
+                                    <input formControlName="nombreEmpresa" type="text" id="nombreEmpresa" class="form-control " placeholder="">
+                                  </div>
+                                </div>
+                                <div class="col-md-12">
+                                  <div class="form-group">
+                                    <label>Tipo de contrato</label>
+                                    <input formControlName="tipoContrato" type="text" id="tipoContrato" class="form-control " placeholder="">
+                                  </div>
+                                </div>
+                                <div class="col-md-12">
+                                  <div class="form-group">
+                                    <label>Antiguedad laboral</label>
+                                    <input formControlName="antiguedadLaboral" type="text" id="antiguedadLaboral" class="form-control " placeholder="">
+                                  </div>
+                                </div>
+                                <div class="col-md-12">
+                                  <div class="form-group">
+                                    <label>Nombre de cargo</label>
+                                    <input formControlName="nombreCargo" type="text" id="nombreCargo" class="form-control " placeholder="">
+                                  </div>
+                                </div>
+                                <div class="col-md-12">
+                                  <div class="form-group">
+                                    <label>Valor Total Mensual Creditos Actuales</label>
+                                    <input [value]="valor_total_mensual_creditos_actuales_eb" (change)="total_valor_total_mensual_creditos_actuales_eb($event.target.value)" formControlName="valorTotalMensualCreditosActuales" type="text" id="valorTotalMensualCreditosActuales" class="form-control " placeholder="">
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <button
+                                  type="button"
+                                  class="btn btn-raised btn-primary"
+                                  (click)="guardarEB()"
+                                  [disabled] = "formExtractoBancario.invalid"
+                                >
+                                  Guardar
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                      <form [formGroup]="formExtractoBancarioPagos" class="width-100">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="row width-100">
+                              <h5><strong>Pagos de nomina</strong></h5>
+                            </div>
+                            <div class="row width-100">
+                              <div class="col-md-12">
+                                <p><b>Nota: Buscar pago nom que es el pago de nomina de la empresa o buscar nombre de la empresa </b></p>
+                              </div>
+                              <div class="col-md-8">
+                                <div class="form-group">
+                                  <label>Tipo de pago</label>
+                                  <select (change)="tipoPagoEB($event.target.value)" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" class="form-control" >
+                                    <option [selected]="tipoPagoNomina == 'Mensual'" value="Mensual">Mensual</option>
+                                    <option [selected]="tipoPagoNomina == 'Quincenal'" value="Quincenal">Quincenal</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="col-md-12">
+                                  <div class="form-group">
+                                    <label>Fecha</label>
+                                    <input
+                                      type="text"
+                                      ngbDatepicker
+                                      #fecha_ebp="ngbDatepicker"
+                                      (click)="fecha_ebp.toggle()"
+                                      class="form-control"
+                                      id="fecha_ebp"
+                                      (dateSelect)="fechaEbp($event)"
+                                      formControlName="fechaebp"
+                                    />
+                                  </div>
+                                </div>
+                                <div class="col-md-12">
+                                  <div class="form-group">
+                                    <label>Concepto</label>
+                                    <input type="text" id="concepto" formControlName="concepto" class="form-control " placeholder="">
+                                  </div>
+                                </div>
+                                <div class="col-md-12">
+                                  <div class="form-group">
+                                    <label>Valor Ingreso</label>
+                                    <input [value]="valor_ingresos_ebp" (change)="total_valor_ingresos_ebp($event.target.value)" type="text" id="valorIngreso" formControlName="valorIngreso" class="form-control " placeholder="">
+                                  </div>
+                                </div>
+                                 <div class="col-md-12">
+                                  <div class="form-group">
+                                    <label>Total Mensual</label>
+                                    <input [value]="total_mensual_ebp" (change)="total_total_mensual_ebp($event.target.value)" type="text" formControlName="totalMensual" id="totalMensual" class="form-control " placeholder="">
+                                  </div>
+                                </div>
+                                <div class="col-md-12">
+                                  <div class="form-group">
+                                    <label>Promedio</label>
+                                    <input [value]="promedio_ebp" (change)="total_promedio_ebp($event.target.value)" formControlName="promedio" type="text" id="promedio" class="form-control " placeholder="">
+                                  </div> 
+                                </div
+                              </div>
+                              <div class="col-md-12">
+                                <button
+                                  type="button"
+                                  class="btn btn-raised btn-primary"
+                                  (click)="guardarEBP()"
+                                  [disabled] = "formExtractoBancarioPagos.invalid"
+                                >
+                                  Guardar
+                                </button>
+                              </div>
+                              <div class="col-md-12">
+                                <table
+                                  class="table table-striped"
+                                  
+                                >
+                                  <thead class="thead-inverse">
+                                    <tr>
+                                      <th>Fecha</th>
+                                      <th>Concepto</th>
+                                      <th>Valor Ingreso</th>
+                                      <th>Total Mensual</th>
+                                      <th>Acciones</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr
+                                      *ngFor="
+                                        let a of extractos_bancarios_pagos;
+                                        index as i
+                                      "
+                                    >
+                                  
+                                      <td scope="row">{{ a.fecha }}</td>
+                                      <td>{{ a.concepto }}</td>
+                                      <td>${{ a.valorIngreso | number:'1.0-0':'es' }}</td>
+                                      <td>${{ a.totalMensualF | number:'1.0-0':'es' }}</td>
+                                      
+                                      
+                                      <td>
+                                        <div class="btn-group">
+                                          
+                                          <button
+                                          ngbTooltip="Eliminar"
+                                            type="button"
+                                            class="btn btn-danger"
+                                            (click)="deleteEBP(a)"
+                                          >
+                                            <a class="ft-trash" style="color:white"></a>
+                                          </button>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td colspan="2"></td>
+                                      <td ><b>Promedio ingreso<br> nomina mensual </b></td>
+                                      <td >${{extractos_bancarios_pagos_promedio | number:'1.0-0':'es'}}</td>
+                                      <td><p><b>Nota: Tiene que ser igual o mayor <br>al salario del formulario. <br>Si el valor es menor alerta </b></p></td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                      <form [formGroup]="formExtractoBancarioCreditos" class="width-100">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="row width-100">
+                              <h5><strong>Creditos actuales</strong></h5>
+                            </div>
+                            <div class="row width-100">
+                              <div class="col-md-6">
+                                <div class="col-md-12">
+                                  <div class="form-group">
+                                    <label>Fecha</label>
+                                     <input [value]="saldo_anterior_eb" (change)="total_saldo_anterior_eb($event.target.value)" type="text" id="saldoAnterior" formControlName="saldoAnterior" class="form-control " placeholder=""> 
+                                    <input
+                                      type="text"
+                                      ngbDatepicker
+                                      #fecha_ebc="ngbDatepicker"
+                                      (click)="fecha_ebc.toggle()"
+                                      class="form-control"
+                                      id="fecha_ebc"
+                                      (dateSelect)="fechaEbc($event)"
+                                      formControlName="fechaebc"
+                                    />
+                                  </div>
+                                </div>
+                                <div class="col-md-12">
+                                  <div class="form-group">
+                                    <label>Empresa</label>
+                                    <input type="text" id="empresa" formControlName="empresa" class="form-control " placeholder="">
+                                  </div>
+                                </div>
+                                <div class="col-md-12">
+                                  <div class="form-group">
+                                    <label>Ingreso</label>
+                                    <input [value]="ingresos_ebc" (change)="total_ingresos_ebc($event.target.value)" type="text" id="ingresoPrestamo" formControlName="ingresoPrestamo" class="form-control " placeholder="">
+                                  </div>
+                                </div>
+                                <div class="col-md-12">
+                                  <div class="form-group">
+                                    <label>Cuota Credito</label>
+                                    <input [value]="cuota_credito_ebc" (change)="total_cuota_credito_ebc($event.target.value)" type="text" formControlName="cuotaCredito" id="cuotaCredito" class="form-control " placeholder="">
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <button
+                                  type="button"
+                                  class="btn btn-raised btn-primary"
+                                  (click)="guardarEBC()"
+                                  [disabled] = "formExtractoBancarioCreditos.invalid"
+                                >
+                                  Guardar
+                                </button>
+                              </div>
+                              <div class="col-md-12">
+                                <table
+                                  class="table table-striped"
+                                  
+                                >
+                                  <thead class="thead-inverse">
+                                    <tr>
+                                      <th>Fecha</th>
+                                      <th>Empresa de credito</th>
+                                      <th>Ingreso prestamo</th>
+                                      <th>Cuota credito</th>
+                                      <th>Acciones</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr
+                                      *ngFor="
+                                        let a of extractos_bancarios_creditos;
+                                        index as i
+                                      "
+                                    >
+                                  
+                                      <td scope="row">{{ a.fecha }}</td>
+                                      <td>{{ a.empresa }}</td>
+                                      <td>${{ a.ingresoPrestamo | number:'1.0-0':'es' }}</td>
+                                      <td>${{ a.cuotaCredito | number:'1.0-0':'es' }}</td>
+                                      
+                                      
+                                      <td>
+                                        <div class="btn-group">
+                                          
+                                          <button
+                                          ngbTooltip="Eliminar"
+                                            type="button"
+                                            class="btn btn-danger"
+                                            (click)="deleteEBC(a)"
+                                          >
+                                            <a class="ft-trash" style="color:white"></a>
+                                          </button>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td></td>
+                                      <td ><b>Suma</b></td>
+                                      <td>${{extractos_bancarios_creditos_ingreso_credito | number:'1.0-0':'es'}}</td>
+                                      <td>${{extractos_bancarios_creditos_cuota_credito | number:'1.0-0':'es'}}</td>
+                                      <td>${{extractos_bancarios_creditos_resta_total | number:'1.0-0':'es'}} <p><b>Este valor no puede ser negativo<br> si es negativo significa que tiene un credito<br> abierto en estos meses  y toca preguntarle<br> la cuota y revisar si la puso en el formulario</b></p></td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                      <div class="col-md-12 txt-cntr " style="margin-top:3em">
+                        <button
+                          type="button"
+                          class="btn btn-raised btn-success"
+                          [disabled]="estatusSolicitud=='abierto' || estatusSolicitud == 'pagado' || estatusSolicitud == 'castigado' || estatusSolicitud=='novado'"
+                          (click)="aceptarEb(revisionSelfie)"
+                        >
+                          Aceptar
+                        </button>
+                       
+                        <button
+                          type="button"
+                          class="btn btn-raised btn-warning"
+                          [disabled]="estatusSolicitud=='abierto' || estatusSolicitud == 'pagado' || estatusSolicitud == 'castigado' || estatusSolicitud=='novado'"
+                          (click)="rechazarEb(revisionSelfie)"
+                        >
+                          Rechazar
+                        </button>
+                        <button
+                        type="button"
+                        class="btn btn-raised btn-info"
+                      
+                        [routerLink]="['/admin/comentarios/', revisionSelfie.id,'extractosBancarios']"
+
+                      >
+                        Agregar comentario
+                      </button>
+                        
+                    </div>
+                    <div class="row" style="width: 100%;">
+                      <div class="col-12 " *ngFor="let c of comentEB">
+                        <div class="row fondoComent">
+                          <div class="col-6">
+                            <strong>{{c.usuario}}</strong>
+                          </div>
+                          <div class="col-6" style="text-align: right;">
+                            <p>{{c.created_at}}</p>
+                          </div>
+                          <div class="col-6">
+                            <p>{{c.comentario}}</p>
+                          </div>
+                          <div class="col-6"></div>
+                          <div class="col-6">
+                            <p><a href="{{ruta}}{{c.archivo}}" target="_blank" download="{{c.archivo}}">{{c.archivo}}</a></p>
+                          </div>
+                          <div class="col-6" style="text-align: right;">
+                            <div class="row">
+                              <div class="col-9" style="text-align: right;"><p><a [routerLink]="['/admin/comentarios/', c.id]">Editar</a></p></div>
+                              <div class="col-3" style="text-align: left;"><p><a style="color: #f4c269;" (click)="borrarComentario(c)">Borrar</a></p></div>
+                            </div>
+                           
+                            
+  
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                  </ng-template>
+                  <ng-template #alerta>
+                    <div class="col-12 txt-cntr">
+                      <p><h3>Para seguir en este paso debe aprobar el anterior</h3>
+                    </div>
+                  </ng-template>
+                  </ngb-tab>
+                <ngb-tab>
+                  <ng-template ngbTabTitle>Data Credito 
+                    <img *ngIf="DataCreditoEstatus=='rechazado'" style="width: 20px;margin-left: 10px;" src="/assets/img/close.png"> 
+                    <img *ngIf="DataCreditoEstatus=='aprobado'" style="width: 20px;margin-left: 10px;" src="/assets/img/correct.png" >
+                  </ng-template>
+                  <ng-template ngbTabContent  >
+                    <div class="row width-100">
+                    <form [formGroup]="formDataCredito" class="width-100">
+                     <div class="row" *ngIf="((financieras.situacionLaboral == 'Independiente' || financieras.situacionLaboral == 'Pensionado' || financieras.situacionLaboral == 'Empleado/a por servicios') && revisionSelfie.adicionales=='aprobado' ) || ((financieras.situacionLaboral != 'Independiente' && financieras.situacionLaboral != 'Pensionado' && financieras.situacionLaboral != 'Empleado/a por servicios') && revisionSelfie.identidad=='aprobado') ; else alerta "> 
+                      
+                      <div class="row">
+                        
+                        <div class="col-md-3">
+                          <div class="row">
+                            <h5><strong>Información Basica</strong></h5>
+                          </div>
+                          <div class="row">
+                            <div class="form-group margin-fg">
+                              <table>
+                                <thead>
+                                  <tr>
+                                    <th></th>
+                                    <th>Aprobar</th>
+                                    <th>Denegar</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <td>Estado documento</td>
+                                    <td><input type='checkbox' (change)="estado_documento('ap')"  name='estadoDocumentoAp' formControlName="estadoDocumentoAp"  class='' /></td>
+                                    <td><input type='checkbox' (change)="estado_documento('de')" name='estadoDocumentoDe' formControlName="estadoDocumentoDe"  class='' /></td>
+                                  </tr>
+                                  <tr>
+                                    <td>Nro de cedula: ({{user.n_document}})</td>
+                                    <td><input type='checkbox' (change)="nro_cedula('ap')"  name='nroCedulaAp' formControlName="nroCedulaAp"  class='' /></td>
+                                    <td><input type='checkbox' (change)="nro_cedula('de')" name='nroCedulaDe' formControlName="nroCedulaDe"  class='' /></td>
+                                  </tr>
+                                  <tr>
+                                    <td>Fecha expedicion: ({{basicas.fechaExpedicionCedula}})</td>
+                                    <td><input type='checkbox' (change)="fecha_expedicion('ap')"  name='fechaExpedicionAp' formControlName="fechaExpedicionAp"  class='' /></td>
+                                    <td><input type='checkbox' (change)="fecha_expedicion('de')" name='fechaExpedicionDe' formControlName="fechaExpedicionDe"  class='' /></td>
+                                  </tr>
+                                  <tr>
+                                    <td>Genero: ({{basicas.genero}})</td>
+                                    <td><input type='checkbox' (change)="genero_('ap')"  name='generoAp' formControlName="generoAp"  class='' /></td>
+                                    <td><input type='checkbox' (change)="genero_('de')" name='generoDe' formControlName="generoDe"  class='' /></td>
+                                  </tr>
+                                  <tr>
+                                    <td>Rango de edad: ({{edad}} años)</td>
+                                    <td><input type='checkbox' (change)="rango_edad('ap')"  name='rangoEdadAp' formControlName="rangoEdadAp"  class='' /></td>
+                                    <td><input type='checkbox' (change)="rango_edad('de')" name='rangoEdadDe' formControlName="rangoEdadDe"  class='' /></td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                              <!-- <label class="fw-600">
+                                Estado documento <input type='checkbox'  name='estadoDocumento' formControlName="estadoDocumento"  class='' />
+                              </label><br>
+                              <label class="fw-600">
+                                Nro de cedula <input type='checkbox'  name='nroCedula' formControlName="nroCedula"  class='' />
+                              </label><br>
+                              <label class="fw-600">
+                                Fecha expedicion <input type='checkbox'  name='fechaExpedicion' formControlName="fechaExpedicion"  class='' />
+                              </label><br>
+                              <label class="fw-600">
+                                Genero <input type='checkbox'  name='genero' formControlName="genero"  class='' />
+                              </label><br>
+                              <label class="fw-600">
+                                Rango de edad <input type='checkbox'  name='rangoEdad' formControlName="rangoEdad"  class='' />
+                              </label><br> 
+                            </div>
+                          </div>
+                          
+                        </div>
+                        <div class="col-md-5">
+                          <div class="row">
+                            <h5><strong>Analisis de ingresos</strong></h5>
+                          </div>
+                          <div class="row width-100">
+                            <div class="col-md-12">
+                              <div class="form-group margin-fg width-100">
+                                <label>Situacion laboral</label><br>
+                                <select formControlName="situacionLaboral" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" class="form-control" >
+                                  <option value="Empleado">Empleado</option>
+                                  <option value="Independiente">Independiente (Si, salen tres rangos de ingresos) </option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <label>Ingreso Data Credito</label>
+                                <input type="text" formControlName="ingresoEstimado" name="ingresoEstimado" id="ingresoEstimado" [value]="ingreso_estimado" (change)="total_ingreso_estimado($event.target.value)" class="form-control " placeholder="">
+                              </div>
+                            </div>
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <label>Ingreso Formulario</label>
+                                <input [value]="ingreso_formulario" type="text" id="ingresoFormulario" class="form-control " placeholder="" readonly>
+                              </div>
+                            </div>
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <label>Variacion de Ingreso</label>
+                                <input [value]="variacion_ingreso+'%'" type="text" id="variacionIngreso" class="form-control " placeholder="" readonly>
+                              </div>
+                            </div>
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <label>Utilización del ingreso Vs. Cuota mensual</label>
+                                <input type="text" formControlName="ingresoVsCuota" id="ingresoVsCuota" class="form-control " placeholder="">
+                              </div>
+                            </div>
+                            <div class="col-md-12">
+                              <p>*Nota: Variacion mayor al 20% es zona roja </p>
+                              <p>*Nota: Si es mayor al 70% es zona roja </p>
+                            </div>
+                          </div>
+                          
+                        </div>
+                        <div class="col-md-4">
+                          <div class="row">
+                            <h5><strong>Indicador de Pago</strong></h5>
+                          </div>
+                          <div class="row">
+                            <div class="form-group margin-fg">
+                              <table>
+                                <tbody>
+                                  <tr>
+                                    <td style="width: 60%;"><input type='checkbox'  name='bajo' formControlName="bajo"  class='' /> Bajo </td>
+                                    <td style="width: 40%;"><input type='text' formControlName="puntajeBajo" name='puntajeBajo' placeholder="Puntaje"></td>
+                                  </tr>
+                                  <tr>
+                                    <td style="width: 60%;"><input type='checkbox'  name='medio' formControlName="medio"  class='' /> Medio (contraoferta Minima Panda Dias y/o Panda Meses)</td>
+                                    <td style="width: 40%;"><input type='text' name='puntajeMedio' formControlName="puntajeMedio" placeholder="Puntaje"></td>
+                                  </tr>
+                                  <tr>
+                                    <td style="width: 60%;"><input type='checkbox'  name='alto' formControlName="alto"  class='' /> Alto (contraoferta Maximo Panda Dias y/o Panda Meses)</td>
+                                    <td style="width: 40%;"><input type='text' name='puntajeAlto' formControlName="puntajeAlto" placeholder="Puntaje"></td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                               <label class="fw-600">
+                                <input type='checkbox'  name='bajo' formControlName="bajo"  class='' /> Bajo 
+                              </label><br>
+                              <label class="fw-600">
+                                <input type='checkbox'  name='medio' formControlName="medio"  class='' /> Medio (contraoferta Minima Panda Dias y/o Panda Meses) 
+                              </label><br>
+                              <label class="fw-600">
+                                <input type='checkbox'  name='alto' formControlName="alto"  class='' /> Alto (contraoferta Maximo Panda Dias y/o Panda Meses) 
+                              </label><br> 
+                            </div>
+                          </div>
+                          
+                        </div>
+                        <div class="col-md-12">
+                          <button
+                            type="button"
+                            class="btn btn-raised btn-primary"
+                            (click)="guardarDataCredito()"
+                            [disabled] = "submitted"
+                          >
+                            Guardar
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                    
+                    <form [formGroup]="formDataCreditoAlerta" class="width-100">
+                      <div class="row width-100">
+                        <h5><strong>Alertas en los ultimos 12 meses</strong></h5>
+                        <div class="row width-100">
+                          <div class="col-md-4">
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <label>Fuente</label>
+                                <input type="text" formControlName="fuente" name="fuente" id="fuente" class="form-control " placeholder="">
+                              </div>
+                            </div>
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <label>Fecha</label>
+                                <input
+                                type="text"
+                                ngbDatepicker
+                                #fecha_alerta="ngbDatepicker"
+                                (click)="fecha_alerta.toggle()"
+                                class="form-control"
+                                id="fecha_alerta"
+                                (dateSelect)="fechaAlerta($event)"
+                                formControlName="fechaS"
+                              />
+                              </div>
+                            </div>
+                             <div class="col-md-12">
+                              <div class="form-group">
+                                <label>Novedad</label>
+                                <input type="text" formControlName="novedad" name="novedad" id="novedad" class="form-control " placeholder="">
+                              </div>
+                            </div> 
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <label>Descripcion</label>
+                                <input type="text" formControlName="descripcion" name="descripcion" id="descripcion" class="form-control " placeholder="">
+                              </div>
+                            </div>
+                            <div class="col-md-12">
+                              <button
+                                type="button"
+                                class="btn btn-raised btn-primary"
+                                (click)="agregarAlerta()"
+                                [disabled] = "submitted"
+                              >
+                                Agregar
+                              </button>
+                            </div>
+                          </div>
+                          <div class="col-md-8">
+                            <table
+                              class="table table-striped"
+                              
+                            >
+                              <thead class="thead-inverse">
+                                <tr>
+                                  <th>Fuente</th>
+                                  <th>Fecha</th>
+                                  <th>Descripcion</th>
+                                  <th>Acciones</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr
+                                  *ngFor="
+                                    let a of (alertas$ | async)['data']
+                                      | paginate
+                                        : {
+                                            itemsPerPage: itemsPerPageA,
+                                            currentPage: pA,
+                                            totalItems: (alertas$ | async)['total']
+                                            
+                                          };
+                                    index as i
+                                  "
+                                >
+                              
+                                  <td scope="row">{{ a.fuente }}</td>
+                                  <td>{{ a.fecha }}</td>
+                                   <td>{{ a.novedad }}</td> 
+                                  <td>{{ a.descripcion }}</td>
+                                  
+                                  
+                                  <td>
+                                    <div class="btn-group">
+                                      
+                                      <button
+                                      ngbTooltip="Eliminar"
+                                        type="button"
+                                        class="btn btn-danger"
+                                        (click)="deleteAlerta(a)"
+                                      >
+                                        <a class="ft-trash" style="color:white"></a>
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <div class="row aling-items-end">
+                              <div class="col-md-12">
+                                <pagination-controls
+                                (pageChange)="perPageA(itemsPerPageA,$event)"
+                                  previousLabel="Anterior"
+                                  nextLabel="Siguiente"
+                                ></pagination-controls>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+
+                    <form [formGroup]="formDataCreditoEndeudamiento" class="width-100">
+                      <div class="row width-100">
+                        <h5><strong>Endeudamiento y comportamiento de pago en los ultimos 12 meses</strong></h5>
+                        <div class="row width-100">
+                          <div class="col-md-5">
+                            <div class="col-md-12">
+                              <div class="form-group margin-fg width-100">
+                                <label>Mes</label><br>
+                                <select formControlName="mes" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" class="form-control" >
+                                  <option value="Enero">Enero</option>
+                                  <option value="Febrero">Febrero</option>
+                                  <option value="Marzo">Marzo</option>
+                                  <option value="Abril">Abril</option>
+                                  <option value="Mayo">Mayo</option>
+                                  <option value="Junio">Junio</option>
+                                  <option value="Julio">Julio</option>
+                                  <option value="Agosto">Agosto</option>
+                                  <option value="Septiembre">Septiembre</option>
+                                  <option value="Octubre">Octubre</option>
+                                  <option value="Noviembre">Noviembre</option>
+                                  <option value="Diciembre">Diciembre</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="col-md-12">
+                              <div class="form-group margin-fg width-100">
+                                <label>Mora</label><br>
+                                <select formControlName="mora" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" class="form-control" >
+                                  <option value="30">30 Dias</option>
+                                  <option value="60">60 Dias</option>
+                                  <option value="90">90 Dias</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="col-md-12">
+                              <button
+                                type="button"
+                                class="btn btn-raised btn-primary"
+                                (click)="agregarEndeudamiento()"
+                                [disabled] = "submitted"
+                              >
+                                Agregar
+                              </button>
+                            </div>
+                          </div>
+                          <div class="col-md-7">
+                            <table
+                              class="table table-striped"
+                              
+                            >
+                              <thead class="thead-inverse">
+                                <tr>
+                                  <th>Mes</th>
+                                  <th>Mora</th>
+                                  <th>Acciones</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr
+                                  *ngFor="
+                                    let e of (endeudamientos$ | async)['data']
+                                      | paginate
+                                        : {
+                                            itemsPerPage: itemsPerPageE,
+                                            currentPage: pE,
+                                            totalItems: (endeudamientos$ | async)['total']
+                                            
+                                          };
+                                    index as i
+                                  "
+                                >
+                              
+                                  <td scope="row">{{ e.mes }}</td>
+                                  <td>{{ e.mora }} Dias</td>
+                                  
+                                  
+                                  <td>
+                                    <div class="btn-group">
+                                                                            
+                                      <button
+                                      ngbTooltip="Eliminar"
+                                        type="button"
+                                        class="btn btn-danger"
+                                        (click)="deleteEndeudamiento(e)"
+                                      >
+                                        <a class="ft-trash" style="color:white"></a>
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <div class="row width-100 aling-items-end">
+                              <div class="col-md-12">
+                                <pagination-controls
+                                (pageChange)="perPageE(itemsPerPageE,$event)"
+                                  previousLabel="Anterior"
+                                  nextLabel="Siguiente"
+                                ></pagination-controls>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+
+                    <form [formGroup]="formDataCreditoPorSector" class="width-100">
+                      <div class="row width-100">
+                        <h5><strong>Cupos, saldos y moras por sector</strong></h5>
+                        <div class="row width-100">
+                          <div class="row width-100">
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label>Ingreso Mensual</label>
+                                <input type="text" [value]="ingreso_mensual" (change)="total_ingreso_mensual($event.target.value)" formControlName="ingresoMensual" name="ingresoMensual" id="ingresoMensual" class="form-control " placeholder="">
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label>Valor cupo inicial</label>
+                                <input type="text" [value]="cupo_inicial" (change)="total_cupo_inicial($event.target.value)" formControlName="cupoInicial" name="cupoInicial" id="cupoInicial" class="form-control " placeholder="">
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label>Saldo Actual</label>
+                                <input type="text" [value]="saldo_actual" (change)="total_saldo_actual($event.target.value)" formControlName="saldoActual" name="saldoActual" id="saldoActual" class="form-control " placeholder="">
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label>Valor cuota mensual</label>
+                                <input type="text" [value]="cuota_mensual" (change)="total_cuota_mensual($event.target.value)" formControlName="cuotaMensual" name="cuotaMensual" id="cuotaMensual" class="form-control " placeholder="">
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label>Gastos familiares</label>
+                                <input type="text" [value]="gastos_familiares" (change)="total_gastos_familiares($event.target.value)" formControlName="gastosFamiliares" name="gastosFamiliares" id="gastosFamiliares" class="form-control " placeholder="">
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label>Saldo mora</label>
+                                <input type="text" [value]="saldo_mora" (change)="total_saldo_mora($event.target.value)" formControlName="saldoMora" name="saldoMora" id="saldoMora" class="form-control " placeholder="">
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label>Disponible mensual</label>
+                                <input type="text" [value]="disponible_mensual" (change)="total_disponible_mensual($event.target.value)" formControlName="disponibleMensual" name="disponibleMensual" id="disponibleMensual" class="form-control " placeholder="">
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label>Disponible endeudamiento</label>
+                                <input type="text" [value]="disponible_endeudamiento" (change)="total_disponible_endeudamiento($event.target.value)" formControlName="disponibleEndeudamiento" name="disponibleEndeudamiento" id="disponibleEndeudamiento" class="form-control " placeholder="">
+                              </div>
+                            </div>
+                            <div class="col-md-12">
+                              <button
+                                type="button"
+                                class="btn btn-raised btn-primary"
+                                (click)="agregarPorSector()"
+                                [disabled] = "submitted"
+                              >
+                                Agregar
+                              </button>
+                            </div>
+                          </div>
+                          <div class="row width-100">
+                            <div class="col-md-12">
+                            <table
+                              class="table table-striped"
+                              
+                            >
+                              <thead class="thead-inverse">
+                                <tr>
+                                  <th>Ingreso mensual</th>
+                                  <th>Cupo inicial</th>
+                                  <th>Saldo actual</th>
+                                  <th>Cuota mensual</th>
+                                  <th>Gastos familiares</th>
+                                  <th>Saldo mora</th>
+                                  <th>Disponible mensual</th>
+                                  <th>Disponible endeudamiento</th>
+                                  <th>Total a pagar</th>
+                                  <th>Acciones</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr
+                                  *ngFor="
+                                    let s of (porSector$ | async)['data']
+                                      | paginate
+                                        : {
+                                            itemsPerPage: itemsPerPageS,
+                                            currentPage: pS,
+                                            totalItems: (porSector$ | async)['total']
+                                            
+                                          };
+                                    index as i
+                                  "
+                                >
+                                  <td>${{ s.ingresoMensual | number:'1.0-0':'es' }}</td>
+                                  <td scope="row">${{ s.cupoInicial | number:'1.0-0':'es' }}</td>
+                                  <td>${{ s.saldoActual | number:'1.0-0':'es' }}</td>
+                                  <td>${{ s.cuotaMensual | number:'1.0-0':'es' }}</td>
+                                  <td>${{ s.gastosFamiliares | number:'1.0-0':'es' }}</td>
+                                  <td>${{ s.saldoMora | number:'1.0-0':'es' }}</td>
+                                  <td>${{ s.disponibleMensual | number:'1.0-0':'es' }}</td>
+                                  <td>${{ s.disponibleEndeudamiento | number:'1.0-0':'es' }}</td>
+                                  <td *ngIf="solicituds && solicituds.tipoCredito == 'm'">${{ (solicituds.totalPagar/solicituds.plazo) | number:'1.0-0':'es' }}</td>
+                                  <td *ngIf="solicituds && solicituds.tipoCredito == 'd'">${{ (solicituds.totalPagar) | number:'1.0-0':'es' }}</td>
+                                  <td>
+                                    <div class="btn-group">
+                                      
+                                      
+                                      <button
+                                      ngbTooltip="Eliminar"
+                                        type="button"
+                                        class="btn btn-danger"
+                                        (click)="deletePorSector(s)"
+                                      >
+                                        <a class="ft-trash" style="color:white"></a>
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <div class="row width-100 aling-items-end">
+                              <div class="col-12">
+                                <pagination-controls
+                                (pageChange)="perPageS(itemsPerPageS,$event)"
+                                  previousLabel="Anterior"
+                                  nextLabel="Siguiente"
+                                ></pagination-controls>
+                              </div>
+                            </div>
+                            <div class="row txt-cntr">
+                              <div class="col-md-12">
+                                <p>Si hay una deuda en el sector real entonces en gastos familiares no se tiene en cuenta el costo de acomodación</p>
+                              </div>
+                            </div>
+                          </div>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                    <div class="col-md-12 txt-cntr " style="margin-top:3em">
+                      <button
+                        type="button"
+                        class="btn btn-raised btn-success"
+                        [disabled]="estatusSolicitud=='abierto' || estatusSolicitud == 'pagado' || estatusSolicitud == 'castigado' || estatusSolicitud=='novado'"
+                        (click)="aceptarDc(revisionSelfie)"
+                      >
+                        Aceptar
+                      </button>
+                     
+                      <button
+                        type="button"
+                        class="btn btn-raised btn-warning"
+                        [disabled]="estatusSolicitud=='abierto' || estatusSolicitud == 'pagado' || estatusSolicitud == 'castigado' || estatusSolicitud=='novado'"
+                        (click)="rechazarDc(revisionSelfie)"
+                      >
+                        Rechazar
+                      </button>
+                      <button
+                          type="button"
+                          class="btn btn-raised btn-info"
+                        
+                          [routerLink]="['/admin/comentarios/', revisionSelfie.id,'dataCredito']"
+
+                        >
+                          Agregar comentario
+                        </button>
+                      
+                  </div>
+                  <div class="row" style="width: 100%;">
+                    <div class="col-12 " *ngFor="let c of comentDC">
+                      <div class="row fondoComent">
+                        <div class="col-6">
+                          <strong>{{c.usuario}}</strong>
+                        </div>
+                        <div class="col-6" style="text-align: right;">
+                          <p>{{c.created_at}}</p>
+                        </div>
+                        <div class="col-6">
+                          <p>{{c.comentario}}</p>
+                        </div>
+                        <div class="col-6"></div>
+                        <div class="col-6">
+                          <p><a href="{{ruta}}{{c.archivo}}" target="_blank" download="{{c.archivo}}">{{c.archivo}}</a></p>
+                        </div>
+                        <div class="col-6" style="text-align: right;">
+                          <div class="row">
+                            <div class="col-9" style="text-align: right;"><p><a [routerLink]="['/admin/comentarios/', c.id]">Editar</a></p></div>
+                            <div class="col-3" style="text-align: left;"><p><a style="color: #f4c269;" (click)="borrarComentario(c)">Borrar</a></p></div>
+                          </div>
+                         
+                          
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+                  </ng-template>
+                  <ng-template #alerta>
+                    <div class="col-12 txt-cntr">
+                      <p><h3>Para seguir en este paso debe aprobar el anterior</h3>
+                    </div>
+                  </ng-template>
+                </ngb-tab> -->
+                
+              
+              </ngb-tabset>
+              
+         
+
+              
+              
+            </div>
+        
+          </div>
+    
+        </div>
+      </div>
+      <!-- {{ users$ | async | json }} -->
+    </div>
+  </div>
+</div>
+
+        
+          
+   

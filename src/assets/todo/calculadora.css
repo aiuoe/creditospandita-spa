@@ -1,0 +1,132 @@
+/* ESTILOS CALCULADORA */
+
+input[type='range']{ display:block; width:100%;}
+input[type='range']:focus {
+  outline: none;
+}
+
+input[type='range'], input[type='range']::-webkit-slider-runnable-track, input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none; 
+  border: none;
+}
+
+/* 2.1 THUMB */
+input[type=range]::-webkit-slider-thumb{background-color:#f36c21; width:70px; height:30px; border-radius:40px; margin-top: -11px;}
+
+input[type=range]::-moz-range-thumb{ background-color:#f36c21; width:65px; height:30px; border-radius:40px;}
+
+input[type=range]::-ms-thumb{ background-color:#f36c21; width:70px; height:30px; border-radius:40px;}
+
+
+/* 2.2 TRACK */
+input[type=range]::-webkit-slider-runnable-track{background-color:whitesmoke; box-shadow: inset 0px 0px 1px #565656; height:6px; border-radius: 15px}
+
+input[type=range]:focus::-webkit-slider-runnable-track{outline: none;}
+
+input[type=range]::-moz-range-track{background-color:whitesmoke; box-shadow: inset 0px 0px 1px #565656;height:6px; border-radius: 15px}
+
+
+input[type=range]::-ms-track{background-color:whitesmoke; box-shadow: inset 0px 0px 1px #565656;height:6px; border-radius: 15px}
+
+input[type=range]::-ms-fill-lower{background-color:HotPink} 
+
+input[type=range]::-ms-fill-upper{background-color:black;} 
+
+.contenedor{width: 100%;float: left;border-radius: 10px;overflow: hidden;box-shadow: 0px 0px 5px #ababab;}
+.calc_salario{display: none}
+.desc_cal{text-align: center;margin: 0;color: gray;font-size: 14px;}
+.desc_cal span{font-size: 22px; color: #f36c21;font-weight: bold}
+.tabs-calculadora{display: flex;height: 80px; width: 100%;}
+.tabs-calculadora .tab{width: 50%; float: left;background: white; text-align: center;font-size: 13px;display: table-cell;vertical-align: middle;padding: 0 10px;}
+.tabs-calculadora .tab div{display: grid;height: 80px;align-items: center;text-align: center;}
+.tabs-calculadora .tab#tab_salario{background: #ebebeb;}
+.name_cred{width: 20%;float: left;}
+.desc_cred{width: 60%;float: left;}
+.desc_cred span{background: #4646ef;width: 80%;margin: 0 auto; border-radius: 15px; padding: 6px;color: white;}
+.meses_cred{width: 20%; float: left;}
+.content-calculadora{float: left;width: 100%;    padding: 15px;}
+.form_calc{font-size: 13px;color: gray;}
+.form_calc label{color: #adadad;font-size: 12px;font-weight: 400;}
+.form_calc .columna_form{width: 33.3333%;float:left;text-align: center;border: 1px solid #f3f3f3;}
+.form_calc .columna_form.med{width: 50%;}
+.form_calc input{border: none;text-align: center;}
+.form_calc input[type=submit]{margin-top: 20px;background: #2ab92a;padding: 15px 30px;border-radius: 30px;}
+.form_calc .columna_form input{padding: 0px; font-weight: 600;}
+.form_calc input:focus{border: none;outline:none;}
+.solicita{border: none !important; padding: 10px;text-align: left !important;}
+.solicita span{font-size: 24px;font-weight: 600; color: #f36c21;}
+
+[data-tooltip] {
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+}
+
+/* Hide the tooltip content by default */
+[data-tooltip]:before,
+[data-tooltip]:after {
+  visibility: hidden;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Position tooltip above the element */
+[data-tooltip]:before {
+  position: absolute;
+  bottom: 150%;
+  left: 50%;
+  margin-bottom: 5px;
+  margin-left: -80px;
+  padding: 7px;
+  width: 170px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #000;
+  background-color: hsla(21, 90%, 54%, 0.93);
+  color: #fff;
+  content: attr(data-tooltip);
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+/* Triangle hack to make tooltip look like a speech bubble */
+[data-tooltip]:after {
+  position: absolute;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -5px;
+  width: 0;
+  border-top: 5px solid #000;
+  border-top: 5px solid hsla(21, 90%, 54%, 0.93);
+  border-right: 5px solid transparent;
+  border-left: 5px solid transparent;
+  content: " ";
+  font-size: 0;
+  line-height: 0;
+}
+
+/* Show tooltip content on hover */
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after {
+  visibility: visible;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+  filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+}
+
+.fed_form_post .vc_col-md-6{margin-bottom: 10px;}
+.fed_form_post .panel-primary{border: none !important;}
+.fed_form_post .panel .panel-heading{display:none;}
+.fed_form_post .panel-body {background: #ffffff !important;}
+.fed_form_post .form-group label{font-size:13px;color: #69717a;font-weight: 600;}
+.fed_form_post .form-control{border: none !important;border-bottom: 1px solid #69717a !important;
+outline: 0 !important;-webkit-transition: all .35s;transition: all .35s;
+padding: 10px 15px !important;background: #f8f9fa !important;
+color: #69717a !important; height: 45px !important;box-shadow:none !important;}
+table.lista_creditos thead{background: #f36c21;color: white;font-size: 15px;}
+table.lista_creditos thead td{text-align: center;padding: 10px 0;}
+table.lista_creditos tbody td{font-size: 15px;padding: 5px;background: white;}

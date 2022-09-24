@@ -1,0 +1,255 @@
+<div class="container-fluid padding-mv-0">
+  <div class="row  margin-mv-0">
+
+    <div class="col-12 padding-mv-0 colorBlanco">
+      <div style="margin-top: 3em;padding-left: 1.5rem;">
+        <h1 style="color: #ebc121;"><b>CONTRAOFERTA</b></h1>
+      </div>
+     
+      <div class="card formula mt3em">
+<h4><b>¡Tu solicitud ha sido pre-aprobada!</b></h4>
+<p>Sin embargo debemos hacerte una contraoferta la cual puedes aceptar o rechazar</p>
+<p>Ten en cuenta que si pagas a tiempo tus creditos, tu cupo ira incrementando al igual que la flexibilidad en tus pagos. <br>Una vez realices el pago exitosamente, te reportaremos POSITIVAMENTE en las centrales de riesgo.</p>
+<p>¡Te ayudamos a crear o mejorar tu historial crediticio!</p>
+        <div class="card-body">
+
+          <div class="row">
+            <div class="col-md-6 home-calc__form">
+              <form [formGroup]="contraOfertaForm">
+                <div class="form-row align-items-end">
+                  <!-- <div class="col-12">
+                    <div class="form-group">
+                      <label for="email">Fecha</label>
+                      <input
+                      type="text"
+                      ngbDatepicker
+                      placeholder="yyyy-mm-dd"
+                      #fecha_nueva="ngbDatepicker"
+                      (click)="fecha_nueva.toggle()"
+                      class="form-control"
+                      id="fecha_nueva"
+                      (dateSelect)="setFechaNueva($event)"
+                      formControlName = "fechaN"
+                    />
+                    </div>
+                  </div> -->
+                  <div class="col-md-12 ">
+                    <strong><h4 style="font-weight: 600;color:#ebc121">TU CRÉDITO</h4></strong>
+                                            <div class="columna_form med solicita">
+                    
+                                                <span class="col-md-12 pdd0" style="text-align: left;">
+                                                    <label id="textcal">Monto Aprobado:
+                                                        <label id="valorpesos">$</label>
+                                                    </label> <span id="monto_solicitado_desc_salario"> {{ montoSolicitadoDias | number:'1.0-0':'es'}}</span>   <br/>
+                                                
+                                                </span>
+                                            
+                                                <input disabled="true" name="m_solicitado" formControlName="m_solicitado" style="padding-top: 10px;" type="range" min="0" max="110000" step="10000" value="110000"  id="m_solicitado_salario">
+                                             
+                                                <div class="row">
+                                                <div class="col-xs-6 col-sm-6 col-lg-6" style="text-align: left;">
+                                                    <label id="montom2"> $ 110.000</label>
+                                                </div>
+                                                <div class="col-xs-6 col-sm-6 col-lg-6" style="text-align: right;">
+                                                    <label id="montoma2">$ 110.000</label>
+                    
+                                                </div>
+                                                </div>
+                                                
+                                            </div>
+                    
+                    
+                                                </div>
+                                                <div class="col-md-12">
+                                                  <div class="columna_form med solicita">
+                                                                        
+                                                      <span class="col-md-12 pdd0" style="text-align: left;">
+                                                          <label id="textcal">Plazo de Pago: </label> <span id="val_meses_salario"> {{ plazoDias }} </span>
+                                                          <label id="textcal2"> días</label> 
+                                                       
+                                                      
+                                                      </span>
+                                                
+                  
+                                                      <input name="c_mensual" formControlName="c_mensual" style="padding-top: 10px;" type="range" min="{{ configCalDias ? configCalDias.dias_minimo : 15 }}" max="{{ configCalDias ? configCalDias.dias_maximo : 35 }}" step="1" (input)="obtenerMonto2()" id="c_mensual_salario">
+                                                   
+                                                      <div class="row">
+                                                      <span class="col-sm-6 col-md-6 col-lg-6 padding-10" style="text-align: left;">
+                                                          <label id="montom22">{{ configCalDias ? configCalDias.dias_minimo : 15 }} días </label>
+                                                      </span>
+                                                      <span class="col-sm-6 col-md-6 col-lg-6 padding-10" style="text-align: right;">
+                  
+                                                          <label id="montoma22">{{ configCalDias ? configCalDias.dias_maximo : 35 }} días </label>
+                                                      </span>
+                                                    </div>
+                                                  </div>
+                                                  
+                                                  
+                                                                              </div>
+                </div>
+                <div class="row">
+                  <div
+                    class="col-12 my-2"
+                  >
+                    <button
+                      type="button"
+                      class="btn btn-raised btn-primary"
+                      style="background-color: #ebc121 !important;width: 100%;"
+                      [disabled]="contraOfertaForm.invalid"
+                      (click)="aprobar()"
+                    >
+                    ¡Solicita tu préstamo ahora!
+                    </button>
+                  </div>
+  
+                  <!-- <div class="col-auto my-2">
+                    <button
+                      type="button"
+                      class="btn btn-raised btn-warning"
+                      [disabled]="!contraOfertaForm.dirty"
+                      (click)="contraOfertaForm.reset()"
+                    >
+                      Limpiar
+                    </button>
+                  </div> -->
+                </div>
+              </form>
+            </div>
+            <div class="col-md-6 home-calc__results">
+              <!-- <strong><h5 style="font-weight: 600;">Simulación de tu prestamo</h5></strong> -->
+
+                                <table class="table table-borderless">
+                                
+                                    <tbody>
+                                      <tr class="fondoGris">
+                                   
+                                        <th>Monto Aprobado</th>
+                                      
+                                        <td>$ {{ montoSolicitadoDias | number:'1.0-0':'es'}}</td>
+                                      </tr>
+                                      <tr class="fondoGris">
+                                   
+                                        <th>Tasa de interes</th>
+                                      
+                                        <td>$ {{ t_interesDias | number:'1.0-0':'es'}}</td>
+                                      </tr>
+                                      <tr>
+                                   
+                                        <th>Subtotal</th>
+                                      
+                                        <td><b>$ {{ subtotalDias | number:'1.0-0':'es'}}</b></td>
+                                      </tr>
+                                      <tr>
+                                        <th>Plataforma (opcional)</th>
+                                      
+                                        <td>$ {{ plataformaDias | number:'1.0-0':'es'}}</td>
+                                      </tr>
+                                      <tr>
+                                        <th>Aprobación rapida (opcional)</th>
+                                      
+                                        <td>$ {{ ap_expressDias | number:'1.0-0':'es'}}</td>
+                                      </tr>
+                                      <tr>
+                                        <th>IVA</th>
+                                      
+                                        <td>$ {{ ivaDias | number:'1.0-0':'es'}}</td>
+                                      </tr>
+                                      <tr class="bordersito fondoGris">
+                                        <th>Total a pagar</th>
+                                      
+                                        <td><b>$ {{ totalDias | number:'1.0-0':'es'}}</b></td>
+                                      </tr>
+                                    
+                                    </tbody>
+                                  </table>
+            </div>
+          </div>
+          <!-- <div class="row">
+            <div class="col-12">
+              
+            </div>
+            <div class="col-12 table-responsive">
+              <table
+                class="table table-striped"
+                
+              >
+                <thead class="thead-inverse">
+                  <tr>
+                    <th>Monto Solicitado</th>
+                    <th>Monto Aprobado</th>
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                    <th>Interés</th>
+                    <th>Duración</th>
+                    <th>Tipo de crédito</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="
+                  let c of (contraOfertas$ | async)['data']
+                    | paginate
+                      : {
+                          itemsPerPage: itemsPerPage,
+                          currentPage: p,
+                          totalItems: (contraOfertas$ | async)['total']
+                        }; 
+                      index as i
+                ">
+                    <td>$ {{ c.montoSolicitado | number:'1.0-0':'es'}}</td>
+                    <td>$ {{ c.montoAprobado | number:'1.0-0':'es'}}</td>
+                    <td> {{c.estatus}}</td>
+                    <td> {{ c.created_at}}</td>
+                    <td>$ {{ c.tasaInteres | number:'1.0-0':'es'}}</td>
+                    <td>{{ c.plazo}}</td>
+                    <td > {{ c.tipoCredito == 'm' ? 'Panda Meses' : 'Panda Dias'}}</td>
+                    <td>
+                      <div class="btn-group">
+
+                        <button
+                        *ngIf ="c.estatus == 'rechazado'"
+                        ngbTooltip="Aprobar"
+                          type="button"
+                          class="btn btn-success"
+                          (click)="aprobar(c)"
+                        >
+                          <a class="ft-check" style="color:white"></a>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div> -->
+          <!-- <div class="row aling-items-end">
+            <div class="col-3">
+              <div class="form-group">
+                
+                <select
+                  class="form-control"
+                  name="page"
+                  id="page"
+                  (change)="perPage($event.target.value, p)"
+                >
+                  <option value="5">5</option>
+                  <option value="15">15</option>
+                  <option value="50">50</option>
+                </select>
+              </div>
+            </div>
+            <div class="col">
+              <pagination-controls
+              (pageChange)="perPage(itemsPerPage,$event)"
+                previousLabel="Anterior"
+                nextLabel="Siguiente"
+              ></pagination-controls>
+            </div>
+          </div> -->
+        </div>
+      </div>
+      <!-- {{ users$ | async | json }} -->
+    </div>
+  </div>
+</div>
+

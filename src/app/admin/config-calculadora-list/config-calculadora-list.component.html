@@ -1,0 +1,115 @@
+<div class="container-fluid padding-mv-0">
+  <div class="row margin-mv-0">
+    <div class="col-12 padding-mv-0">
+      <div class="card formula mt3em">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>Configuraciones de calculadoras</h2>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12">
+              <!-- <div class="pull-right">
+                <button
+                ngbTooltip="Agregar"
+                type="button"
+                class="btn btn-primary"
+                [routerLink]="['/admin/config-calculadora/add']"
+                >
+                <a class="ft-plus" text-info></a>
+              </button>
+              </div> -->
+            </div>
+            <div class="col-12 table-responsive">
+              <table
+                class="table table-striped"
+              >
+                <thead class="thead-inverse">
+                  <tr>
+                    <th>Tipo</th>
+                    <th>Monto minimo</th>
+                    <th>Monto maximo</th>
+                    <th>Dias minimo</th>
+                    <th>Dias maximo</th>
+                    <th>Porcentaje iva</th>
+                    <th>Plataforma</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                  *ngFor="
+                    let c of (configuraciones$ | async)['data']
+                      | paginate
+                        : {
+                            itemsPerPage: pItemsInPage,
+                            currentPage: p,
+                            totalItems: (configuraciones$ | async)['total']
+                          }
+                    "
+                  >
+                
+                    <td scope="row">{{ c.tipo == 1 ? 'Meses' : 'Dias' }}</td>
+                    <td>${{ c.monto_minimo | number:'1.0-0':'es' }}</td>
+                    <td>${{ c.monto_maximo | number:'1.0-0':'es' }}</td>
+                    <td>{{ c.dias_minimo }}</td>
+                    <td>{{ c.dias_maximo }}</td>
+                    <td>{{ c.porcentaje_iva | number:'1.2-2':'es' }}%</td>
+                    <td>{{ c.tipo == 1 ? '' : '$' }}{{ c.porcentaje_plataforma | number:'1.2-2':'es' }}{{ c.tipo == 2 ? '' : '%' }}</td>
+                    <td>
+                      <div class="btn-group">
+                        <button
+                        ngbTooltip="Editar"
+                          type="button"
+                          class="btn btn-secondary"
+                          [routerLink]="['/admin/config-calculadora/', c.id]"
+                        >
+                          <a class="ft-more-horizontal" text-info></a>
+                        </button>
+
+                        <!-- <button
+                        ngbTooltip="Eliminar"
+                          type="button"
+                          class="btn btn-danger"
+                          (click)="delete(c)"
+                        >
+                          <a class="ft-trash" style="color:white"></a>
+                        </button> -->
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row aling-items-end">
+            <div class="col-3">
+              <div class="form-group">
+                <!-- <label for="page">Items por Página</label> -->
+                <select
+                  class="form-control"
+                  name="page"
+                  id="page"
+                  (change)="perPage($event.target.value, p)"
+                >
+                  <option value="5">5</option>
+                  <option value="15">15</option>
+                  <option value="50">50</option>
+                </select>
+              </div>
+            </div>
+            <div class="col">
+              <pagination-controls
+              (pageChange)="perPage(pItemsInPage,$event)"
+                previousLabel="Anterior"
+                nextLabel="Siguiente"
+              ></pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- {{ users$ | async | json }} -->
+    </div>
+  </div>
+</div>

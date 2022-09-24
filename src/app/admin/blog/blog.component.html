@@ -1,0 +1,129 @@
+<div class="container-fluid">
+  <div class="row align-items-end">
+    <div class="col-xs-12">
+      <div class="card formula mt3em">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>
+              {{ (blogToEdit$ | async)?.id ? 'Edición' : 'Registro' }} de
+              Blogs
+            </h2>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-content">
+            <form [formGroup]="formBlog">
+              <div class="form-row align-items-end">
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="email">Titulo</label>
+                    <input
+                      type="mail"
+                      class="form-control"
+                      formControlName="titulo"
+                      id="titulo"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="password">Imagen</label>
+                    <input
+                      type="file"
+                      class="form-control"
+                      formControlName="imagen"
+                      id="imagen"
+                      (change)="onFileChange($event)"
+                    />
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="descripcion">Descripcion</label>
+                    <textarea class="form-control"
+                    formControlName="descripcion"
+                    id="descripcion"></textarea>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <!-- <label for="descripcion_larga">Descripcion Larga</label> -->
+                  <!-- <div >Hello, Froala!</div>                   -->
+                  <div class="form-group">
+                    <label for="descripcion_larga">Descripcion Larga</label>
+                    <textarea [froalaEditor] class="form-control"
+                    formControlName="descripcion_larga"
+                    id="descripcion_larga"></textarea>
+                  </div>
+                  <!-- <textarea [froalaEditor] formControlName="descripcion_larga"></textarea> -->
+                </div>
+              </div>
+              <!-- <div class="form-row">
+                <div class="col-4">
+                  <div class="form-group">
+                    <label for="roles">Roles</label>
+                    <select
+                      class="form-control"
+                      name="roles"
+                      id="roles"
+                      formControlName="roles"
+                      multiple
+                      *ngIf="roles$ | async as roles"
+                      required
+                    >
+                      <option
+                        *ngFor="let role of roles['data']; index as i"
+                        for
+                        [value]="role.id"
+                        >{{ role.name }}</option
+                      >
+                    </select>
+                  </div>
+                </div>
+              </div> -->
+              <div class="row">
+                <div
+                  class="col-auto my-2"
+                  *ngIf="(blogToEdit$ | async)?.id; else noEditMode"
+                >
+                  <button
+                    type="button"
+                    class="btn btn-raised btn-primary"
+                    [disabled]="formBlog.invalid"
+                    (click)="edit()"
+                  >
+                    Editar
+                  </button>
+                </div>
+                <ng-template #noEditMode>
+                  <div class="col-auto my-2">
+                    <button
+                      type="button"
+                      class="btn btn-raised btn-primary"
+                      [disabled]="formBlog.invalid"
+                      (click)="add()"
+                    >
+                      Guardar
+                    </button>
+                  </div>
+                </ng-template>
+
+                <div class="col-auto my-2">
+                  <button
+                    type="button"
+                    class="btn btn-raised btn-warning"
+                    [disabled]="!formBlog.dirty"
+                    (click)="formBlog.reset()"
+                  >
+                    Limpiar
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

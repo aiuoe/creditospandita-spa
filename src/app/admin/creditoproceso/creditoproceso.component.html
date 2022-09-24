@@ -1,0 +1,114 @@
+<div class="container-fluid padding-mv-0">
+  <div class="row margin-mv-0">
+    <div class="col-12 padding-mv-0">
+      <div class="card formula mt3em">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>Creditos en proceso</h2>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12">
+              <label>Busqueda por: Nºcrédito,Nombres y Apellido,Estatus, Fecha de solicitud</label><br>
+              <app-filter (onFilter)="onFilter($event)"></app-filter>
+            </div>
+            <div class="col-12">
+              <!-- <button
+                        ngbTooltip="Descargar  Excel"
+                          type="button"
+                          class="btn btn-success"
+                          (click)="export()"
+                          
+                        >
+                          <a class="ft-download" style="color:white"></a>
+                        </button> -->
+            </div>
+            <div class="col-12 table-responsive">
+              <table
+                class="table table-striped"
+                
+              >
+                <thead class="thead-inverse">
+                  <tr>
+                    
+                    <th>#Credito</th>
+                    <th>Fecha de solicitud</th>
+                    <th>Tipo</th>
+                    <th>Doc. Enviados</th>
+                    <th>Doc. Firmados</th>
+                    <th>Nombres y Apellidos</th>
+                    <th>Monto aprobado</th>
+                    <th>Plazo de pago</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+            
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="
+                  let c of (aprobados$ | async)['data']
+                    | paginate
+                      : {
+                          itemsPerPage: itemsPerPage,
+                          currentPage: p,
+                          totalItems: (aprobados$ | async)['total']
+                        }; 
+                      index as i
+                ">
+                    <td> {{ c.numero_credito }}</td>
+                    <td> {{ c.fecha_solicitud }}</td>
+                    <td> {{ c.tipoCredito == 'm' ? 'Panda Meses' : 'Panda Dias'}}</td>
+                    <td>{{c.fechaDocEnviado}}</td>
+                    <td>{{c.fechaDocFirma}}</td>
+                    <td>{{c.first_name}} {{c.second_name}} {{c.last_name}} {{c.second_last_name}}</td>
+                    <td >$ {{ (c.ContraOferta ? c.ContraOferta.montoAprobado  : c.montoSolicitado) | number:'1.0-0':'es' }}</td>
+                    <td>{{ c.plazo}}</td>
+                    <td>{{ c.estatus_firma=='pendiente' ? 'Por firmar' : 'Por desembolsar'}}</td>
+                    <td >     <div class="btn-group">
+                      <button
+                      ngbTooltip="Desembolsar"
+                        type="button"
+                        class="btn btn-success"
+                        [routerLink]="['/admin/desembolsar/', c.idUserFk,c.ContraOferta ? c.ContraOferta.montoAprobado  : c.montoSolicitado]"
+                       
+                      >
+                        <a class="ft-download-cloud" style="color:white"></a>
+                      </button>
+                    </div> </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row aling-items-end">
+            <div class="col-3">
+              <div class="form-group">
+                <!-- <label for="page">Items por Página</label> -->
+                <select
+                  class="form-control"
+                  name="page"
+                  id="page"
+                  (change)="perPage($event.target.value, p)"
+                >
+                  <option value="5">5</option>
+                  <option value="15">15</option>
+                  <option value="50">50</option>
+                </select>
+              </div>
+            </div>
+            <div class="col">
+              <pagination-controls
+              (pageChange)="perPage(itemsPerPage,$event)"
+                previousLabel="Anterior"
+                nextLabel="Siguiente"
+              ></pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- {{ users$ | async | json }} -->
+    </div>
+  </div>
+</div>
+

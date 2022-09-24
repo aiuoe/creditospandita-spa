@@ -1,0 +1,39 @@
+.txtc{
+    text-align: center;
+}
+.mlrauto{
+    margin-right: auto;
+    margin-left: auto;
+}
+.left{
+    text-align: left;
+}
+.right{
+    text-align: right;
+}
+.btn-primary {
+    color: #fff !important;
+    background-color: #ebc121 !important;
+    border-color: #ebc121 !important;
+}
+
+.dark {
+    background: #f7f9fa;
+    border-radius: 0.5em;
+    padding: 15px;
+    text-align: center;
+    font-size: 1em;
+    color: #223857;
+    font-weight: normal;
+}
+a:focus, a:hover {
+    color: #333 !important;
+    text-decoration: none !important;
+}
+a{
+    color: #0073e5 !important;
+    text-decoration: underline !important;
+}
+li{
+    font-size: 1rem;
+}

@@ -1,0 +1,120 @@
+<div class="container-fluid">
+  <div class="row align-items-end">
+    <div class="col-xs-12">
+      <div class="card formula mt3em">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>
+            Cambio de Contraseña
+            </h2>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-content">
+            <form [formGroup]="formUser" (ngSubmit)="edit()">
+              <div class="form-row align-items-end">
+     <div class="row">
+                <div class="col-12">
+                  <div class="form-group">
+                    <label for="password">Nueva Contraseña</label>
+                    <input
+                      type="password"
+                      class="form-control"
+                      formControlName="password"
+                      id="password"
+                      [ngClass]="{ 'is-invalid':  f.password.errors }"
+                      required
+                    />
+                  </div>
+                  <div *ngIf=" f.password.errors" class="error">
+                    <div *ngIf="f.password.errors.required"><small>Campo requerido</small></div>
+                    <div *ngIf="f.password.errors.pattern"><small>Contraseña debe tener minimo 8 caracteres, un numero, una mayuscula, una minuscula y un caracter especial.</small></div>
+                </div> 
+                </div>
+                <div class="col-12">
+                  <div class="form-group">
+                    <label for="password">Confirmar Contraseña</label>
+                    <input
+                      type="password"
+                      class="form-control"
+                      formControlName="confirmation_password"
+                      id="confirmation_password"
+                      [ngClass]="{ 'is-invalid':  f.confirmation_password.errors }"
+                      required
+                    />
+                  </div>
+                  <div *ngIf=" f.confirmation_password.errors" class="error">
+                    <div *ngIf="f.confirmation_password.errors.required"><small>Campo requerido</small></div>
+                    <div *ngIf="f.confirmation_password.errors.mustMatch"><small style="color:red">Contraseñas no coinciden</small></div>
+                </div> 
+                </div>
+          </div>
+              </div>
+              <!-- <div class="form-row">
+                <div class="col-4">
+                  <div class="form-group">
+                    <label for="roles">Roles</label>
+                    <select
+                      class="form-control"
+                      name="roles"
+                      id="roles"
+                      formControlName="roles"
+                      multiple
+                      *ngIf="roles$ | async as roles"
+                      required
+                    >
+                      <option
+                        *ngFor="let role of roles['data']; index as i"
+                        for
+                        [value]="role.id"
+                        >{{ role.name }}</option
+                      >
+                    </select>
+                  </div>
+                </div>
+              </div> -->
+              <div class="row">
+                <div
+                  class="col-auto my-2"
+                  *ngIf="(userToEdit$ | async)?.id; else noEditMode"
+                >
+                  <button
+                    type="submit"
+                    class="btn btn-raised btn-primary"
+              
+              
+                  >
+                    Guardar cambios
+                  </button>
+                </div>
+                <ng-template #noEditMode>
+                  <div class="col-auto my-2">
+                    <button
+                      type="button"
+                      class="btn btn-raised btn-primary"
+                      [disabled]="formUser.invalid"
+                      (click)="add()"
+                    >
+                      Guardar
+                    </button>
+                  </div>
+                </ng-template>
+
+                <div class="col-auto my-2">
+                  <button
+                    type="button"
+                    class="btn btn-raised btn-warning"
+                    [disabled]="!formUser.dirty"
+                    (click)="formUser.reset()"
+                  >
+                    Limpiar
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

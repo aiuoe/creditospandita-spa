@@ -1,0 +1,736 @@
+
+<div class="container-fluid padding-mv-0" *ngIf="cargarte">
+  <div class="row justify-content-center margin-mv-0">
+    <div class="col-sm-12 col-md-12 col-lg-12 padding-mv-0">
+
+      <!-- <app-time-per-client></app-time-per-client> -->
+
+     
+
+      <div class="vc_row wpb_row vc_row-fluid grisaseo">
+        <div class="wpb_column vc_column_container vc_col-sm-2"><div class="vc_column-inner"><div class="wpb_wrapper"></div></div></div><div class="wpb_column vc_column_container vc_col-sm-8 mt3em"><div class="vc_column-inner"><div class="wpb_wrapper"><link rel="stylesheet" id="calculadora-css" href="http://creditospanda.com/wp-content/plugins/CalculadoraPlus/css/calculadora.css" type="text/css" media="all">
+            <div class="fed_tab_content" data-id="fed_register_tab">
+              <form (ngSubmit)="edit(1)" [formGroup]="registroForm" class="form_calc fed_form_post formula" name="form">
+                <div class="row margenesform" >
+
+                    <ul class="list-unstyled multi-steps">
+                        <li class="is-active" (click)="edit(1)">Información básica</li>
+                        <li (click)="edit(2)">Referencias</li>
+                        <li (click)="edit(3)">Info. Financiera y laboral</li>
+                      </ul>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Primer Nombre</label>
+                        <input [readonly]="!isAdmin" formControlName="first_name" type="text" name="first_name" class="form-control " placeholder="" >       
+                        <div *ngIf="submitted && f.first_name.errors" class="error">
+                          <div *ngIf="f.first_name.errors.required"><small>Primer nombre es requerido</small></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Segundo Nombre</label>
+                        <input [readonly]="!isAdmin" formControlName="second_name" type="text" name="second_name" class="form-control " placeholder="" >       
+                        <div *ngIf="submitted && f.second_name.errors" class="error">
+                          <div *ngIf="f.second_name.errors.required"><small>Segundo nombre es requerido</small></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Primer Apellido</label>
+                        <input [readonly]="!isAdmin" formControlName="last_name" type="text" name="last_name" class="form-control " placeholder="" >       
+                        <div *ngIf="submitted && f.last_name.errors" class="error">
+                          <div *ngIf="f.last_name.errors.required"><small>Primer apellido es requerido</small></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Segundo Apellido</label>
+                        <input [readonly]="!isAdmin" formControlName="second_last_name" type="text" name="second_last_name" class="form-control " placeholder="" >       
+                        <div *ngIf="submitted && f.second_last_name.errors" class="error">
+                          <div *ngIf="f.second_last_name.errors.required"><small>Segundo apellido es requerido</small></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Correo Electrónico</label>
+                        <input [readonly]="!isAdmin" formControlName="email" type="text" name="email" class="form-control " placeholder="" >       
+                        <div *ngIf="submitted && f.email.errors" class="error">
+                          <div *ngIf="f.email.errors.required"><small>Correo Electrónico es requerido</small></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Telefono</label>
+                        <input formControlName="phone_number" type="text" name="phone_number" class="form-control " placeholder="" >       
+                        <div *ngIf="submitted && f.phone_number.errors" class="error">
+                          <div *ngIf="f.phone_number.errors.required"><small>Telefono es requerido</small></div>
+                          <div *ngIf="f.phone_number.errors.pattern"><small>No se reconoce el formato del teléfono</small></div>
+                          <div *ngIf="f.phone_number.errors.maxlength"><small>Este campo debe tener maximo 10 caracteres</small></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                  <label>Selecciona tu Ciudad</label>
+                  <!-- <select formControlName="ciudad" name="ciudad" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" id="ciudad" class="form-control select-dropdown" required="true">      
+                    <option *ngFor="let c of countries">{{ c.name }}</option>
+                  </select> -->
+                  <ngx-select-dropdown
+                  formControlName="ciudads"
+                  [multiple]="false"
+                  [config]="clientSelectConfig"
+                  [options]="countries"
+                  (change)="clientSelected($event.value)"
+                  style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" id="ciudad" class="form-control select-dropdown" required="true"
+               
+                  ></ngx-select-dropdown>
+                    <div *ngIf="submitted && f.ciudad.errors" class="error">
+                        <div *ngIf="f.ciudad.errors.required"><small>Ciudad es requerido</small></div>
+                    </div>
+                  </div>
+                  </div>
+                  <div class="col-md-6">
+                  <div class="form-group">
+
+                  <label>Dirección</label>
+                  <input formControlName="direccion" type="text" name="direccion" class="form-control " placeholder="" required="required" >       
+                  <div *ngIf="submitted && f.direccion.errors" class="error">
+                    <div *ngIf="f.direccion.errors.required"><small>Direccion es requerido</small></div>
+                  </div>
+                </div>
+                </div>
+                  </div>
+
+                  <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                  <label>Tipo de Vivienda</label>
+                  <select formControlName="tipoVivienda" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="tipo_vivienda" class="form-control">
+                    <option value="Rentada">Rentada</option>
+                                <option value="Propia">Propia</option>
+                                <option value="Familiar">Familiar</option>
+                                <option value="Hipotecada">Hipotecada</option>
+                  </select>
+                  <div *ngIf="submitted && f.tipoVivienda.errors" class="error">
+                    <div *ngIf="f.tipoVivienda.errors.required"><small>Tipo de Vivienda es requerido</small></div>
+                  </div>
+                </div>
+                </div>
+                <div class="col-md-6">
+                <div class="form-group">
+                <label>Tiempo en esta Vivienda</label>
+                  <select formControlName="tienmpoVivienda" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="tiempo_vivienda" class="form-control">
+                    <option value="2 meses">2 meses</option>
+                                <option value="4 meses">4 meses</option>
+                                <option value="6 meses">6 meses</option>
+                                <option value="Menos de un Año">Menos de un año</option>
+                                <option value="1 a 2 años">1 a 2 años</option>
+                                <option value="2 a 4 años">2 a 4 años</option>
+                                <option value="4 a 5 Años">4 a 5 años</option>
+                                <option value="Más de 5 años">Más de 5 años</option>
+                  </select>
+                  <div *ngIf="submitted && f.tienmpoVivienda.errors" class="error">
+                    <div *ngIf="f.tienmpoVivienda.errors.required"><small>Tiempo en esta Vivienda es requerido</small></div>
+                  </div>              
+                  </div>
+                  </div>
+                  </div>
+                  
+                  <div class="row">
+                  <div class="col-md-6">
+                  <div class="form-group">
+
+                  <label>¿Con quién vives?</label>
+                  <select formControlName="conquienVives" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="conquien_vive" class="form-control">
+                    <option value="Solo">Solo</option>
+                                <option value="Padres y/o Hermanos">Padres y/o Hermanos</option>
+                                <option value="Esposo(a) y/o Pareja">Esposo(a) y/o Pareja</option>
+                                <option value="Esposo(a) y/o Pareja con hijos">Esposo(a) y/o Pareja con hijos</option>
+                                <option value="Unicamente Hijos">Unicamente Hijos</option>
+                                <option value="Amigos">Amigos</option>
+                                <option value="Otro">Otro</option>
+                  </select>
+                  <div *ngIf="submitted && f.conquienVives.errors" class="error">
+                    <div *ngIf="f.conquienVives.errors.required"><small>Con quién vives es requerido</small></div>
+                  </div>
+                </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                  <label>Cuantas personas económicamente activas o que laboran viven contigo? (fuera de ti)</label>
+                  <select formControlName="personasaCargo" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="personascargo" class="form-control">
+                  <option value="Ninguna">Ninguna</option>
+                  <option value="Una Persona">Una Persona</option>
+                  <option value="Dos Personas">Dos Personas</option>
+                  <option value="Tres Personas">Tres Personas</option>
+                  <option value="Mas de Tres Personas">Mas de Tres Personas</option>
+                  </select>
+                  <div *ngIf="submitted && f.personasaCargo.errors" class="error">
+                  <div *ngIf="f.personasaCargo.errors.required"><small>Este campo es requerido</small></div>
+                  </div>               
+              </div>
+              </div>
+
+                  </div>
+                  
+
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="form-group">
+
+<label>Estrato</label>
+<select formControlName="estrato" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="estrato" class="form-control">
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+</select>
+<div *ngIf="submitted && f.estrato.errors" class="error">
+<div *ngIf="f.estrato.errors.required"><small>Estrato es requerido</small></div>
+</div>               
+</div>
+</div>
+                <div class="col-md-6">
+                                  <div class="form-group">
+
+                  <label>Genero</label>
+                  <select [disabled]="!isAdmin" formControlName="genero" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="genero" class="form-control">
+                    <option value="Femenino">Femenino</option>
+                    <option value="Masculino">Masculino</option>
+                  </select>
+                  <div *ngIf="submitted && f.genero.errors" class="error">
+                    <div *ngIf="f.genero.errors.required"><small>Genero es requerido</small></div>
+                  </div>
+                        </div>
+                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                      <div class="col-md-6">
+                                        <div class="form-group">
+      
+                        <label>Fecha de Nacimiento </label>
+                        <input
+                        type="text"
+                        ngbDatepicker
+                        placeholder="{{temporalfechanac | date:'yyyy-MM-dd'}}"
+                        #fecha_nacimiento="ngbDatepicker"
+                        (click)="fecha_nacimiento.toggle()"
+                        class="form-control"
+                        id="fecha_nacimiento"
+                        (dateSelect)="minFE($event)"
+                        [startDate] = "fechaN"
+                        
+                        [minDate]="fechasesenta"
+                        [maxDate]="maxDate"
+                        [readonly]="!isAdmin"
+                      />
+                        <!-- <input [readonly]="!isAdmin" formControlName="fechaNacimiento" max="{{maxBirthdate}}" (change)="minFE()" class="form-control" name="nacimiento" placeholder="d-m-Y" type="date" > -->
+                        <div *ngIf="submitted && f.fechaNacimiento.errors" class="error">
+                          <div *ngIf="f.fechaNacimiento.errors.required"><small>Fecha de nacimiento es requerido</small></div>
+                        </div>
+                      </div>
+                                          </div>
+                <div class="col-md-6">
+                                  <div class="form-group">
+
+                  <label>Estado Civil</label>
+                  <select formControlName="estadoCivil" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="ecivil" class="form-control">
+                    <option value="Soltero">Soltero</option>
+                                <option value="Casado">Casado</option>
+                                <option value="Unión Libre">Unión Libre</option>
+                                <option value="Divorciado">Divorciado</option>
+                                <option value="Viudo">Viudo</option>
+                  </select> 
+                  <div *ngIf="submitted && f.estadoCivil.errors" class="error">
+                    <div *ngIf="f.estadoCivil.errors.required"><small>Estado Civil es requerido</small></div>
+                  </div>              
+                </div>
+                </div>
+                </div>
+                
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="form-group">
+        <label>Cuantas personas dependen de ti economicamente</label>
+        <select formControlName="nroPersonasDependenEconomicamente" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="personascargo" class="form-control">
+        <option value="Ninguna">Ninguna</option>
+        <option value="Una Persona">Una Persona</option>
+        <option value="Dos Personas">Dos Personas</option>
+        <option value="Tres Personas">Tres Personas</option>
+        <option value="Mas de Tres Personas">Mas de Tres Personas</option>
+        </select>
+        <div *ngIf="submitted && f.nroPersonasDependenEconomicamente.errors" class="error">
+        <div *ngIf="f.nroPersonasDependenEconomicamente.errors.required"><small>Este campo es requerido</small></div>
+        </div>               
+    </div>
+</div>
+                <div class="col-md-6">
+                                <div class="form-group">
+
+                  <label>Número de cédula</label>
+ 
+                  <input [readonly]="!isAdmin" formControlName="nCedula" type="text" name="cedula" class="form-control " placeholder="" required="required">                 </div>
+                  <div *ngIf="submitted && f.nCedula.errors" class="error">
+                    <div *ngIf="f.nCedula.errors.required"><small>Cédula es requerido</small></div>
+                  </div> 
+                </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+
+    <label>Fecha de Expedición del documento</label>
+    <input
+    type="text"
+    ngbDatepicker
+    placeholder="{{temporalfechaexp | date:'yyyy-MM-dd'}}"
+    #fecha_expedicion_doc="ngbDatepicker"
+    (click)="fecha_expedicion_doc.toggle()"
+    class="form-control"
+    id="fecha_expedicion_doc"
+    (dateSelect)="setFechaEx($event)"
+    [minDate]="minDate"
+    [readonly]="!isAdmin"
+    [startDate] = "fechaEC"
+  />
+    <!-- <input [readonly]="!isAdmin" formControlName="fechaExpedicionCedula" min="{{minFe}}"  class="form-control" name="fecha_expedicion" placeholder="d-m-Y" type="date" max="<?php echo $hoy; ?>" >                 -->
+    <div *ngIf="submitted && f.fechaExpedicionCedula.errors" class="error">
+      <div *ngIf="f.fechaExpedicionCedula.errors.required"><small>Fecha de Expedición del documento es requerido</small></div>
+    </div>
+  </div>
+  </div>
+                </div>
+                <div class="row">
+
+                  <div class="col-sm-12 background-gray file-name">
+                      <div class="col-md-12 no-padding mb-1">
+                          <h4 class="no-padding">Fotos de la C.C.  </h4>                                                                
+                
+                          <small class="info-color">Adjunta fotos de tu cédula (anverso y reverso)</small>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-3 col-md-3 no-padding">
+                            <input (change)="onFileChange($event,'cc_anverso')" type="file" id="idCardImage1" name="idCardImage1" class="form-control parinput" accept="image/jpeg, image/png, .jpg, .jpeg, .png"><label class="fl-name btn_actdash" style="color:white !important" for="idCardImage1">Anverso</label><img *ngIf="isResize1" src="/assets/img/resize.gif" width="30" height="30"><img *ngIf="mostrarcheckanverso==1" style="width: 10%;" src="/assets/img/checkverde.png">
+                            <div *ngIf="submitted && f.cc_anverso.errors" class="error">
+                                <div *ngIf="f.cc_anverso.errors.required"><small>Anverso es requerido</small></div>
+                              </div>
+                              <div *ngIf="isResize1">
+                                <p><small>Espere para continuar...</small></p>
+                            </div>
+                              <br>
+                              <img *ngIf="imgAnverso" [src]="imgAnverso" width="150" height="auto">
+                        </div>
+                        <div class="col-sm-3 col-md-3 no-padding ml-2-sm ml-2-md">
+                            <input (change)="onFileChange($event,'cc_reverso')" type="file" id="idCardImage2" name="idCardImage2" class="form-control parinput" accept="image/jpeg, image/png, .jpg, .jpeg, .png">                        <label class="fl-name btn_actdash" style="color:white !important" for="idCardImage2">Reverso</label><img *ngIf="isResize2" src="/assets/img/resize.gif" width="30" height="30"><img *ngIf="mostrarcheckreverso==1" style="width: 10%;" src="/assets/img/checkverde.png">
+                            <div *ngIf="submitted && f.cc_reverso.errors" class="error">
+                                <div *ngIf="f.cc_reverso.errors.required"><small>Reverso es requerido</small></div>
+                              </div>
+                              <div *ngIf="isResize2">
+                                <p><small>Espere para continuar...</small></p>
+                            </div>
+                              <br>
+                              <img *ngIf="imgReverso" [src]="imgReverso" width="150" height="auto">
+                        </div>
+                      </div>
+                      <div class="col-sm-12 col-md-12 no-padding mb-1">
+                          <h4 class="no-padding">Hazte un selfi con el anverso de tu cédula en la mano  </h4>
+                          <small class="info-color">Hazte un selfi con la cédula en la mano a la altura de la cara</small>
+                      </div>
+                      <div class="col-sm-3 col-md-3 no-padding">
+                          <input (change)="onFileChange($event,'selfie')" type="file" id="userPhoto" name="userPhoto" class="form-control parinput " accept="image/jpeg, image/png, .jpg, .jpeg, .png" ><label class="fl-name btn_actdash" style="color:white !important" for="userPhoto"><i class="far fa-smile"></i> Selfi</label><img *ngIf="isResize3" src="/assets/img/resize.gif" width="30" height="30"><img *ngIf="mostrarcheckselfi==1" style="width: 10%;" src="/assets/img/checkverde.png">
+                          <div *ngIf="submitted && f.selfie.errors" class="error">
+                              <div *ngIf="f.selfie.errors.required"><small>Selfie es requerido</small></div>
+                            </div>
+                            <div *ngIf="isResize3">
+                              <p><small>Espere para continuar...</small></p>
+                          </div>
+                            <br>
+                            <img *ngIf="imgSelfie" [src]="imgSelfie" width="150" height="auto">
+                      </div>
+                  </div>
+                  
+                </div>
+
+<div class="row">
+                <div class="col-md-6">
+                                  <div class="form-group">
+
+                  <label>Número de Hijos</label>
+                  <select formControlName="nHijos" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="hijos" class="form-control" required="true">
+                    <option value="Sin Hijos">Sin Hijos</option>
+                    <option value="Un Hijo">Un Hijo</option>
+                    <option value="Dos Hijos">Dos Hijos</option>
+                    <option value="Tres Hijos">Tres Hijos</option>
+                    <option value="Mas de Tres Hijos">Mas de Tres Hijos</option>
+                  </select>
+                  <div *ngIf="submitted && f.nHijos.errors" class="error">
+                    <div *ngIf="f.nHijos.errors.required"><small>Número de Hijos es requerido</small></div>
+                  </div>           
+                </div>
+                </div>
+
+                <div class="col-md-6">
+                                  <div class="form-group">
+
+                  <label>Tipo de plan móvil</label>
+                  <select formControlName="tipoPlanMovil" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="movil" class="form-control" required="true">
+                    <option value="Pospago">Pospago</option>
+                    <option value="Prepago">Prepago</option>
+                    
+                  </select>
+                  <div *ngIf="submitted && f.tipoPlanMovil.errors" class="error">
+                    <div *ngIf="f.tipoPlanMovil.errors.required"><small>Tipo de plan móvil es requerido</small></div>
+                  </div>              
+                </div>
+                </div>
+                </div>
+
+                <div class="row">
+                <div class="col-md-6">
+                                  <div class="form-group">
+
+                  <label>Nivel de Estudios</label>
+                  <select formControlName="nivelEstudio" (change)="nivelEstudios()" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="nivel_estudios" id="nivel_estudios" class="form-control" required="true" onchange="niveles(this.options[this.selectedIndex].value)">
+                    <option value="Ninguno">Ninguno</option>
+                                <option value="Básico">Básico</option>
+                                <option value="Bachiller">Bachiller</option>
+                                <option value="Técnico">Técnico</option>
+                                <option value="Tecnólogo">Tecnólogo</option>
+                                <option value="Pregrado">Pregrado</option>
+                                <option value="Postgrado">Postgrado</option>
+                  </select>
+                  <div *ngIf="submitted && f.nivelEstudio.errors" class="error">
+                    <div *ngIf="f.nivelEstudio.errors.required"><small>Nivel de Estudios es requerido</small></div>
+                  </div>            
+                </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+
+                  <label>Estado de Estudios</label>
+                  <select formControlName="estadoEstudio" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="estado_estudios" id="estado_estudios" class="form-control">
+                    <option value="">Seleccione</option>
+                    <option value="En curso">En curso</option>
+                                <option value="Finalizado">Finalizado</option>
+                  </select>  
+                  <div *ngIf="submitted && f.estadoEstudio.errors" class="error">
+                    <div *ngIf="f.estadoEstudio.errors.required"><small>Estado de Estudios es requerido</small></div>
+                  </div>               
+                </div>
+                </div>
+                </div>
+
+<div class="row">
+                <div class="col-md-6">
+                                  <div class="form-group">
+
+                  <label>¿Tienes vehículo propio?</label>
+                  <select formControlName="vehiculo" (change)="vehiculoPropio()" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="vehiculo" class="form-control" required="true" onchange="vehiculoselect(this.options[this.selectedIndex].value)">
+                    <option value="Ninguno">Ninguno</option>
+                    <option value="Carro">Carro</option>
+                    <option value="Moto">Moto</option>
+                  </select>  
+                  <div *ngIf="submitted && f.vehiculo.errors" class="error">
+                    <div *ngIf="f.vehiculo.errors.required"><small>Tienes vehículo propio es requerido</small></div>
+                  </div>               
+                </div>
+                </div>
+                
+                <div class="col-md-6">
+                                <div class="form-group">
+
+                  <label>Número de placa</label>
+                  <input formControlName="placa" type="text" name="placa" id="placa" class="form-control " placeholder="" >
+                  <div *ngIf="submitted && f.placa.errors" class="error">
+                    <div *ngIf="f.placa.errors.required"><small>Número de placa es requerido</small></div>
+                  </div>
+                </div>
+                  </div>
+</div>
+<div class="row">
+  <div class="col-md-6">
+      <div class="form-group">
+
+          <label>¿Cotizas a Seguridad Social?  </label>
+              <select (change)=seguridadSocial($event.target.value) formControlName="cotizasSeguridadSocial" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="central" class="form-control" required="true">
+              <option value="Si">Si</option>
+              <option value="No">No</option>
+              </select>   
+              <div *ngIf="submitted && f.cotizasSeguridadSocial.errors" class="error">
+                  <div *ngIf="f.cotizasSeguridadSocial.errors.required"><small>Este campo es requerido</small></div>
+              </div>              
+          </div>
+          </div>
+</div>
+<div class="row" *ngIf="segSoc">
+  <div class="col-md-6">
+      <div class="form-group">
+          <label>Tipo de afiliacion </label>
+              <select formControlName="tipoAfiliacion" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="central" class="form-control" required="true" onchange="vehiculoselect(this.options[this.selectedIndex].value)">
+              <option value="Cotizante">Cotizante</option>
+              <option value="Beneficiario">Beneficiario </option>
+              </select>   
+              <div *ngIf="submitted && f.tipoAfiliacion.errors" class="error">
+                  <div *ngIf="f.tipoAfiliacion.errors.required"><small>Este campo es requerido</small></div>
+              </div>              
+      </div>
+  </div>
+  <div class="col-md-6">
+      <div class="form-group">
+          <label>EPS </label>
+          <input formControlName="eps" type="text" name="eps" id="eps" class="form-control " placeholder="" >   
+              <div *ngIf="submitted && f.eps.errors" class="error">
+                  <div *ngIf="f.eps.errors.required"><small>Este campo es requerido</small></div>
+              </div>              
+      </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12 background-gray text-center padding-10">
+    <h6 class="padding-0 margin-0 color-g">!Recuerda que SI prestamos a reportados. Lo más importante para la aprobación del credito es que tus respuestas sean lo mas exactas posibles.!</h6>
+  </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+
+            <label>¿Reportado en data credito ?  </label>
+                <select (change)="reportadoCredito($event.target.value)" formControlName="centralRiesgo" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="central" class="form-control" required="true" onchange="vehiculoselect(this.options[this.selectedIndex].value)">
+                <option value="Si">Si</option>
+                <option value="No">No</option>
+                </select>   
+                <div *ngIf="submitted && f.centralRiesgo.errors" class="error">
+                    <div *ngIf="f.centralRiesgo.errors.required"><small>Se encuentra reportado en alguna central de riesgo es requerido</small></div>
+                </div>              
+            </div>
+            </div>
+            <div class="col-md-6" *ngIf="reporCred">
+              <div class="form-group">
+
+                  <label>Entidad que te ha reportado</label>
+                      <select (change)="entidadRepor($event.target.value)" formControlName="entidadReportado" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="central" class="form-control" required="true" onchange="vehiculoselect(this.options[this.selectedIndex].value)">
+                      <option value="Bancos o entidades de financiamiento">Bancos o entidades de financiamiento</option>
+                      <option value="Empresa de Telecomunicaciones">Empresa de Telecomunicaciones</option>
+                      <option value="Otros">Otros</option>
+                      </select>   
+                      <div *ngIf="submitted && f.entidadReportado.errors" class="error">
+                          <div *ngIf="f.entidadReportado.errors.required"><small>Este campo es requerido</small></div>
+                      </div>              
+                  </div>
+                  </div>
+</div>
+<div class="row" *ngIf="reporCred">
+  <div class="col-md-6" *ngIf="entidadOtros">
+      <div class="form-group">
+          <label>Cual? </label>
+          <input formControlName="cualEntidadReportado" type="text" name="cualEntidadReportado" id="cualEntidadReportado" class="form-control " placeholder="" >      
+              <div *ngIf="submitted && f.cualEntidadReportado.errors" class="error">
+                  <div *ngIf="f.cualEntidadReportado.errors.required"><small>Este campo es requerido</small></div>
+              </div>              
+      </div>
+  </div>
+  <div class="col-md-6">
+      <div class="form-group">
+          <label>Valor en mora</label><small> (Colocar el valor sin puntos o comas)</small>
+          <input [value]="cantidad" (click)="limpiar()" (change)="valor_mora($event.target.value)" type="text" name="valorMora" id="valorMora" class="form-control " placeholder="" >   
+              <div *ngIf="submitted && f.valorMora.errors" class="error">
+                  <div *ngIf="f.valorMora.errors.required"><small>Este campo es requerido</small></div>
+              </div>              
+      </div>
+  </div>
+</div>
+<div class="row" >
+  <div class="col-md-6" *ngIf="reporCred">
+    <div class="form-group">
+        <label>Estado</label>
+        <select formControlName="estadoReportado" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="central" class="form-control" required="true" >
+            <option value="castigada">castigada</option>
+            <option value="deuda pagada">Deuda Pagada</option>
+            <option value="reestructurada">reestructurada</option>
+            <option value="no paga">No paga</option>
+            </select> 
+            <div *ngIf="submitted && f.estadoReportado.errors" class="error">
+                <div *ngIf="f.estadoReportado.errors.required"><small>Este campo es requerido</small></div>
+            </div>              
+    </div>
+</div>
+    <div class="col-md-6" *ngIf="reporCred">
+        <div class="form-group">
+            <label>Tiempo reportado</label>
+            <select formControlName="tiempoReportado" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="central" class="form-control" required="true" >
+                <option value="1 mes">1 mes</option>
+                <option value="2 meses">2 meses</option>
+                <option value="3 meses">3 meses</option>
+                <option value="4 meses">4 meses</option>
+                <option value="5 meses">5 meses</option>
+                <option value="6 meses">6 meses</option>
+                <option value="7 meses">7 meses</option>
+                <option value="8 meses">8 meses</option>
+                <option value="9 meses">9 meses</option>
+                <option value="10 meses">10 meses</option>
+                <option value="11 meses">11 meses</option>
+                <option value="mas de 1 ano">mas de 1 año</option>
+
+                </select> 
+                <div *ngIf="submitted && f.tiempoReportado.errors" class="error">
+                    <div *ngIf="f.tiempoReportado.errors.required"><small>Este campo es requerido</small></div>
+                </div>              
+        </div>
+    </div>
+    <div class="col-md-6" *ngIf="reporCred">
+      <div class="form-group">
+          <label>Explique el motivo del reporte </label>
+          <textarea formControlName="motivoReportado" rows="2" name="motivoReportado" id="motivoReportado" class="form-control " placeholder="" ></textarea>
+              <div *ngIf="submitted && f.motivoReportado.errors" class="error">
+                  <div *ngIf="f.motivoReportado.errors.required"><small>Este campo es requerido</small></div>
+              </div>              
+      </div>
+  </div>
+  <div class="col-md-6">
+      <div class="form-group">
+          <label>Como te enteraste de nosotros</label>
+          <select formControlName="comoEnterasteNosotros" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="central" class="form-control" required="true" onchange="vehiculoselect(this.options[this.selectedIndex].value)">
+              <option value="Redes Sociales">Redes Sociales</option>
+              <option value="Recomendacion">Recomendacion </option>
+              <option value="Google">Google</option>
+              </select>
+              <div *ngIf="submitted && f.comoEnterasteNosotros.errors" class="error">
+                  <div *ngIf="f.comoEnterasteNosotros.errors.required"><small>Este campo es requerido</small></div>
+              </div>              
+      </div>
+  </div>
+</div>
+                <div class="row">
+                  <div *ngIf="msjSubmit" class="col-md-12 text-center">
+                      <img src="/assets/img/load.gif" width="100" height="100">
+                      <p>Enviando solicitud espere...</p>
+                  </div>
+                </div>
+                  <div class="row">
+                    <div class="col-md-12 text-center">
+                      <button (click)="edit(2)" type="button" class="btn btn-raised btn-primary" >Guardar Cambios</button>
+                  </div>
+                <div id="sig-btn" class="col-md-12 text-center">
+                  <br/>
+
+                </div>
+              </div>
+                               
+            </form>
+              </div>
+
+
+
+<div class="wpb_text_column wpb_content_element " >
+    <div class="wpb_wrapper">
+        
+
+    </div>
+</div>
+</div></div></div><div class="wpb_column vc_column_container vc_col-sm-2"><div class="vc_column-inner"><div class="wpb_wrapper"></div></div></div></div>
+
+      <!-- FINALLLLLLLLLLLLL-->
+    </div>
+  </div>
+
+</div>
+
+     <!-- MODAL DE CONTRAOFERTA-->
+     <ng-template #content let-modal>
+                          
+      <div class="modal-header stepText2">
+        <!-- <button type="button"  (click)="modal.dismiss('Cross click')" class="close" data-dismiss="modal">&times;</button> -->
+        <h4 class="modal-title">Contra oferta</h4>
+      </div>
+      <div class="modal-body stepText2" >
+        <!-- <img [src]="imgAnverso"  style="width: 100%;" > -->
+        
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card formula">
+              <div class="card-header">
+                <div class="card-title">
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="card-content">
+                  <form [formGroup]="contraOfertaForm">
+                    <div class="form-row align-items-end">
+                      <div class="col-12">
+                        <div class="form-group">
+                          <label for="email">Fecha</label>
+                          <input
+                          type="text"
+                          ngbDatepicker
+                          placeholder="yyyy-mm-dd"
+                          #fecha_nueva="ngbDatepicker"
+                          (click)="fecha_nueva.toggle()"
+                          class="form-control"
+                          id="fecha_nueva"
+                          (dateSelect)="setFechaNueva($event)"
+                          formControlName = "fechaN"
+                        />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div
+                        class="col-auto my-2"
+                      >
+                        <button
+                          type="button"
+                          class="btn btn-raised btn-primary"
+                          [disabled]="contraOfertaForm.invalid"
+                          (click)="editCo()"
+                        >
+                          Aceptar
+                        </button>
+                      </div>
+      
+                      <div class="col-auto my-2">
+                        <button
+                          type="button"
+                          class="btn btn-raised btn-warning"
+                          [disabled]="!contraOfertaForm.dirty"
+                          (click)="contraOfertaForm.reset()"
+                        >
+                          Limpiar
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <p [innerHTML]="tablaContraOferta"></p>
+          </div>
+        </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button"  (click)="logout()" class="btn btn-default" data-dismiss="modal" style="background-color: #f36c21;color: white;border-color: #f36c21;">Cerrar</button>
+        <!-- <button type="button"  (click)="modal.dismiss('Cross click')" class="btn btn-default" data-dismiss="modal" style="background-color: #f36c21;color: white;border-color: #f36c21;">Cerrar</button> -->
+      </div>
+
+      </ng-template>

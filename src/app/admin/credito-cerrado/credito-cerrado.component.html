@@ -1,0 +1,121 @@
+<div class="container-fluid padding-mv-0">
+  <div class="row margin-mv-0">
+    <div class="col-12 padding-mv-0">
+      <div class="card formula mt3em">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>Creditos Cerrados</h2>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <label>Estatus</label>
+              <select  (change)='cambioestatus($event.target.value)' style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" class="form-control" >
+                  <option value="pagado">pagado</option>
+                  <option value="castigado">castigado</option>
+                  </select> 
+            </div>
+            <div class="col-12">
+              <label>Busqueda por: Nº crédito, Nombres y Apellido, Estatus, Fecha de desembolso </label><br>
+              <app-filter (onFilter)="onFilter($event)"></app-filter>
+            </div>
+            <div class="col-12">
+              <button
+                        ngbTooltip="Descargar  Excel"
+                          type="button"
+                          class="btn btn-success"
+                          (click)="export()"
+                          
+                        >
+                          <a class="ft-download" style="color:white"></a>
+                        </button>
+            </div>
+            <div class="col-12 table-responsive">
+              <table
+                class="table table-striped"
+                
+              >
+                <thead class="thead-inverse">
+                  <tr>
+                    <th>Nro de Credito</th>
+                    <th>Cliente</th>
+                    <th>Estado</th>
+                    <th>Tipo</th>
+                    <th>Fecha de pago</th>
+                    <th>Monto desembolsado</th>
+                    <th>Monto pagado</th>
+                    <th>Saldo Pendiente</th>
+                    <th>Acciones</th> 
+            
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="
+                  let c of (creditosCerrados$ | async)['data']
+                    | paginate
+                      : {
+                          itemsPerPage: itemsPerPage,
+                          currentPage: p,
+                          totalItems: (creditosCerrados$ | async)['total']
+                        }; 
+                      index as i
+                ">
+                <td>{{c.numero_credito}}</td>
+                <td> {{ c.first_name }} {{c.last_name}}</td>
+                    <td> {{ c.estatus_credito }}</td>
+                    <td> {{ c.tipoCredito == 'm' ? 'Panda Meses' : 'Panda Dias'}}</td>
+                    <td>{{c.fechaPago}}</td>
+                    <td *ngIf="c.ofertaEnviada == 2" >${{c.montoSolicitado | number:'1.0-0':'es'}}</td>
+                    <td *ngIf="c.ofertaEnviada != 2" >${{c.ContraOferta.montoAprobado | number:'1.0-0':'es'}}</td>
+                    <td>${{c.MontoPagado | number:'1.0-0':'es' }}</td>
+                    <td *ngIf="c.ofertaEnviada == 2" >${{(c.estatus_credito =='castigado' ? (c.totalPagar-c.MontoPagado) : 0) | number:'1.0-0':'es'}}</td>
+                    <td *ngIf="c.ofertaEnviada != 2">${{(c.estatus_credito =='castigado' ? (c.ContraOferta.totalPagar-c.MontoPagado) : 0) | number:'1.0-0':'es' }}</td>
+                    <td >     
+                      <button
+                      ngbTooltip="Detalle"
+                        type="button"
+                        class="btn btn-info"
+                        [routerLink]="['/admin/detalle-cerrados/', c.id_solicitud]"
+                       
+                      >
+                        <a class="ft-list" style="color:white"></a>
+                      </button>
+                  </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row aling-items-end">
+            <div class="col-3">
+              <div class="form-group">
+                <!-- <label for="page">Items por Página</label> -->
+                <select
+                  class="form-control"
+                  name="page"
+                  id="page"
+                  (change)="perPage($event.target.value, p)"
+                >
+                  <option value="5">5</option>
+                  <option value="15">15</option>
+                  <option value="50">50</option>
+                </select>
+              </div>
+            </div>
+            <div class="col">
+              <pagination-controls
+              (pageChange)="perPage(itemsPerPage,$event)"
+                previousLabel="Anterior"
+                nextLabel="Siguiente"
+              ></pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- {{ users$ | async | json }} -->
+    </div>
+  </div>
+</div>
+
+

@@ -1,0 +1,121 @@
+<div class="container-fluid padding-mv-0">
+  <div class="row margin-mv-0">
+    <div class="col-12 padding-mv-0">
+      <div class="card formula mt3em">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>Lista negra</h2>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12">
+              <app-filter (onFilter)="onFilter($event)"></app-filter>
+            </div>
+            <div class="col-12 table-responsive">
+              <table
+                class="table table-striped"
+                *ngIf="users2$ | async as users"
+              >
+                <thead class="thead-inverse">
+                  <tr>
+                    <th>Fecha de registro</th>
+                    <th>Nº crédito</th>
+                    
+                    <th>Nombres y Apellidos</th>
+                    <th>Nº cedula</th>
+                    <th>Email</th>
+                    <th>Estatus crédito</th>
+                    <!-- <th>Oficinas</th> -->
+                    <!-- <th>Roles</th> -->
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="
+                      let user of (users2$ | async)['data']
+                        | paginate
+                          : {
+                              itemsPerPage: itemsPerPage,
+                              currentPage: p,
+                              totalItems: (users2$ | async)['total']
+                            };
+                      index as i
+                    "
+                  >
+                  <td scope="row">{{ user.created_at }}</td>
+                  <td scope="row">{{ user.LastSolicitud.numero_credito ? user.LastSolicitud.numero_credito : 'No posee'  }}</td>
+                    
+                    <td>{{ user.first_name }} {{ user.last_name }}</td>
+                    <td scope="row">{{ user.n_document }}</td>
+                    <td scope="row">{{ user.email }}</td>
+                    <td scope="row">{{ user.LastSolicitud.estatus ? user.LastSolicitud.estatus : 'No posee' }}</td>
+
+                    <!-- <td>{{ joinData(user.offices) }}</td> -->
+                    <!-- <td>{{ user.roles.name }}</td> -->
+                    <td>
+                      <div class="btn-group">
+                        <button
+                        ngbTooltip="Activar"
+                          type="button"
+                          class="btn btn-warning"
+                          
+                          (click)="activar(user)"
+                        >
+                          <a class="ft-unlock" style="color:white" text-info></a>
+                        </button>
+                        <!-- <button
+                        ngbTooltip="Editar"
+                          type="button"
+                          class="btn btn-secondary"
+                          [routerLink]="['/admin/ficha/', user.id]"
+                        >
+                          <a class="ft-more-horizontal" text-info></a>
+                        </button> -->
+
+                        <!-- <button
+                        ngbTooltip="Eliminar"
+                          type="button"
+                          class="btn btn-danger"
+                          (click)="delete(user)"
+                        >
+                          <a class="ft-trash" style="color:white"></a>
+                        </button> -->
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row aling-items-end">
+            <div class="col-3">
+              <div class="form-group">
+                <!-- <label for="page">Items por Página</label> -->
+                <select
+                  class="form-control"
+                  name="page"
+                  id="page"
+                  (change)="perPage($event.target.value, p)"
+                >
+                  <option value="5">5</option>
+                  <option value="15">15</option>
+                  <option value="50">50</option>
+                </select>
+              </div>
+            </div>
+            <div class="col">
+              <pagination-controls
+              (pageChange)="perPage(itemsPerPage,$event)"
+                previousLabel="Anterior"
+                nextLabel="Siguiente"
+              ></pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- {{ users$ | async | json }} -->
+    </div>
+  </div>
+</div>

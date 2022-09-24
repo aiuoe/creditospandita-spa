@@ -1,0 +1,96 @@
+.txt-cntr{
+    text-align: center;
+}
+
+.btn{
+
+    margin-right: 1em;
+}
+.btn-error{
+  color: rgb(233, 17, 17) !important;
+  background-color: rgb(233, 17, 17) !important;
+    border-color: rgb(233, 17, 17) !important;
+}
+.zoomimg::ng-deep .ngxImageZoomContainer> img {
+  max-height: 450px !important;
+  }
+
+
+        
+.zoom {      
+    -webkit-transition: all 0.35s ease-in-out;    
+    -moz-transition: all 0.35s ease-in-out;    
+    transition: all 0.35s ease-in-out;     
+    cursor: -webkit-zoom-in;      
+    cursor: -moz-zoom-in;      
+    cursor: zoom-in;  
+    }     
+    
+    .zoom:hover,  
+    .zoom:active,   
+    .zoom:focus {
+    /**adjust scale to desired size, 
+    add browser prefixes**/
+    -ms-transform: scale(2.5);    
+    -moz-transform: scale(2.5);  
+    -webkit-transform: scale(2.5);  
+    -o-transform: scale(2.5);  
+    transform: scale(2.5);    
+    position:relative;      
+    z-index:999; 
+    left: 10em; 
+    }
+    
+    /**To keep upscaled images visible on mobile, 
+    increase left & right margins a bit**/  
+    @media only screen and (max-width: 768px) {   
+    ul.gallery {      
+    margin-left: 15vw;       
+    margin-right: 15vw;
+    }
+    
+    /**TIP: Easy escape for touch screens,
+    give gallery's parent container a cursor: pointer.**/
+    .DivName {cursor: pointer}
+    }
+    .fondogris{
+        background-color: #f2f2f2;
+      }
+
+    .fondoComent{
+    background-color: #f5f7fa;
+    padding: 10px;
+    border-bottom: 1px dashed #00000047;
+    // margin-bottom: 3em;
+    }
+
+
+    .img-zoom-lens {
+        position: absolute;
+        border: 1px solid #d4d4d4;
+        /*set the size of the lens:*/
+        width: 40px;
+        height: 40px;
+      }
+      
+      .img-zoom-result {
+        border: 1px solid #d4d4d4;
+        /*set the size of the result div:*/
+        width: 300px;
+        height: 300px;
+        left:315px;
+        top:0px;
+        position:absolute;
+        display:none
+      }
+    .text-underline{
+      text-decoration: underline !important;
+    }
+
+
+
+
+
+
+      
+

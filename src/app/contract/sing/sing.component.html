@@ -1,0 +1,64 @@
+
+<div class="container-fluid padding-mv-0">
+  <div class="row justify-content-center margin-mv-0">
+    <div class="col-sm-12 col-md-12 col-lg-12 padding-mv-0">
+
+      <!-- <app-time-per-client></app-time-per-client> -->
+
+
+      <div class="vc_row wpb_row vc_row-fluid grisaseo">
+        <div class="wpb_column vc_column_container vc_col-sm-2"><div class="vc_column-inner"><div class="wpb_wrapper"></div></div></div><div class="wpb_column vc_column_container vc_col-sm-8 mt3em"><div class="vc_column-inner"><div class="wpb_wrapper"><link rel="stylesheet" id="calculadora-css" href="http://creditospanda.com/wp-content/plugins/CalculadoraPlus/css/calculadora.css" type="text/css" media="all">
+            <div class="fed_tab_content" data-id="fed_register_tab">
+              <section class="vc_section">
+                <div class="vc_row wpb_row vc_row-fluid grisaseo pdto1">
+                    <div class="wpb_column vc_column_container vc_col-sm-2"><div class="vc_column-inner"><div class="wpb_wrapper"></div></div></div><div class="wpb_column vc_column_container vc_col-sm-8"><div class="vc_column-inner"><div class="wpb_wrapper"><link rel="stylesheet" id="calculadora-css" href="http://creditospanda.com/wp-content/plugins/CalculadoraPlus/css/calculadora.css" type="text/css" media="all">
+                        <div class="col-md-12 formula" style="text-align: center;padding-top: 30px;" >
+                          <div *ngIf="solicitud && solicitud.Evaluacion != '' && solicitud.estatus =='aprobado' && solicitud.estatus_firma =='pendiente' && solicitud.Evaluacion.estatus == 'aprobado' && solicitud.ofertaEnviada >=0">
+                            <div class="container conter" >
+      
+                              <p  style="display: inline-block;"><strong>¡Felicidades tu solicitud ha sido aprobada!</strong></p> <br>
+                              <!-- <p  style="display: inline-block;">Plazo:  <p  style="display: inline-block;margin-left: 10px;">  <strong class="fw-700"> 4 meses</strong></p><br> -->
+                              <p>Sin embargo, siguen pendientes de ser firmados electrónicamente los documentos para tu préstamo.<br> Por favor da clic en el botón de abajo “firmar contrato” y en segundos te va llegar un correo electrónico con las instrucciones a seguir. </p>
+                              <!-- <p><small>Introduce el código</small></p><br>
+                              <input type="text" class="form-control" placeholder="Introduce el código del SMS"> -->
+      
+                            </div> 
+                            
+                          
+                              <a class="btn_actdash" (click)="firmar()">Firmar el contrato</a>
+                          </div>
+
+                            <div class="col-12 txt-cntr" *ngIf="solicitud && (solicitud.estatus !='aprobado' || solicitud.estatus_firma !='pendiente' || solicitud.Evaluacion == '' || solicitud.Evaluacion.estatus != 'aprobado')">
+                              <h3>No posee ningun credito pendiente por firmar</h3>
+                            </div>
+                        </div>
+                     
+        
+        
+        
+                        <div class="wpb_text_column wpb_content_element " >
+                            <div class="wpb_wrapper">
+                            </div>
+                        </div>
+        </div></div></div><div class="wpb_column vc_column_container vc_col-sm-2"><div class="vc_column-inner"><div class="wpb_wrapper"></div></div></div></div></section>
+            </div>
+
+
+
+<div class="wpb_text_column wpb_content_element " >
+    <div class="wpb_wrapper">
+        
+
+    </div>
+</div>
+</div></div></div><div class="wpb_column vc_column_container vc_col-sm-2"><div class="vc_column-inner"><div class="wpb_wrapper"></div></div></div></div>
+
+      <!-- FINALLLLLLLLLLLLL-->
+    </div>
+  </div>
+  <!-- <div class="row justify-content-center py-3 my-1">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <app-time-per-user></app-time-per-user>
+    </div>
+  </div> -->
+</div>

@@ -1,0 +1,403 @@
+<div class="container-fluid padding-mv-0">
+  <div class="row margin-mv-0">
+    <div [ngClass]="{'col-6 padding-mv-0': external, 'col-12 padding-mv-0': !external}">
+      <div class="card formula mt3em">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>Usuarios Registrados</h2>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-6">
+              <label>Estatus</label>
+              <select (change)='cambioestatus($event.target.value)' style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" class="form-control" >
+                  <option value="all">Todos</option>
+                  <option selected value="pendiente_manual">Pendiente por aprobación manual</option>
+                  <option value="pendiente_email">Pendiente por aprobación Email</option>
+                  <option value="pendiente_verifiquese">Pendiente por aprobación Verifiquese</option>
+                  <option value="aprobado">Aprobado</option>
+                  <option value="negado">negado</option>
+                  <option value="incompleto">incompleto</option>
+                  <option value="moroso">moroso</option>
+              </select> 
+            </div>
+            <div class="col-12">
+              <label>Busqueda por: Nºcrédito,Nombres y Apellido, Nº cedula, Email, Estatus</label><br>
+              <app-filter (onFilter)="onFilter($event)"></app-filter>
+            </div>
+            <div class="col-12">
+              <button
+                        ngbTooltip="Descargar Excel"
+                          type="button"
+                          class="btn btn-success"
+                          (click)="export()"
+                          
+                        >
+                          <a class="ft-download" style="color:white"></a>
+                        </button>
+            </div>
+            <div class="col-12 table-responsive">
+              <table
+                class="table table-striped fs-12"
+                *ngIf="users$ | async as users"
+              >
+                <thead class="thead-inverse">
+                  <tr>
+                    <th>Fecha de registro</th>
+                    <th>Nº crédito</th>
+                    
+                    <th>Nombres y Apellidos</th>
+                    <th>Nº cedula</th>
+                    <th>Email</th>
+                    <th>Telefono</th>
+                    <th>Estatus crédito</th>
+                    <!-- <th>Contra oferta</th> -->
+                    <th>Retornantes</th>
+                    <!-- <th>Roles</th> -->
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                  
+                    *ngFor="
+                      let user of (users$ | async)['data']
+                        | paginate
+                          : {
+                              itemsPerPage: itemsPerPage,
+                              currentPage: p,
+                              totalItems: (users$ | async)['total']
+                            };
+                      index as i
+                    "
+                  >
+                  <td scope="row">{{ user.created_at }}</td>
+                  <td scope="row">{{ user.LastSolicitud.numero_credito ? user.LastSolicitud.numero_credito : 'No posee'  }}</td>
+                    
+                    <td>{{ user.first_name }} {{ user.last_name }}</td>
+                    <td scope="row">{{ user.n_document }}</td>
+                    <td scope="row">{{ user.email }}</td>
+                    <td scope="row">{{ user.phone_number }}</td>
+                    <td scope="row">{{ user.LastSolicitud.estatus ? user.LastSolicitud.estatus : 'No posee' }}</td>
+
+                    <!-- <td>{{ joinData(user.offices) }}</td> -->
+                    <!-- <td>{{ user.LastSolicitud.estatus_contraOferta }}</td> -->
+                    <td>{{ user.calculadora.length - 1 }}</td>
+                    <td>
+                      <div class="btn-group">
+                        <!-- <ng-container *ngIf="user.LastSolicitud !='' && user.LastSolicitud.Evaluacion !='' && user.LastSolicitud.Evaluacion.estatus === 'pendiente manual'; else elseTemplate">
+                          <button
+                            *ngIf="user.LastSolicitud.Evaluacion.verifiquese === 'pendiente manual'"
+                            ngbTooltip="Aprobación manual de verifiquese"
+                            type="button"
+                            class="btn btn-danger"
+                            style="background-color: #dc3545; border-color: #dc3545;"
+                            (click)="openApproveVerifiquese(approveVerifiquese, user)"
+                          >
+                            <a class="ft-bell" style="color:white"></a>
+                          </button>  
+                          <button
+                            *ngIf="user.LastSolicitud.Evaluacion.email === 'pendiente manual'"
+                            ngbTooltip="Aprobación manual de email"
+                            type="button"
+                            class="btn btn-danger"
+                            style="background-color: #dc3545; border-color: #dc3545;"
+                            (click)="openApprove(approve, user)"
+                          >
+                            <a class="ft-bell" style="color:white"></a>
+                          </button>  
+                        </ng-container>
+                        <ng-template #elseTemplate> -->
+                          
+                          <button
+                            *ngIf="user.LastSolicitud !='' && user.LastSolicitud.Evaluacion !=''"
+                            ngbTooltip="Detalle"
+                            [ngClass]="{'alert-button': user.LastSolicitud.Evaluacion.estatus === 'pendiente manual' ? '#dc3545' : null}"
+                            type="button"
+                            class="btn btn-info"
+                            (click)="setExternalEvaluacionId(user.LastSolicitud.Evaluacion.id)"
+                          >
+                            <a class="ft-list" style="color:white"></a>
+                          </button>  
+                        <!-- </ng-template> -->
+                        
+                        <button
+                        ngbTooltip="Lista negra"
+                          type="button"
+                          class="btn btn-warning"
+                          
+                          (click)="listanegra(user)"
+                        >
+                          <a class="ft-lock" style="color:white" text-info></a>
+                        </button>
+                        <button
+                        ngbTooltip="Historico"
+                          type="button"
+                          class="btn btn-secondary"
+                          [routerLink]="['/credit/creditHistory/', user.id]"
+                        >
+                          <a class="ft-list" text-info></a>
+                        </button>
+                        <button
+                        ngbTooltip="Editar"
+                          type="button"
+                          class="btn btn-secondary"
+                          [routerLink]="['/admin/ficha/', user.id]"
+                        >
+                          <a class="ft-more-horizontal" text-info></a>
+                        </button>
+
+                        <button
+                        ngbTooltip="Eliminar"
+                          type="button"
+                          class="btn btn-danger"
+                          (click)="delete(user)"
+                        >
+                          <a class="ft-trash" style="color:white"></a>
+                        </button>
+                        
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-md-5">
+
+            </div>
+          </div>
+          <div class="row aling-items-end">
+            <div class="col-3">
+              <div class="form-group">
+                <!-- <label for="page">Items por Página</label> -->
+                <select
+                  class="form-control"
+                  name="page"
+                  id="page"
+                  (change)="perPage($event.target.value, p)"
+                >
+                  <option value="5">5</option>
+                  <option value="15">15</option>
+                  <option value="50">50</option>
+                </select>
+              </div>
+            </div>
+            <div class="col">
+              <pagination-controls
+              (pageChange)="perPage(itemsPerPage,$event)"
+                previousLabel="Anterior"
+                nextLabel="Siguiente"
+              ></pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- {{ users$ | async | json }} -->
+    </div>
+    <div *ngIf="external" class="col-6 padding-mv-0">
+      <app-evaluacion-add
+        (openExternalModal)="openExternalModal($event)" 
+        (closeExternalId)="closeExternal($event)" 
+        [external_evaluacion_id]="external_evaluacion_id" 
+        [external]="external"
+      ></app-evaluacion-add>
+    </div>
+  </div>
+</div>
+<ng-template #excel let-modal>
+
+  <div class="modal-header">
+    <h4 class="modal-title">Excel</h4>
+  <button type="button"  (click)="modal.dismiss('Cross click')" class="close" data-dismiss="modal">&times;</button>
+  
+  </div>
+  <div class="modal-body" style="max-height: 600px;overflow-y: scroll;">
+    <div class="row">
+      <div class="col-12">
+        <div class="form-group">
+          <label for="medio">Selecciona rango de usuarios</label>
+          <select [(ngModel)]="descargaExcel" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="medioPago" class="form-control" required="true">
+            <option *ngFor="let ae of arrExcel" value="{{ae.value}}">{{ae.name}}</option>
+
+            </select>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+            
+      <div class="col-auto my-2">
+        <button
+          type="button"
+          class="btn btn-raised btn-primary"
+          (click)="export()"
+        >
+          Descargar
+        </button>
+      </div>
+  </div>
+  </div>
+  <!-- <div class="modal-footer">
+  <button type="button"  (click)="modal.dismiss('Cross click')" class="btn btn-default" data-dismiss="modal" style="background-color: #f36c21;color: white;border-color: #f36c21;">Cerrar</button>
+  </div> -->
+  
+  </ng-template>
+
+
+
+<!-- FORMULARIO DE aprobacion de email -->
+<ng-template #approve id="approve" let-modal>
+  
+  <div class="modal-header">
+    <h4 class="modal-title">Aprobación manual de <b>{{modalTitle}}</b></h4>
+    <button type="button" (click)="modal.dismiss('Cross click')" class="close" data-dismiss="modal">&times;</button>
+  </div>
+  <div class="modal-body" style="max-height: 600px;overflow-y: auto;">
+    <form class="row" [formGroup]="validations_form" (ngSubmit)="approveMethodEmail(validations_form.value, true)">
+
+      <div class="col-12">
+        <div class="form-group">
+          <label for="medio">Resultado de la consulta</label>
+          <textarea
+            placeholder="resultado de la consulta"
+            type="text"
+            class="form-control"
+            formControlName="result"
+            #result
+          ></textarea>
+          <div class="validation-errors">
+            <ng-container *ngFor="let validation of validation_messages.result">
+              <div class="error-message"
+                *ngIf="validations_form.get('result').hasError(validation.type) && (validations_form.get('result').dirty || validations_form.get('result').touched)">
+                <small class="text-danger">{{ validation.message }}</small>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 text-center">
+        <input type="submit" class="btn btn-raised btn-primary" value="Aprobar" [disabled]="!validations_form.valid">
+        <input 
+          type="button" 
+          class="btn btn-danger ml-2" 
+          style="background-color: #dc3545; border-color: #dc3545; color: white !important" 
+          value="Negar" 
+          (click)="approveMethodEmail(validations_form.value, false)">
+      </div>
+
+    </form>
+
+  </div>
+
+</ng-template>
+
+
+<ng-template #approveVerifiquese id="approveVerifiquese" let-modal>
+  
+  <div class="modal-header">
+    <h4 class="modal-title">Aprobación manual de <b>{{modalTitle}}</b></h4>
+    <button type="button" (click)="modal.dismiss('Cross click')" class="close" data-dismiss="modal">&times;</button>
+  </div>
+  <div class="modal-body" style="max-height: 600px;overflow-y: auto;">
+    <form class="row" [formGroup]="validations_verifiquese" (ngSubmit)="approveMethodVerifiquese(validations_verifiquese.value, true)">
+
+      <div class="col-12">
+        <div class="form-group">
+          <label for="medio">Resultado BDUA</label>
+          <textarea
+            placeholder="resultado BDUA"
+            type="text"
+            class="form-control"
+            formControlName="bdua"
+            #bdua
+          ></textarea>
+          <div class="validation-errors">
+            <ng-container *ngFor="let validation of validation_messages.bdua">
+              <div class="error-message"
+                *ngIf="validations_verifiquese.get('bdua').hasError(validation.type) && (validations_verifiquese.get('bdua').dirty || validations_verifiquese.get('bdua').touched)">
+                <small class="text-danger">{{ validation.message }}</small>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="form-group">
+          <label for="medio">Resultado OFAC</label>
+          <textarea
+            placeholder="resultado OFAC"
+            type="text"
+            class="form-control"
+            formControlName="ofac"
+            #ofac
+          ></textarea>
+          <div class="validation-errors">
+            <ng-container *ngFor="let validation of validation_messages.ofac">
+              <div class="error-message"
+                *ngIf="validations_verifiquese.get('ofac').hasError(validation.type) && (validations_verifiquese.get('ofac').dirty || validations_verifiquese.get('ofac').touched)">
+                <small class="text-danger">{{ validation.message }}</small>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="form-group">
+          <label for="medio">Resultado del estado de la cédula</label>
+          <textarea
+            placeholder="resultado del estado de la cédula"
+            type="text"
+            class="form-control"
+            formControlName="estadoCedula"
+            #estadoCedula
+          ></textarea>
+          <div class="validation-errors">
+            <ng-container *ngFor="let validation of validation_messages.estadoCedula">
+              <div class="error-message"
+                *ngIf="validations_verifiquese.get('estadoCedula').hasError(validation.type) && (validations_verifiquese.get('estadoCedula').dirty || validations_verifiquese.get('estadoCedula').touched)">
+                <small class="text-danger">{{ validation.message }}</small>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="form-group">
+          <label for="medio">Resultado de antecedentes</label>
+          <textarea
+            placeholder="Resultado de antecedentes"
+            type="text"
+            class="form-control"
+            formControlName="antecedentes"
+            #antecedentes
+          ></textarea>
+          <div class="validation-errors">
+            <ng-container *ngFor="let validation of validation_messages.antecedentes">
+              <div class="error-message"
+                *ngIf="validations_verifiquese.get('antecedentes').hasError(validation.type) && (validations_verifiquese.get('antecedentes').dirty || validations_verifiquese.get('antecedentes').touched)">
+                <small class="text-danger">{{ validation.message }}</small>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 text-center">
+        <input type="submit" class="btn btn-raised btn-primary" value="Aprobar" [disabled]="!validations_verifiquese.valid">
+        <input 
+          type="button" 
+          class="btn btn-danger ml-2" 
+          style="background-color: #dc3545; border-color: #dc3545; color: white !important" 
+          value="Negar" 
+          (click)="approveMethodVerifiquese(validations_verifiquese.value, false)">
+      </div>
+
+    </form>
+
+  </div>
+
+</ng-template>

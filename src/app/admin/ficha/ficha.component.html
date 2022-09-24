@@ -1,0 +1,707 @@
+<div class="container-fluid padding-mv-0">
+  <div class="row margin-mv-0">
+    <div class="col-md-12 padding-mv-0">
+      <div class="card formula mt3em">
+        <div class="card-header">
+          <div class="card-title">
+            <h2 *ngIf="user && !external">Detalles de {{user.first_name}} {{user.last_name}} </h2>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row txt-right">
+            <div class="col-md-12 ">
+              <button *ngIf="user && user.roles[0].name != 'Administrador' && !external"
+                        ngbTooltip="Editar"
+                          type="button"
+                          class="btn btn-danger"
+                          [routerLink]="['/home/', user.id]"
+                        >
+                          <a class="ft-edit" style="color:white"></a>
+                        </button>
+                        <button *ngIf="user && user.roles[0].name == 'Administrador' && !external"
+                        ngbTooltip="Editar"
+                          type="button"
+                          class="btn btn-danger"
+                          [routerLink]="['/admin/user/edit-admin/', user.id]"
+                        >
+                          <a class="ft-edit" style="color:white"></a>
+                        </button>
+                        <button *ngIf="user && !external"
+                        ngbTooltip="Editar contraseña"
+                          type="button"
+                          class="btn btn-warning"
+                          [routerLink]="['/admin/user/', user.id, 'edit']"
+                        >
+                          <a class="ft-edit" style="color:white"></a>
+                        </button>
+            </div>
+          </div>
+          <div class="row">
+  </div>
+<div class="row">
+            <div class="col-md-12">
+
+
+              <ngb-tabset [justify]="currentJustify">
+                <ngb-tab title="Información Básica">
+                  <ng-template ngbTabContent>
+                    <div class="row" *ngIf="user">
+                      <div class="col-md-3">
+                        <div class="row" >
+                          <div class="col-md-12">
+                            <small><strong>Anverso</strong></small><br>    
+                            <img *ngIf="imgAnverso" [src]="imgAnverso" style="width: 100%;" >
+                          </div>
+                          <div class="col-md-12">
+                            <small><strong>Reverso</strong></small><br>          
+                            <img *ngIf="imgReverso" [src]="imgReverso" style="width: 100%;" >
+                          </div>
+                          <div class="col-md-12"> 
+                            <small><strong>Selfie</strong></small><br>      
+                            <img  *ngIf="imgSelfie" [src]="imgSelfie" style="width: 100%;">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-9">
+                        <div class="row fondogris">
+                          <div class="col-md-6 txt-cntr" >
+                            <label>Nombres y Apellidos</label>
+                            <p *ngIf="user">{{user.first_name}} {{user.second_name}} {{user.last_name}} {{user.second_last_name}}</p>
+                          </div>
+                          <div class="col-md-6 txt-cntr" >
+                            <label>Correo electrónico</label>
+                            <p *ngIf="user">{{user.email}}</p>
+                          </div>
+                         
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4 txt-cntr" >
+                            <label>Teléfono</label>
+                            <p *ngIf="user">{{user.phone_number}}</p>
+                          </div>
+                          <div class="col-md-4 txt-cntr" >
+                            <label>Dirección</label>
+                            <p *ngIf="basicas">{{basicas.direccion}}</p>
+                          </div>
+                          <div class="col-md-4 txt-cntr" >
+                            <label>Ciudad</label>
+                            <p *ngIf="basicas">{{basicas.ciudad}}</p>
+                          </div>
+                        </div>
+
+                        <div class="row fondogris">
+                          <div class="col-md-4 txt-cntr" >
+                            <label>Tipo de vivienda</label>
+                            <p *ngIf="basicas">{{basicas.tipoVivienda}}</p>
+                          </div>
+                          <div class="col-md-4 txt-cntr" >
+                            <label>Tiempo en esta vivienda</label>
+                            <p *ngIf="basicas">{{basicas.tienmpoVivienda}}</p>
+                          </div>
+                          <div class="col-md-4 txt-cntr" >
+                            <label>¿Con quien vive?</label>
+                            <p *ngIf="basicas">{{basicas.conquienVives}}</p>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-4 txt-cntr" >
+                            <label>
+                              Cuantas personas económicamente activas o que laboran viven contigo? (fuera de ti)</label>
+                            <p *ngIf="basicas">{{basicas.personasaCargo}}</p>
+                          </div>
+                          <div class="col-md-2 txt-cntr" >
+                            <label>Fecha de nacimiento</label>
+                            <p *ngIf="basicas">{{basicas.fechaNacimiento}}</p>
+                          </div>
+                          <div class="col-md-4 txt-cntr" >
+                            <label>Genero</label>
+                            <p *ngIf="basicas">{{basicas.genero}}</p>
+                          </div>
+                          <div class="col-md-2 txt-cntr" >
+                            <label>Estrato</label>
+                            <p *ngIf="basicas">{{basicas.estrato}}</p>
+                          </div>
+                        </div>
+
+                        <div class="row fondogris">
+                          <div class="col-md-4 txt-cntr" >
+                            <label>Estado civil</label>
+                            <p *ngIf="basicas">{{basicas.estadoCivil}}</p>
+                          </div>
+                          <div class="col-md-4 txt-cntr" >
+                            <label>Cuantas personas dependen de ti economicamente</label>
+                            <p *ngIf="basicas">{{basicas.nroPersonasDependenEconomicamente}}</p>
+                          </div>
+                          <div class="col-md-4 txt-cntr" >
+                            <label>Número de hijos</label>
+                            <p *ngIf="basicas">{{basicas.nHijos}}</p>
+                          </div>
+                     
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-4 txt-cntr" >
+                            <label>Nº de cedula</label>
+                            <p *ngIf="basicas">{{basicas.nCedula}}</p>
+                          </div>
+                          <div class="col-md-4 txt-cntr" >
+                            <label>Fecha de expedición</label>
+                            <p *ngIf="basicas">{{basicas.fechaExpedicionCedula}}</p>
+                          </div>
+                          <div class="col-md-4 txt-cntr" >
+                            <label>Tipo de plan movil</label>
+                            <p *ngIf="basicas">{{basicas.tipoPlanMovil}}</p>
+                          </div>
+                     
+                        </div>
+                        <div class="row fondogris">
+                          <div class="col-md-4 txt-cntr" >
+                            <label>Nivel de estudios</label>
+                            <p *ngIf="basicas">{{basicas.nivelEstudio}}</p>
+                          </div>
+                          <div class="col-md-4 txt-cntr" >
+                            <label>Estado de estudio</label>
+                            <p *ngIf="basicas">{{basicas.estadoEstudio}}</p>
+                          </div>
+                          <div class="col-md-4 txt-cntr" >
+                            <label>¿Reportado en central de riesgo?</label>
+                            <p *ngIf="basicas">{{basicas.centralRiesgo}}</p>
+                          </div>
+                     
+                        </div>
+                        <div class="row" *ngIf="basicas.centralRiesgo=='Si'">
+                          <div class="col-md-3 txt-cntr" >
+                            <label>Entidad que te ha reportado</label>
+                            <p *ngIf="basicas">{{basicas.entidadReportado}}</p>
+                          </div>
+                          <div class="col-md-3 txt-cntr" >
+                            <label>Cual?</label>
+                            <p *ngIf="basicas">{{basicas.cualEntidadReportado}}</p>
+                          </div>
+                          <div class="col-md-3 txt-cntr" >
+                            <label>Estado reportado</label>
+                            <p *ngIf="basicas">{{basicas.estadoReportado}}</p>
+                          </div>
+                          <div class="col-md-3 txt-cntr" >
+                            <label>Tiempo reportado</label>
+                            <p *ngIf="basicas">{{basicas.tiempoReportado}}</p>
+                          </div>
+                       
+                     
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4 txt-cntr" *ngIf="basicas.centralRiesgo=='Si'">
+                            <label>Valor en mora</label>
+                            <p *ngIf="basicas">{{basicas.valorMora}}</p>
+                          </div>
+                          <div class="col-md-4 txt-cntr" *ngIf="basicas.centralRiesgo=='Si'">
+                            <label>Motivo del reporte</label>
+                            <p *ngIf="basicas">{{basicas.motivoReportado}}</p>
+                          </div>
+                          <div class="col-md-4 txt-cntr" >
+                            <label>¿Tiene vehiculo propio?</label>
+                            <p *ngIf="basicas">{{basicas.vehiculo}}</p>
+                          </div>
+                          <div class="col-md-4 txt-cntr" >
+                            <label>Placa</label>
+                            <p *ngIf="basicas">{{basicas.placa}}</p>
+                          </div>
+                       
+                     
+                        </div>
+                        <div class="row fondogris">
+                       
+                          <div class="col-md-6 txt-cntr" >
+                            <label>
+                              ¿Cotizas a Seguridad Social?</label>
+                            <p *ngIf="basicas">{{basicas.cotizasSeguridadSocial}}</p>
+                          </div>
+
+                        </div>
+                        <div class="row" >
+                          <div class="col-md-4 txt-cntr" *ngIf="basicas.cotizasSeguridadSocial=='Si'">
+                            <label>
+                              Tipo de afiliacion</label>
+                            <p *ngIf="basicas">{{basicas.tipoAfiliacion}}</p>
+                          </div>
+              
+                          <div class="col-md-4 txt-cntr" *ngIf="basicas.cotizasSeguridadSocial=='Si'">
+                            <label>
+                              EPS</label>
+                            <p *ngIf="basicas">{{basicas.eps}}</p>
+                          </div>
+
+                          <div class="col-md-4 txt-cntr">
+                            <label>
+                              Como se entero de nosotros?</label>
+                            <p *ngIf="basicas">{{basicas.comoEnterasteNosotros}}</p>
+                          </div>
+                          <div class="col-md-4 txt-cntr">
+                            <label>
+                              IP</label>
+                            <p *ngIf="user">{{user.ip}}</p>
+                          </div>
+                          <div class="col-md-4 txt-cntr">
+                            <label>
+                              Coordenadas</label>
+                            <p *ngIf="user">{{user.coordenadas}}</p>
+                          </div>
+                        </div>
+                        
+                      </div>
+                  </div>
+                  </ng-template>
+                </ngb-tab>
+                <ngb-tab title="Referencias">
+                  <ng-template ngbTabContent>
+                    <div class="row fondogris">
+                      <div class="col-md-12 txt-cntr">
+                        <h3>Referencia Personal</h3>
+                      </div>
+                      <div class="col-md-6 txt-cntr" >
+                        <label>Nombres</label>
+                        <p *ngIf="referencias">{{referencias.ReferenciaPersonalNombres}}</p>
+                      </div>
+                      <div class="col-md-6 txt-cntr" >
+                        <label>Apellidos</label>
+                        <p *ngIf="referencias">{{referencias.ReferenciaPersonalApellidos}}</p>
+                      </div>
+                      <div class="col-md-6 txt-cntr" >
+                        <label>Ciudad</label>
+                        <p *ngIf="referencias">{{referencias.ReferenciaPersonalCiudadFk}}</p>
+                      </div>
+                      <div class="col-md-6 txt-cntr" >
+                        <label>Teléfono</label>
+                        <p *ngIf="referencias">{{referencias.ReferenciaPersonalTelefono}}</p>
+                      </div>
+                      <div class="col-md-6 txt-cntr" >
+                        <label>Relación</label>
+                        <p *ngIf="referencias">{{referencias.relacionp}}</p>
+                      </div>
+                      <div class="col-md-6 txt-cntr" >
+                        <label>Email</label>
+                        <p *ngIf="referencias">{{referencias.emailp}}</p>
+                      </div>
+                      
+
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12 txt-cntr">
+                        <h3>Referencia Familiar</h3>
+                      </div>
+                      <div class="col-md-6 txt-cntr" >
+                        <label>Nombres</label>
+                        <p *ngIf="referencias">{{referencias.ReferenciaFamiliarNombres}}</p>
+                      </div>
+                      <div class="col-md-6 txt-cntr" >
+                        <label>Apellidos</label>
+                        <p *ngIf="referencias">{{referencias.ReferenciaFamiliarApellidos}}</p>
+                      </div>
+                      <div class="col-md-6 txt-cntr" >
+                        <label>Ciudad</label>
+                        <p *ngIf="referencias">{{referencias.ReferenciaFamiliarCiudadFk}}</p>
+                      </div>
+                      <div class="col-md-6 txt-cntr" >
+                        <label>Teléfono</label>
+                        <p *ngIf="referencias">{{referencias.ReferenciaFamiliarTelefono}}</p>
+                      </div>
+                      <div class="col-md-6 txt-cntr" >
+                        <label>Relación</label>
+                        <p *ngIf="referencias">{{referencias.relacionf}}</p>
+                      </div>
+                      <div class="col-md-6 txt-cntr" >
+                        <label>Email</label>
+                        <p *ngIf="referencias">{{referencias.emailf}}</p>
+                      </div>
+                      <div class="col-md-12 txt-cntr" >
+                        <label>Quien te recomendo?</label>
+                        <p *ngIf="referencias">{{referencias.QuienRecomendo}}</p>
+                      </div>
+
+                    </div>
+                  </ng-template>
+                </ngb-tab>
+                <ngb-tab title="Información Financiera">
+                  <ng-template ngbTabContent>
+                    <div class="row fondogris">
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Banco</label>
+                        <p *ngIf="financieras">{{financieras.banco}}</p>
+                      </div>
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Tipo de Cuenta</label>
+                        <p *ngIf="financieras">{{financieras.tipoCuenta}}</p>
+                      </div>
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Nº de cuenta</label>
+                        <p *ngIf="financieras">{{financieras.nCuenta}}</p>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Ingresos totales mensuales</label>
+                        <p *ngIf="financieras">$ {{financieras.ingresoTotalMensual | number:'1.0-0':'es'}}</p>
+                      </div>
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Egresos totales mensuales</label>
+                        <p *ngIf="financieras">$ {{financieras.egresoTotalMensual | number:'1.0-0':'es'}}</p>
+                      </div>
+                      <div class="col-md-4 txt-cntr" >
+                        <label>¿Como te pagan?</label>
+                        <p *ngIf="financieras">{{financieras.comoTePagan}}</p>
+                      </div>
+                    </div>
+
+                    <div class="row fondogris">
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Periodo de pago de Nómina</label>
+                        <p *ngIf="financieras">{{financieras.periodoPagoNomina}}</p>
+                      </div>
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Dias</label>
+                        <p *ngIf="financieras">{{financieras.diasPago}}</p>
+                      </div>
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Tienes tarjeta de Credito</label>
+                        <p *ngIf="financieras">{{financieras.tarjetasCredito}}</p>
+                      </div>
+                    </div>
+
+                    <div class="row ">
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Otros Ingresos Mensuales</label>
+                        <p *ngIf="financieras">{{financieras.otroIngreso}}</p>
+                      </div>
+                      <div class="col-md-4 txt-cntr" >
+                        <label>¿De donde proviene?</label>
+                        <p *ngIf="financieras">{{financieras.proviene}}</p>
+                      </div>
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Total otros ingresos mensuales</label>
+                        <p *ngIf="financieras">$ {{ (financieras.total_otro_ingr_mensual !=" " ? financieras.total_otro_ingr_mensual : 0) | number:'1.0-0':'es'}}</p>
+                      </div>
+                    </div>
+
+                    <div class="row fondogris">
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Tienes o has tenido una obligación (crédito) con una entidad financiera ?</label>
+                        <p *ngIf="financieras">{{financieras.creditosBanco}}</p>
+                      </div>
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Tienes créditos o deudas que estas pagando en este momento?</label>
+                        <p *ngIf="financieras">{{financieras.deudaActual}}</p>
+                      </div>
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Cual es la cuota total mensual de todos los creditos que estas pagando?</label>
+                        <p *ngIf="financieras && financieras.pagandoActual !=' '">${{financieras.pagandoActual | number:'1.0-0':'es' }}</p>
+                      </div>
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Tienes otras cuentas de ahorro o corriente?</label>
+                        <p *ngIf="financieras">{{financieras.otrasCuentas}}</p>
+                      </div>
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Situación Laboral</label>
+                        <p *ngIf="financieras">{{financieras.situacionLaboral}}</p>
+                      </div>
+
+                     
+                    </div>
+
+                    <div class="row ">
+                     
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Actividad</label>
+                        <p *ngIf="financieras">{{financieras.actividad}}</p>
+                      </div>
+                      <div class="col-md-4 txt-cntr" *ngIf="financieras.situacionLaboral!='Independiente' || financieras.situacionLaboral!='Desempleado' || financieras.situacionLaboral!='Pensionado' || financieras.situacionLaboral!='Estudiante'" >
+                        <label>Tipo de empresa</label>
+                        <p *ngIf="financieras">{{financieras.tipoEmpresa}}</p>
+                      </div>
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Antiguedad laboral</label>
+                        <p *ngIf="financieras">{{financieras.antiguedadLaboral}}</p>
+                      </div>
+                   
+                    </div>
+
+                
+
+                    <div class="row fondogris">
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Nombre de la empresa</label>
+                        <p *ngIf="financieras">{{financieras.nombreEmpresa}}</p>
+                      </div>
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Nombre del Cargo</label>
+                        <p *ngIf="financieras">{{financieras.nombreCargo}}</p>
+                      </div>
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Teléfono de la empresa</label>
+                        <p *ngIf="financieras">{{financieras.telefonoEmpresa}}</p>
+                      </div>
+
+                    </div>
+
+
+
+                    <div class="row ">
+                     
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Ciudad donde trabaja</label>
+                        <p *ngIf="financieras">{{financieras.ciudadTrabajas}}</p>
+                      </div>
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Direccion de la empresa</label>
+                        <p *ngIf="financieras">{{financieras.direccionEmpresa}}</p>
+                      </div>
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Sector Economico que se dedica</label>
+                        <p *ngIf="financieras">{{financieras.sectorEconomico}}</p>
+                      </div>
+
+                    </div>
+
+                    <div class="row fondogris">
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Tamaño de la empresa donde labora</label>
+                        <p *ngIf="financieras">{{financieras.tamanoEmpresa}}</p>
+                      </div>
+                  
+               
+                    </div>
+                    <div class="row " *ngIf="financieras.situacionLaboral=='Independiente'">
+                      <div class="col-md-4 txt-cntr" >
+                        <label>Empresa constituida</label>
+                        <p *ngIf="financieras">{{financieras.empresaConstituida}}</p>
+                      </div>
+                      <div class="col-md-4 txt-cntr" *ngIf="financieras.empresaConstituida=='Si'">
+                        <label>NIT</label>
+                        <p *ngIf="financieras">{{financieras.nit}}</p>
+                      </div>
+                      <div class="col-md-4 txt-cntr" *ngIf="financieras.empresaConstituida=='No' ">
+                        <label>RUT</label>
+                        <p *ngIf="financieras">{{financieras.rut}}</p>
+                      </div>
+               
+                    </div>
+
+                    <div class="row fondogris" >
+                      <div class="col-md-4 txt-cntr" *ngIf="financieras.situacionLaboral=='Estudiante'">
+                        <label>Cual es tu fuente de ingreso ?</label>
+                        <p *ngIf="financieras">{{financieras.empresaConstituida}}</p>
+                      </div>
+                      <div class="col-md-4 txt-cntr" >
+                        <label>¿En qué usarás el crédito?</label>
+                        <p *ngIf="financieras">{{financieras.usoCredito}}</p>
+                      </div>
+
+                      <div class="col-md-4 txt-cntr" *ngIf="usoCredito=='Otros'">
+                        <label>¿Cual?</label>
+                        <p *ngIf="financieras">{{financieras.cual}}</p>
+                      </div>
+        
+               
+                    </div>
+                  </ng-template>
+                </ngb-tab>
+
+
+                <ngb-tab title="Información Adicional">
+                  <ng-template ngbTabContent>
+                    <div class="row">
+                      <div class="col-md-md-12">
+                        <form [formGroup]="formBlog">
+                          <div class="form-row align-items-end">
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label for="email">Nombre del documento</label>
+                                <input
+                                  type="mail"
+                                  class="form-control"
+                                  formControlName="nombre"
+                                  id="nombre"
+                                  required
+                                />
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label for="password">Archivo</label>
+                                <input
+                                  type="file"
+                                  class="form-control"
+                                  formControlName="imagen"
+                                  id="imagen"
+                                  (change)="onFileChange($event)"
+                                />
+                              </div>
+                            </div>
+                            <img *ngIf="isResize1" src="/assets/img/resize.gif" width="30" height="30">
+                            <div *ngIf="isResize1">
+                              <p><small>Espere para continuar...</small></p>
+            
+                          </div>
+                          <img *ngIf="urlImagen" [src]="urlImagen" width="70" height="auto">
+            
+                          </div>
+                       
+                          <div class="row">
+                            <div
+                              class="col-auto my-2"
+                              *ngIf="(blogToEdit$ | async)?.id; else noEditMode"
+                            >
+                              <button
+                                type="button"
+                                class="btn btn-raised btn-primary"
+                                [disabled]="formBlog.invalid"
+                                (click)="edit()"
+                              >
+                                Editar
+                              </button>
+                            </div>
+                            <ng-template #noEditMode>
+                              <div class="col-auto my-2">
+                                <button
+                                  type="button"
+                                  class="btn btn-raised btn-primary"
+                                  [disabled]="formBlog.invalid"
+                                  (click)="add()"
+                                >
+                                  Guardar
+                                </button>
+                              </div>
+                            </ng-template>
+            
+                            <div class="col-auto my-2">
+                              <button
+                                type="button"
+                                class="btn btn-raised btn-warning"
+                                [disabled]="!formBlog.dirty"
+                                (click)="formBlog.reset()"
+                              >
+                                Limpiar
+                              </button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 txt-cntr"  *ngFor="let c of adicionales">
+                        <img *ngIf="c.tipo == 'imagen'" style="width: 100px;" src="{{ruta}}{{c.nombre}}"/>
+                        <p *ngIf="c.tipo == 'imagen'"><a href="{{ruta}}{{c.nombre}}" target="_blank" download="{{c.nombre}}"><i class="ft-download"></i>Descargar</a></p>
+                        <a *ngIf="c.tipo == 'archivo'" href="{{ruta}}{{c.nombre}}" target="_blank" download="{{c.nombre}}"><i class="ft-file" style="font-size: 50px;"></i></a><br>
+                        <a *ngIf="c.tipo == 'archivo'" href="{{ruta}}{{c.nombre}}" target="_blank" download="{{c.nombre}}"><i class="ft-download" style="font-size: 25px;"></i> {{c.nombre}}</a><br>
+                      </div>
+                      
+                    </div>
+                  </ng-template>
+                </ngb-tab>
+
+                <ngb-tab title="Solicitudes y puntos pandas">
+                  <ng-template ngbTabContent>
+                    <div class="row">
+                      <div class="col-md-12 txt-cntr" *ngFor="let c of solicitudes" >
+
+                        <div class="container">
+                          <div class="row">
+                              <div class="col-md-12" style="border: 1px dashed #dee2e6;">
+                                  <div class="card ">
+                                      <div class="card-body">
+                                          <div class="row">
+                                             
+                                              <div class="col-md-7">
+                                                <div class="row">
+                                                  <div class="col-md-6 txt-cntr fondogris" >
+                                                    <label>Número de crédito</label>
+                                                    <p *ngIf="user">{{c.numero_credito}}</p>
+                                                  </div>
+                                                  <div class="col-md-6 txt-cntr fondogris" >
+                                                    <label>Estatus</label>
+                                                    <p *ngIf="user">{{c.estatus}}</p>
+                                                  </div>
+                                                  <div class="col-md-6 txt-cntr " >
+                                                    <label>Tipo de crédito</label>
+                                                    <p *ngIf="c.tipoCredito=='m'">Panda meses</p>
+                                                    <p *ngIf="c.tipoCredito!='m'">Panda días</p>
+                                                  </div>
+                                                  <div class="col-md-6 txt-cntr" >
+                                                    <label>Plazo</label>
+                                                    <p *ngIf="user">{{c.plazo }}</p>
+                                                  </div>
+                                                  <div class="col-md-6 txt-cntr fondogris" >
+                                                    <label>Monto solicitado</label>
+                                                    <p *ngIf="user">$ {{c.montoSolicitado | number:'1.0-0':'es'}}</p>
+                                                  </div>
+                                                  <div class="col-md-6 txt-cntr fondogris" >
+                                                    <label>Tasa de interes</label>
+                                                    <p *ngIf="user">$ {{c.tasaInteres | number:'1.0-0':'es'}}</p>
+                                                  </div>
+                                                  <div class="col-md-6 txt-cntr" >
+                                                    <label>Subtotal</label>
+                                                    <p *ngIf="user">$ {{c.subtotal | number:'1.0-0':'es'}}</p>
+                                                  </div>
+                                                  <div class="col-md-6 txt-cntr" >
+                                                    <label>Plataforma</label>
+                                                    <p *ngIf="user">$ {{c.plataforma | number:'1.0-0':'es'}}</p>
+                                                  </div>
+                                                  <div class="col-md-6 txt-cntr fondogris" >
+                                                    <label>Aprobción express</label>
+                                                    <p *ngIf="user">$ {{c.aprobacionRapida | number:'1.0-0':'es'}}</p>
+                                                  </div>
+
+                                                  <div class="col-md-6 txt-cntr fondogris" >
+                                                    <label>IVA</label>
+                                                    <p *ngIf="user">$ {{c.iva | number:'1.0-0':'es'}}</p>
+                                                  </div>
+                                                  <div class="col-md-6 txt-cntr" >
+                                                    <label>Total a pagar</label>
+                                                    <p *ngIf="user">$ {{c.totalPagar | number:'1.0-0':'es'}}</p>
+                                                  </div>
+                                                 
+                                                </div>        
+                                              </div>
+                                             <div class="col-md-4">
+                                                  <h2>Puntos Panda</h2>
+                                                  <button class="rating_circle">{{c.puntaje_total}} %</button>
+                                                  <div>
+                                                    
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      
+                      </div>
+                      
+                    </div>
+                  </ng-template>
+                </ngb-tab>
+
+                
+              </ngb-tabset>
+              
+         
+
+              
+              
+            </div>
+        
+          </div>
+    
+        </div>
+      </div>
+      <!-- {{ users$ | async | json }} -->
+    </div>
+  </div>
+</div>
+
+        
+          
+   

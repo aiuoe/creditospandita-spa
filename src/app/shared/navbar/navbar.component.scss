@@ -1,0 +1,20 @@
+.header-navbar {
+  background-color: #ffffff;
+}
+.blue-grey.lighten-5{
+  color: #f36c21 !important;
+}
+.logo-img{
+  padding-top:10px !important ;
+}
+.logo-img img{
+  height: 3.7rem;
+}
+@media (max-width: 768px){
+  .logo-img img{
+    height: 3rem;
+  }
+}
+.navbar{
+  z-index: 6;
+}

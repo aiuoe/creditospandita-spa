@@ -1,0 +1,147 @@
+<div class="container-fluid padding-mv-0">
+  <div class="row margin-mv-0">
+    <div class="col-12 padding-mv-0">
+      <div class="card formula mt3em">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>Creditos activos</h2>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12">
+              <!-- <label>Busqueda por: Nºcrédito,Nombres y Apellido,Estatus</label><br>
+              <app-filter (onFilter)="onFilter($event)"></app-filter> -->
+            </div>
+            <div class="col-12">
+              <!-- <button
+                        ngbTooltip="Descargar  Excel"
+                          type="button"
+                          class="btn btn-success"
+                          (click)="export()"
+                          
+                        >
+                          <a class="ft-download" style="color:white"></a>
+                        </button> -->
+            </div>
+            <div class="col-12 table-responsive">
+              <table
+                class="table table-striped"
+                
+              >
+                <thead class="thead-inverse">
+                  <tr>
+                    <th>Nro de Credito</th>
+                    <th>Estado</th>
+                    <th>Tipo</th>
+                    <th>Plazo de pago</th>
+                    <th>Fecha de desembolso</th>
+                    <th>Fecha de pago</th>
+                    <!-- <th>Fecha pago próxima cuota</th> -->
+                    <th>Valor cuota mensual</th>
+                    <th>Monto desembolsado</th>
+                    <!-- <th>Intereses de mora</th> -->
+                    <th>Total a pagar</th>
+                    <!-- <th>Pagado</th>
+                    <th>Saldo al vencimiento</th>
+                    <th>Saldo al día</th>
+                    <th>Días/Meses al vencimiento</th>
+                    <th>Días en mora</th>-->
+                    <th>Acciones</th> 
+            
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="
+                  let c of (country$ | async)['data']
+                    | paginate
+                      : {
+                          itemsPerPage: itemsPerPage,
+                          currentPage: p,
+                          totalItems: (country$ | async)['total']
+                        }; 
+                      index as i
+                ">
+                <td>{{c.numero_credito}}</td>
+                    <td> {{ c.estatus_credito=='abierto' ? 'Desembolsado' : c.estatus_credito }}</td>
+                    <td> {{ c.tipoCredito == 'm' ? 'Panda Meses' : 'Panda Dias'}}</td>
+                    <td>{{ c.plazo}}</td>
+                    <td>{{c.fechaDesembolso}}</td>
+                    <td>{{c.ProximoPago.fechaPago}}</td>
+                    <!-- <td>{{c.fechaPagoProxima}}</td> -->
+                    <td>${{c.cuota | number:'1.0-0':'es'}}</td>
+                    <td>${{(c.ContraOferta ? c.ContraOferta.montoAprobado: c.montoSolicitado) | number:'1.0-0':'es' }}</td>
+                    <!-- <td></td> -->
+                    <td>${{(c.ContraOferta ? c.ContraOferta.totalPagar: c.totalPagar) | number:'1.0-0':'es' }}</td>
+                    <!-- <td>${{c.totalPagar | number:'1.0-0':'es'}}</td> -->
+                    <!-- <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td> -->
+                    <td >     <div class="btn-group">
+                      <button
+                      ngbTooltip="Detalle"
+                        type="button"
+                        class="btn btn-info"
+                        [routerLink]="['/admin/detalle-abiertos/', c.id_solicitud]"
+                       
+                      >
+                        <a class="ft-list" style="color:white"></a>
+                      </button>
+                      <button
+                      ngbTooltip="Pagar credito"
+                        type="button"
+                        class="btn btn-success"
+                        [routerLink]="['/admin-credit/', c.id_solicitud]"
+                       
+                      >
+                        <a class="fa fa-credit-card" style="color:white"></a>
+                      </button>
+                      <button
+                      *ngIf="c.tipoCredito!='m'"
+                      ngbTooltip="Novacion"
+                        type="button"
+                        class="btn btn-warning"
+                        [routerLink]="['/credit/novacion/', c.id_solicitud]"
+                       
+                      >
+                        <a class="ft-watch" style="color:white"></a>
+                      </button>
+                    </div> </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row aling-items-end">
+            <div class="col-3">
+              <div class="form-group">
+                <!-- <label for="page">Items por Página</label> -->
+                <select
+                  class="form-control"
+                  name="page"
+                  id="page"
+                  (change)="perPage($event.target.value, p)"
+                >
+                  <option value="5">5</option>
+                  <option value="15">15</option>
+                  <option value="50">50</option>
+                </select>
+              </div>
+            </div>
+            <div class="col">
+              <pagination-controls
+              (pageChange)="perPage(itemsPerPage,$event)"
+                previousLabel="Anterior"
+                nextLabel="Siguiente"
+              ></pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- {{ users$ | async | json }} -->
+    </div>
+  </div>
+</div>
+

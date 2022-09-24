@@ -1,0 +1,110 @@
+<div class="container-fluid padding-mv-0">
+  <div class="row margin-mv-0">
+    <div class="col-12 padding-mv-0">
+      <div class="card formula mt3em">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>Información adicional</h2>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12">
+              
+            </div>
+            <div class="col-12 table-responsive">
+              <table
+                class="table table-striped"
+              >
+                <thead class="thead-inverse">
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Preview</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="
+                      let t of (blogs$ | async)['data']
+                        | paginate
+                          : {
+                              itemsPerPage: itemsPerPage,
+                              currentPage: p,
+                              totalItems: (blogs$ | async)['total']
+                              
+                            };
+                      index as i
+                      let j =index
+                    "
+                  >
+                
+                    <td scope="row">{{ t.nombreDocumento }}</td>
+                    <!-- <td><img src="{{ruta}}{{t.nombre}}"></td> -->
+                    <td> 
+                      <a *ngIf="t.tipo == 'imagen'" (click)="open(j)"><i class="ft-image" style="font-size: 25px;"></i></a>
+                      <a *ngIf="t.tipo == 'archivo'" href="{{ruta}}{{t.nombre}}" target="_blank" download="{{t.nombre}}"><i class="ft-download" style="font-size: 25px;"></i></a>
+                    </td>
+                      <!-- MODAL DE ANVERSO -->
+                      <ng-template #j let-modal>
+                                              
+                        <div class="modal-header">
+                          <button type="button"  (click)="modal.dismiss('Cross click')" class="close" data-dismiss="modal">&times;</button>
+                          <!-- <h4 class="modal-title">Modal Header</h4> -->
+                        </div>
+                        <div class="modal-body" >
+                          <img src="{{ruta}}{{t.nombre}}"  style="width: 100%;" >
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button"  (click)="modal.dismiss('Cross click')" class="btn btn-default" data-dismiss="modal" style="background-color: #f36c21;color: white;border-color: #f36c21;">Cerrar</button>
+                        </div>
+
+                        </ng-template>
+                    
+                    <td>
+                      <div class="btn-group">
+                        <button
+                        ngbTooltip="Eliminar"
+                          type="button"
+                          class="btn btn-danger"
+                          (click)="delete(t)"
+                        >
+                          <a class="ft-trash" style="color:white"></a>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row aling-items-end">
+            <div class="col-3">
+              <div class="form-group">
+                <!-- <label for="page">Items por Página</label> -->
+                <select
+                  class="form-control"
+                  name="page"
+                  id="page"
+                  (change)="perPage($event.target.value, p)"
+                >
+                  <option value="5">5</option>
+                  <option value="15">15</option>
+                  <option value="50">50</option>
+                </select>
+              </div>
+            </div>
+            <div class="col">
+              <pagination-controls
+              (pageChange)="perPage(itemsPerPage,$event)"
+                previousLabel="Anterior"
+                nextLabel="Siguiente"
+              ></pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- {{ users$ | async | json }} -->
+    </div>
+  </div>
+</div>

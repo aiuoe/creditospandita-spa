@@ -1,0 +1,48 @@
+span.grey {
+    background: #ebc121;
+    border-radius: 0.8em;
+    -moz-border-radius: 0.8em;
+    -webkit-border-radius: 0.8em;
+    color: #fff !important;
+    display: inline-block;
+    font-weight: bold;
+    line-height: 1.6em;
+    margin-right: 15px;
+    text-align: center;
+    width: 1.6em; 
+    font-size: 22px;
+  }
+
+  .mb10{
+    margin-bottom: 10px;
+  }
+
+  .textarea{
+    width: 80%;
+    height: 470px;
+    overflow:hidden;
+    resize: none;
+  }
+  .recuadro{
+    text-align: center;
+    background-color: #eaeaea;
+    padding: 20px;
+  }
+
+  .claseh3{
+    border-bottom: 1px dashed grey;
+    font-size: 22px;
+  }
+  .sombra{
+    box-shadow: 10px 0 5px -2px #888;
+  }
+  .tamano{
+    height: 588px;
+  }
+  .tamanores{
+    border-width: 0;
+    cursor: pointer;
+    background: #ebc121;
+    color: white;
+    padding: 10px;
+  }

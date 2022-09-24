@@ -1,0 +1,126 @@
+<!--Footer Starts-->
+<footer>
+  <div class="container-fluid padding-footer">
+    <!-- <p class="copyright text-center">
+      Copyright &copy; {{ currentDate | date: 'yyyy' }}
+      <a id="pixinventLink" href="http://www.creditospanda.com/">Créditos Panda</a>,
+      All rights reserved.
+    </p> -->
+    <div class="row" style="width: 100%;">
+      <div class="vc_col-sm-1/5">
+        <div class="title">
+          <h5><strong>Contáctanos</strong></h5>
+        </div>
+        <div class="content">
+          <div >
+            <p class="text-content"><span><i class="fa fa-clock-o label-icon" aria-hidden="true"></i></span> Lunes a Viernes</p>
+          </div>
+          <div>
+            <p class="text-content">8:00 am a 5:00 pm</p>
+          </div>
+          <!-- <div>
+              <p class="text-content"><span><i class="fa fa-phone label-icon" aria-hidden="true"></i></span> (1) 329 9833</p>
+          </div> -->
+          <!-- <div>
+              <p class="text-content"><span><i class="fa fa-whatsapp label-icon" aria-hidden="true"></i></span> (1) 321 240 3734</p>
+          </div> -->
+          
+          <div>
+            <p class="text-content"><span><i class="fa fa-map-marker label-icon" aria-hidden="true"></i></span> Carrera 49 No. 93-38</p>
+        </div>
+          <div>
+              <p class="text-content"><span><i class="fa fa-map-marker label-icon" aria-hidden="true"></i></span> Bogota - Colombia</p>
+          </div>
+        </div>
+      </div>
+      <div class="vc_col-sm-1/5" id="margerleftfooter">
+        <div class="title">
+          <h5><strong>Secciones</strong></h5>
+        </div>
+        <div class="content">
+          <div >
+            <a href="{{ruta}}/quienes"><p class="text-content">Sobre nosotros</p></a>
+          </div>
+          <div>
+            <a href="{{ruta}}/funciona"><p class="text-content">¿Cómo funciona?</p></a>
+          </div>
+          <div>
+            <a href="{{ruta}}/ayuda"><p class="text-content">Preguntas Frecuentes</p></a>
+          </div>
+          <div>
+            <a href="{{ruta}}/contacto"><p class="text-content">Contáctanos</p></a>
+          </div>
+        </div>
+      </div>
+      <div class="vc_col-sm-1/5" id="margerleftfooter3">
+        <div class="title">
+          <h5><strong>Avisos Legales</strong></h5>
+        </div>
+        <div class="content">
+          <div >
+            <a [href]="rutaStorage+'/contratos_pdf/Terminos y condiciones del servicio vr 26.05.2020.pdf'" target="_blank"><p class="text-content">Términos y condiciones</p></a>
+          </div>
+          <div >
+            <a [href]="rutaStorage+'/contratos_pdf/Politica de Tratamiento de Datos vr 26.05.2020.pdf'" target="_blank"><p class="text-content">Políticas de privacidad</p></a>
+          </div>
+          <div >
+            <a (click)="export()"><p class="text-content">Realizar solicitud física</p></a>
+          </div>
+          <div >
+            <a href="{{ruta}}/etico"><p class="text-content">Código ético</p></a>
+          </div>
+        </div>
+      </div>
+      <div class="vc_col-sm-1/5" id="margerleftfooter2">
+        <div class="title">
+          <h5><strong>Información Útil</strong></h5>
+        </div>
+        <div class="content">
+          <div >
+            <a href="{{ruta}}/blog"><p class="text-content">Blog</p></a>
+          </div>
+          <div >
+            <a href="{{ruta}}/plan"><p class="text-content">Plan de referidos</p></a>
+          </div>
+          <div >
+            <a href="{{ruta}}/como-pagar"><p class="text-content">¿Cómo pagar?</p></a>
+          </div>
+        </div>
+      </div>
+      <div class="vc_col-sm-1/5" id="margerleftfooter4">
+        <div class="title">
+          <h5><strong>Síguenos en</strong></h5>
+        </div>
+        <div class="content">
+          <div class="row">
+            <div class="col-md-2 padding-0 text-center" >
+              <a href="https://www.facebook.com/Creditos-Panda-102126898244433" target="_blank"><i class="fa fa-facebook gusta-icon fs-24"></i></a>
+            </div>
+            <div class="col-md-2 padding-0 text-center" >
+              <a href="https://www.instagram.com/creditospanda/" target="_blank"><i class="fa fa-instagram gusta-icon fs-24"></i></a>
+            </div>
+            <div class="col-md-2 padding-0 text-center" >
+              <a href="https://youtu.be/-8eFEmzdneI" target="_blank"><i class="fa fa-youtube gusta-icon fs-24"></i></a>
+            </div>
+            <!-- <div class="col-md-2 padding-0 text-center" >
+              <a href="https://twitter.com/CreditosPanda" target="_blank"><i class="fa fa-twitter gusta-icon fs-24"></i></a>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row borde-foot">
+      <div class="col-md-12 contenido-foot">
+          <img src="/assets/img/logo-white.png">
+      </div>
+      <div class="col-md-12 contenido-foot">
+          <p style="margin-bottom: 0;">Usar este sitio implica que usted acepta nuestros <a [href]="rutaStorage+'/contratos_pdf/Terminos y condiciones del servicio vr 26.05.2020.pdf'" target="_blank">Términos y condiciones</a> - <a [href]="rutaStorage+'/contratos_pdf/Politica de Tratamiento de Datos vr 26.05.2020.pdf'" target="_blank">Políticas de Privacidad</a></p>
+          <!-- <p style="margin-bottom: 0;">De acuerdo a lo preceptuado en la Ley 1581 de 2012, sobre régimen general de protección de datos personales, y su Decreto Reglamentario 1377 de 2013, los usuarios de Créditos Panda autorizan a Créditos Panda SAS para que reúna la información solicitada dentro del proceso de solicitud del crédito y para que investigue sus antecedentes en los bancos de datos legalmente establecidos en Colombia, y los guarde para uso exclusivo de los servicios ofrecidos.</p>
+          <p style="margin-bottom: 0;">Dando cumplimiento al Decreto 1368 de la SIC de Julio de 2014, publicamos en nuestra página TODOS los costos y gastos asociados a tu línea de crédito y a los servicios que contratas. </p> -->
+          <p style="margin-bottom: 0;">*La novación es un servicio solicitado por ti de manera OPCIONAL, y tú como deudor podrás incurrir en costos asociados a la prestación del servicio. (Artículo 1700 y 1701 del Código Civil Colombiano).</p>
+      </div>
+  </div>
+
+  </div>
+</footer>
+<!--Footer Ends-->

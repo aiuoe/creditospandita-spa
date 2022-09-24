@@ -1,0 +1,101 @@
+<div class="container-fluid">
+  <div class="row align-items-end">
+    <div class="col-xs-12">
+      <div class="card formula mt3em">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>
+              {{ (configToEdit$ | async)?.id ? 'Edición' : 'Registro' }} de
+              Cannon de alojamiento mensual
+            </h2>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-content">
+            <form [formGroup]="formConfig">
+              <div class="form-row align-items-end">
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="email">Estrato</label>
+                    <select formControlName="estrato" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="estrato" class="form-control">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                      </select>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="email">Alojamiento</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="alojamiento"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="email">Monto</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="monto"
+                      required
+                    />
+                  </div>
+                </div>
+                
+              </div>
+              <div class="row">
+                <div
+                  class="col-auto my-2"
+                  *ngIf="(configToEdit$ | async)?.id; else noEditMode"
+                >
+                  <button
+                    type="button"
+                    class="btn btn-raised btn-primary"
+                    [disabled]="formConfig.invalid"
+                    (click)="edit()"
+                  >
+                    Editar
+                  </button>
+                </div>
+                <ng-template #noEditMode>
+                  <div class="col-auto my-2">
+                    <button
+                      type="button"
+                      class="btn btn-raised btn-primary"
+                      [disabled]="formConfig.invalid"
+                      (click)="add()"
+                    >
+                      Guardar
+                    </button>
+                  </div>
+                </ng-template>
+
+                <div class="col-auto my-2">
+                  <button
+                    type="button"
+                    class="btn btn-raised btn-warning"
+                    [disabled]="!formConfig.dirty"
+                    (click)="formConfig.reset()"
+                  >
+                    Limpiar
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

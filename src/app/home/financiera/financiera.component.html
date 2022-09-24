@@ -1,0 +1,658 @@
+
+<div class="container-fluid padding-mv-0">
+  <div class="row justify-content-center margin-mv-0">
+    <div class="col-sm-12 col-md-12 col-lg-12 padding-mv-0">
+
+      <!-- <app-time-per-client></app-time-per-client> -->
+
+
+      <div class="vc_row wpb_row vc_row-fluid grisaseo">
+        <div class="wpb_column vc_column_container vc_col-sm-2"><div class="vc_column-inner"><div class="wpb_wrapper"></div></div></div><div class="wpb_column vc_column_container vc_col-sm-8 mt3em"><div class="vc_column-inner"><div class="wpb_wrapper"><link rel="stylesheet" id="calculadora-css" href="http://creditospanda.com/wp-content/plugins/CalculadoraPlus/css/calculadora.css" type="text/css" media="all">
+            <div class="fed_tab_content" data-id="fed_register_tab">
+              <form [formGroup]="registroForm" class="form_calc fed_form_post formula" name="financiera">
+                <div class="row margenesform">
+                    <!-- <div class="row line">
+                        <div class="col-xs-3 stepText1-1"><strong>Información básica</strong></div>
+                        <div class="col-xs-3 stepText1-2"><strong>Referencias</strong></div>
+                        <div class="col-xs-3 stepText1-3"><strong>Información financiera y laboral</strong></div>
+                        <div class="col-xs-3 stepText1-4"><strong>Verificación de datos importantes</strong></div>
+                  
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-3"><div class="step step1-1 "></div></div>
+                        <div class="col-xs-3"><div class="step step1-2 "></div></div>
+                        <div class="col-xs-3"><div class="step step1-3 active"></div></div>
+                        <div class="col-xs-3"><div class="step step1-4"></div></div>
+                    </div>  -->
+                    <ul class="list-unstyled multi-steps">
+                        <li (click)="edit(1)" >Información básica</li>
+                        <li (click)="edit(2)">Referencias</li>
+                        <li (click)="edit(3)" class="is-active">Info. Financiera y laboral</li>
+
+                      </ul>
+                  </div>
+                <div class="row">
+                <div class="col-md-6">
+                                <div class="form-group">
+
+                  <label>Banco</label>
+                  <select formControlName="banco" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="banco" class="form-control" required="true">
+                    <option value="Bancolombia">Bancolombia</option>
+                    <option value="Banco Davivienda">Banco Davivienda</option>
+                    <option value="Banco de Bogotá">Banco de Bogotá</option>
+                    <option value="Banco agrario">Banco agrario</option>
+                    <option value="Banco de Occidente">Banco de Occidente</option>
+                    <option value="Banco AV Villas">Banco AV Villas</option>
+                    <option value="Banco Caja Social">Banco Caja Social</option>
+                    <option value="Banco de las Microfinanzas -Bancamía">Banco de las Microfinanzas -Bancamía</option>
+                    <option value="Banco Falabella">Banco Falabella</option>
+                    <option value="Banco Finandina">Banco Finandina</option>
+                    <option value="Banco GNB Sudameris">Banco GNB Sudameris</option>
+                    <option value="Banco Pichincha">Banco Pichincha</option>
+                    <option value="Banco Popular">Banco Popular</option>
+                    <option value="Banco ProCredit Colombia">Banco ProCredit Colombia</option>
+                    <option value="Banco Santander de Negocios">Banco Santander de Negocios</option>
+                    <option value="Bancoomeva">Bancoomeva</option>
+                    <option value="BBVA Colombia">BBVA Colombia</option>
+                    <option value="Colpatria Multibanca - Scotiabank">Colpatria Multibanca - Scotiabank</option>
+                    <option value="Coopcentral">Coopcentral</option>
+                    <option value="Banco Itaú (Helm Bank, Corpbanca)">Banco Itaú (Helm Bank, Corpbanca)</option>
+                  </select>
+                  <div *ngIf="submitted && f.banco.errors" class="error">
+                    <div *ngIf="f.banco.errors.required"><small>Banco es requerido</small></div>
+                    </div>
+                 </div>
+                  </div>
+                  <div class="col-md-6">
+                                  <div class="form-group">
+
+                  <label>Tipo de Cuenta</label>
+                  <select formControlName="tipoCuenta" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="tipo_cuenta" class="form-control" required="true">
+                    <option value="Ahorros">Ahorros</option>
+                    <option value="Corriente">Corriente</option>
+                  </select>   
+                  <div *ngIf="submitted && f.tipoCuenta.errors" class="error">
+                    <div *ngIf="f.tipoCuenta.errors.required"><small>Tipo de Cuenta es requerido</small></div>
+                    </div>  
+                </div>
+                </div>
+
+                  </div>
+                  <div class="row">
+                <div class="col-md-12">
+                                  <div class="form-group">
+
+                  <label>Número de cuenta</label>
+                  <input formControlName="nCuenta" type="text" name="numero_cuenta"  class="form-control " placeholder="" required="required">  
+                  <div *ngIf="submitted && f.nCuenta.errors" class="error">
+                    <div *ngIf="f.nCuenta.errors.required"><small>Número de cuenta es requerido</small></div>
+                    <div *ngIf="f.nCuenta.errors.pattern"><small>Este campo es numerico</small></div>
+                    </div> 
+                </div>
+                </div>
+                </div>
+                <div class="row">
+                <div class="col-md-6">
+                                  <div class="form-group">
+
+      
+
+                  <label>Mi salario <small> (Colocar el valor sin puntos o comas)</small></label>
+                  <input [value]="cantidad"  (click)="limpiar()" (change)="Ingresos_totales_mensuales($event.target.value)" type="text" name="ing_mensuales" id="ing_mensuales" class="form-control " placeholder="">            
+                  <div *ngIf="submitted && f.ingresoTotalMensual.errors" class="error">
+                    <div *ngIf="f.ingresoTotalMensual.errors.required"><small>Mi salario es requerido</small></div>
+                    <div *ngIf="f.ingresoTotalMensual.errors.pattern"><small>Este campo es numerico</small></div>
+                    </div>
+                </div>
+                  </div>
+                <div class="col-md-6">
+                                <div class="form-group">
+
+                  <label>Lo que gasto al mes <small> (Colocar el valor sin puntos o comas)</small></label>
+                  <input [value]="cantidad2"   (click)="limpiar()" (change)="Egresos_totales_mensuales($event.target.value)" type="text" name="egr_mensuales" class="form-control " placeholder="" required="required">                 </div>
+                  <div *ngIf="submitted && f.egresoTotalMensual.errors" class="error">
+                    <div *ngIf="f.egresoTotalMensual.errors.required"><small>Lo que gasto al mes es requerido</small></div>
+                    
+                    <div *ngIf="f.egresoTotalMensual.errors.pattern"><small>Este campo es numerico</small></div>
+                    </div>
+                </div>
+                  </div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="form-group">
+
+            <label>Otros Ingresos Mensuales </label>
+            <select formControlName="otroIngreso" (change)="otromensual()" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="pagan" class="form-control" required="true">
+                <option value=""></option>
+                <option value="Si">Si</option>
+                <option value="No">No</option>
+              </select>      
+            <div *ngIf="submitted && f.otroIngreso.errors" class="error">
+            <div *ngIf="f.otroIngreso.errors.required"><small>Otros Ingresos Mensuales es requerido</small></div>
+            </div>
+            </div>
+            </div>
+            <div class="col-md-6" *ngIf="mostrar==1">
+              <div class="form-group">
+
+                      <label>¿De donde proviene?</label>
+                      <select formControlName="proviene" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="pagan" class="form-control" required="true">
+                          <option value="Arriendo">Arriendo</option>
+                          <option value="Salario Pareja">Salario Pareja</option>
+                          <option value="Actividad Comercial Extra">Actividad Comercial Extra</option>
+                          <option value="Bonificaciones">Bonificaciones</option>
+                        </select>      
+                      <div *ngIf="submitted && f.proviene.errors" class="error">
+                      <div *ngIf="f.proviene.errors.required"><small>Donde proviene es requerido</small></div>
+                      </div>
+                      </div>
+                      </div>
+                      <div class="col-md-6" *ngIf="mostrar==1">
+                          <div class="form-group">
+          
+                                  <label>Total otros ingresos mensuales <small> (Colocar el valor sin puntos o comas)</small></label>
+                                  <input [value]="cantidad3" (click)="limpiar()" (change)="total_otro_ingr_mensual($event.target.value)" type="text" name="total_otro_ingr_mensual"  class="form-control " placeholder="" >            
+                                  <div *ngIf="submitted && f.total_otro_ingr_mensual.errors" class="error">
+                                  <div *ngIf="f.total_otro_ingr_mensual.errors.required"><small>Total otros ingresos mensuales es requerido</small></div>
+                                  <div *ngIf="f.total_otro_ingr_mensual.errors.pattern"><small>Este campo es numerico</small></div>
+
+                                  </div>
+                                  </div>
+                                  </div>
+
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <div class="form-group">
+
+<label>¿Como te pagan?</label>
+
+<select formControlName="comoTePagan" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="pagan" class="form-control" required="true">
+<option value="Transferencia bancaria">Transferencia bancaria</option>
+<option value="Cheque">Cheque</option>
+<option value="Efectivo">Efectivo</option>
+</select>
+<div *ngIf="submitted && f.comoTePagan.errors" class="error">
+<div *ngIf="f.comoTePagan.errors.required"><small>¿Como te pagan? es requerido</small></div>
+</div>
+</div>
+</div>
+  <div class="col-md-6">
+      <div class="form-group">
+
+      <label>Periodo de pago de Nómina</label>
+      <select (change)="periodoPN($event.target.value)" formControlName="periodoPagoNomina" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="periodoPagoNomina" class="form-control" required="true">
+      <option value="Diario">Diario</option>
+      <option value="Semanal">Semanal</option>
+      <option value="Quincenal">Quincenal</option>
+      <option value="Mensual">Mensual</option>
+      </select>
+      <div *ngIf="submitted && f.periodoPagoNomina.errors" class="error">
+      <div *ngIf="f.periodoPagoNomina.errors.required"><small>Este campo es requerido</small></div>
+      </div>
+  </div>
+  </div>
+
+</div>
+<div class="row">
+  <div class="col-md-6" *ngIf="isPeriodoSelect && isDiario">
+    <div class="form-group">
+
+    <label>Dias de pago</label>
+    <ng-multiselect-dropdown
+    name="dias"
+    [placeholder]="'Seleccionar'"
+    [data]="dias"
+    formControlName="diasP"
+    style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" id="ciudad" class="form-control select-dropdown" required="true"
+
+    [settings]="dropdownSettings"
+    (onSelect)="diasSelected($event)">
+</ng-multiselect-dropdown>
+    <!-- <ngx-select-dropdown
+    formControlName="diasP"
+    [multiple]="true"
+    [config]="diasSelectConfig"
+    [options]="dias"
+    (change)="diasSelected($event.value)"
+    style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" id="ciudad" class="form-control select-dropdown" required="true"
+></ngx-select-dropdown> -->
+    <div *ngIf="submitted && f.diasP.errors" class="error">
+    <div *ngIf="f.diasP.errors.required"><small>Este campo es requerido</small></div>
+    </div>
+</div>
+</div>
+  <div class="col-md-6">
+      <div class="form-group">
+
+      <label>Tienes tarjeta de Credito </label>
+      <select formControlName="tarjetasCredito" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="tarjetasCredito" class="form-control" required="true">
+      <option value="Si">Si</option>
+      <option value="No">No</option>
+      </select>
+      <div *ngIf="submitted && f.tarjetasCredito.errors" class="error">
+      <div *ngIf="f.tarjetasCredito.errors.required"><small>Este campo es requerido</small></div>
+      </div>
+  </div>
+  </div>
+
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <div class="form-group">
+
+    <label>Tienes o has tenido una obligación (crédito) con una entidad financiera ? </label>
+    <select formControlName="creditosBanco" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="creditosBanco" class="form-control" required="true">
+    <option value="Si">Si</option>
+    <option value="No">No</option>
+    </select>
+    <div *ngIf="submitted && f.creditosBanco.errors" class="error">
+    <div *ngIf="f.creditosBanco.errors.required"><small>Este campo es requerido</small></div>
+    </div>
+</div>
+</div>
+<div class="col-md-6">
+  <div class="form-group">
+
+  <label>Tienes créditos o deudas que estas pagando en este momento? </label>
+  <select formControlName="deudaActual" (change)="deuda($event.target.value)" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="deudaActual" class="form-control" required="true">
+  <option value="Si">Si</option>
+  <option value="No">No</option>
+  </select>
+  <div *ngIf="submitted && f.deudaActual.errors" class="error">
+  <div *ngIf="f.deudaActual.errors.required"><small>Este campo es requerido</small></div>
+  </div>
+</div>
+</div>
+
+<div class="col-md-6" *ngIf="isPagando">
+  <div class="form-group">
+
+          <label> Cual es la cuota total mensual de todos los creditos que estas pagando? <small> (Colocar el valor sin puntos o comas)</small></label>
+          <input [value]="pagandoActual2" (click)="limpiar()" (change)="pagandoActual($event.target.value)"  type="text" name="pagandoActual" class="form-control " placeholder="" >                 </div>
+          <div *ngIf="submitted && f.pagandoActual.errors" class="error">
+              <div *ngIf="f.pagandoActual.errors.required"><small>pagandoActual es requerido</small></div>
+              <div *ngIf="f.pagandoActual.errors.pattern"><small>Este campo es numerico y tiene que ser mayor a cero</small></div>
+
+              </div>
+          </div>
+  <div class="col-md-6">
+      <div class="form-group">
+
+      <label>Tienes otras cuentas de ahorro o corriente?</label>
+      <select formControlName="otrasCuentas" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="otrasCuentas" class="form-control" required="true">
+      <option value="Si">Si</option>
+      <option value="No">No</option>
+      </select>
+      <div *ngIf="submitted && f.otrasCuentas.errors" class="error">
+      <div *ngIf="f.otrasCuentas.errors.required"><small>Este campo es requerido</small></div>
+      </div>
+  </div>
+  </div>
+</div>
+<div class="row">
+                <div class="col-md-6">
+                                  <div class="form-group">
+
+                  <label>Situación Laboral</label>
+                  <select formControlName="situacionLaboral" (change)="Activities()" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="sit_laboral" class="form-control" required="true" >
+                    <option value="Empleado/a termino indefinido">Empleado/a termino indefinido</option>
+                    <option value="Empleado/a termino fijo renovable">Empleado/a termino fijo renovable </option>
+                    <option value="Empleado/a por servicios">Empleado/a por servicios </option>
+                    <option value="Empleado/a obra labor">Empleado/a obra labor</option>
+                    <option value="Empleado/a temporal">Empleado/a temporal</option>
+                    <option value="Independiente">Independiente</option>
+                    <option value="Desempleado">Desempleado/a</option>
+                    <option value="Pensionado">Pensionado/a</option>
+                    <option value="Estudiante">Estudiante</option>
+                    <option value="Contratista">Contratista</option>
+                  </select>
+                  <div *ngIf="submitted && f.situacionLaboral.errors" class="error">
+                    <div *ngIf="f.situacionLaboral.errors.required"><small>Situación Laboral es requerido</small></div>
+                    </div>
+                </div>
+                </div>
+                  <div class="col-md-6">
+                                  <div class="form-group">
+
+                  <label>Actividad</label>
+                  <select formControlName="actividad" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="actividad" id="actividad" class="form-control" required="true">
+                    <option value="">Seleccione</option>
+                    <option *ngFor="let a of activities" value="{{a.name}}">{{a.name}}</option>
+                    
+                  </select>
+                  <div *ngIf="submitted && f.actividad.errors" class="error">
+                    <div *ngIf="f.actividad.errors.required"><small>Actividad es requerido</small></div>
+                    </div> 
+                </div>
+                </div>
+                </div>
+                <div class="row" *ngIf="camposLaborales==1">
+                  <div class="col-md-6" *ngIf="isEmpleado">
+                      <div class="form-group">
+      
+                      <label>Tipo de empresa</label>
+                      <select formControlName="tipoEmpresa" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="tipoEmpresa" class="form-control" required="true">
+                      <option value="Privada">Privada</option>
+                      <option value="Publica">Publica</option>
+                      </select>
+                      <div *ngIf="submitted && f.tipoEmpresa.errors" class="error">
+                      <div *ngIf="f.tipoEmpresa.errors.required"><small>Este campo es requerido</small></div>
+                      </div>
+                  </div>
+                  </div>
+                  <div class="col-md-6" *ngIf="isIndependiente">
+                      <div class="form-group">
+      
+                      <label>Empresa constituida</label>
+                      <select (change)="isEmpresaConst($event.target.value)" formControlName="empresaConstituida" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="empresaConstituida" class="form-control" required="true">
+                      <option value="Si">Si</option>
+                      <option value="No">No</option>
+                      </select>
+                      <div *ngIf="submitted && f.empresaConstituida.errors" class="error">
+                      <div *ngIf="f.empresaConstituida.errors.required"><small>Este campo es requerido</small></div>
+                      </div>
+                  </div>
+                  </div>
+              </div>
+              <div class="row" *ngIf="isIndependiente">
+                  <div class="col-md-6" *ngIf="isNit">
+                      <div class="form-group">
+      
+                      <label>NIT (opcional)</label>
+                      <input formControlName="nit" type="text" name="nit"  class="form-control " placeholder="" >            
+                      <div *ngIf="submitted && f.nit.errors" class="error">
+                      <div *ngIf="f.nit.errors.required"><small>Este campo es requerido</small></div>
+                      </div>
+                  </div>
+                  </div>
+                  <div class="col-md-6" *ngIf="isRut">
+                      <div class="form-group">
+      
+                      <label>RUT (opcional)</label>
+                      <input formControlName="rut" type="text" name="rut"  class="form-control " placeholder="" >            
+                      <div *ngIf="submitted && f.rut.errors" class="error">
+                      <div *ngIf="f.rut.errors.required"><small>Este campo es requerido</small></div>
+                      </div>
+                  </div>
+                  </div>
+              </div>
+<div class="row">
+                <div class="col-md-6"  *ngIf="camposLaborales==1">
+                  <div class="form-group">
+
+                  <label>Antiguedad Laboral</label>
+                  <select formControlName="antiguedadLaboral" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="antiguedad" id="antiguedad" class="form-control" required="true">
+                    <option value="menos de 2 meses">menos de 2 meses</option>
+                    <option value="3 meses">3 meses</option>
+                    <option value="4 meses">4 meses</option>
+                    <option value="5 meses">5 meses</option>
+                    <option value="6 meses">6 meses</option>
+                    <option value="7 meses">7 meses</option>
+                    <option value="8 meses">8 meses</option>
+                    <option value="9 meses">9 meses</option>
+                    <option value="10 meses">10 meses</option>
+                    <option value="11 meses">11 meses</option>
+                    <option value="1 Año">1 Año</option>
+                    <!-- <option value="Menos de 1 Año">Menos de 1 Año</option> -->
+                    <option value="Dos Años">Dos Años</option>
+                    <option value="Tres Años o más">Tres Años o más</option>
+                  </select>
+                  <div *ngIf="submitted && f.antiguedadLaboral.errors" class="error">
+                    <div *ngIf="f.antiguedadLaboral.errors.required"><small>Antiguedad Laboral es requerido</small></div>
+                    </div>
+                </div>
+                </div>
+                
+                <div class="col-md-6"  *ngIf="camposLaborales==1">
+                                <div class="form-group">
+
+                  <label>Nombre de la empresa</label>
+                  <input formControlName="nombreEmpresa" type="text" name="name_empresa" id="name_empresa" class="form-control " placeholder="" required="required">                 </div>
+                  <div *ngIf="submitted && f.nombreEmpresa.errors" class="error">
+                    <div *ngIf="f.nombreEmpresa.errors.required"><small>Nombre de la empresa es requerido</small></div>
+                    </div>
+                </div>
+                  </div>
+
+                <div class="row" *ngIf="camposLaborales==1">
+                  <div class="col-md-6" >
+                    <div class="form-group">
+
+                <label>Nombre del Cargo</label>
+                <input formControlName="nombreCargo" type="text" name="nombreCargo" id="nombreCargo" class="form-control " placeholder="" required="required">                 </div>
+                <div *ngIf="submitted && f.nombreCargo.errors" class="error">
+                    <div *ngIf="f.nombreCargo.errors.required"><small>Este campo es requerido</small></div>
+                    </div>
+                </div>
+                <div class="col-md-6" >
+                                  <div class="form-group">
+
+                  <label>Teléfono de la empresa</label>
+                  <input formControlName="telefonoEmpresa" type="text" name="tel_empresa" id="tel_empresa" class="form-control " placeholder="" required="required">            
+                  <div *ngIf="submitted && f.telefonoEmpresa.errors" class="error">
+                    <div *ngIf="f.telefonoEmpresa.errors.required"><small>Teléfono de la empresa es requerido</small></div>
+                    <div *ngIf="f.telefonoEmpresa.errors.pattern"><small>No se reconoce el formato del teléfono</small></div>
+                    <div *ngIf="f.telefonoEmpresa.errors.maxlength"><small>Este campo debe tener maximo 10 caracteres</small></div>
+                    <div *ngIf="f.telefonoEmpresa.errors.minlength"><small>Este campo debe tener minimo 10 caracteres</small></div>
+                    </div>
+                </div>
+                  </div>
+                  
+                  </div> 
+
+                  <div class="row" *ngIf="camposLaborales==1">
+                    <div class="col-md-6" >
+                        <div class="form-group">
+
+                    <label>Ciudad donde trabajas</label>
+                    <ngx-select-dropdown
+                        formControlName="ciudads"
+                        [multiple]="false"
+                        [config]="clientSelectConfig"
+                        [options]="countries"
+                        (change)="ciudadTrabajasSelected($event.value)"
+
+
+                        style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" id="ciudad" class="form-control select-dropdown" required="true"
+                     
+                        ></ngx-select-dropdown>
+                    </div>
+                    <div *ngIf="submitted && f.ciudadTrabajas.errors" class="error">
+                        <div *ngIf="f.ciudadTrabajas.errors.required"><small>Este campo es requerido</small></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6" >
+                        <div class="form-group">
+
+                    <label>Direccion de la empresa</label>
+                    <input formControlName="direccionEmpresa" type="text" name="direccionEmpresa" id="direccionEmpresa" class="form-control " placeholder="" required="required">                 </div>
+                    <div *ngIf="submitted && f.direccionEmpresa.errors" class="error">
+                        <div *ngIf="f.direccionEmpresa.errors.required"><small>Este campo es requerido</small></div>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="row" *ngIf="camposLaborales==1">
+                    <div class="col-md-6" >
+                        <div class="form-group">
+
+                            <label>Sector Economico que se dedica</label>
+                            <select formControlName="sectorEconomico" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="sectorEconomico" id="sectorEconomico" class="form-control" required="true">
+                            <option value="Agropecuario">Agropecuario</option>
+                            <option value="Alimentos y bebidas">Alimentos y bebidas</option>
+                            <option value="Aviación, Turismo">Aviación, Turismo</option>
+                            <option value="Consultorías -Asesorías">Consultorías -Asesorías</option>
+                            <option value="Comercio">Comercio</option>
+                            <option value="Construcción">Construcción</option>
+                            <option value="Educación">Educación</option>
+                            <option value="Editorial e impresión">Editorial e impresión</option>
+                            <option value="Energía, minería (hierro, acero, petróleo, otros materiales)">Energía, minería (hierro, acero, petróleo, otros materiales)</option>
+                            <option value="Entretenimiento">Entretenimiento</option>
+                            <option value="Empresas del estado, gubernamentales">Empresas del estado, gubernamentales</option>
+                            <option value="Manufactura">Manufactura</option>
+                            <option value="Plástico, caucho">Plástico, caucho</option>
+                            <option value="Publicidad y mercadeo">Publicidad y mercadeo</option>
+                            <option value="Químicos">Químicos</option>
+                            <option value="Salud">Salud</option>
+                            <option value="Servicios">Servicios</option>
+                            <option value="Tecnología y software">Tecnología y software</option>
+                            <option value="Telecomunicaciones">Telecomunicaciones</option>
+                            <option value="Textiles (prendas de vestir, calzado)">Textiles (prendas de vestir, calzado)</option>
+                            <option value="Transporte, vehículos y partes">Transporte, vehículos y partes</option>
+                            <option value="Transporte de pasajeros ">Transporte de pasajeros </option>
+                            <option value="Grandes superficies (Supermercados)">Grandes superficies (Supermercados)</option>
+                            <option value="Comida a domicilio">Comida a domicilio</option>
+                            <option value="Otro">Otro</option>
+                            </select>
+                            <div *ngIf="submitted && f.sectorEconomico.errors" class="error">
+                            <div *ngIf="f.sectorEconomico.errors.required"><small>Este campo es requerido</small></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6" *ngIf="isEmpleado">
+                        <div class="form-group">
+
+                            <label>Tamaño de la empresa donde laboras</label>
+                            <select formControlName="tamanoEmpresa" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="tamanoEmpresa" id="tamanoEmpresa" class="form-control" required="true">
+                            <option value="De 1 a 10">De 1 a 10</option>
+                            <option value="De 11 a 25">De 11 a 25 </option>
+                            <option value="De 26 a 50">De 26 a 50 </option>
+                            <option value="De 51 a 100">De 51 a 100 </option>
+                            <option value="De 101 a 500">De 101 a 500 </option>
+                            <option value="Mas de 500">Mas de 500 </option>
+                            </select>
+                            <div *ngIf="submitted && f.tamanoEmpresa.errors" class="error">
+                            <div *ngIf="f.tamanoEmpresa.errors.required"><small>Este campo es requerido</small></div>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="row" *ngIf="isPensionado">
+                    <div class="col-md-6" >
+                        <div class="form-group">
+
+                    <label>Cual es tu fondo de pension ?</label>
+                    <input formControlName="fondoPension" type="text" name="fondoPension" id="fondoPension" class="form-control " placeholder="" required="required">                 </div>
+                    <div *ngIf="submitted && f.fondoPension.errors" class="error">
+                        <div *ngIf="f.fondoPension.errors.required"><small>Este campo es requerido</small></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6" >
+                        <div class="form-group">
+
+                    <label>Banco donde recibes tu pension</label>
+                    <input formControlName="bancoPension" type="text" name="bancoPension" id="bancoPension" class="form-control " placeholder="" required="required">                 </div>
+                    <div *ngIf="submitted && f.bancoPension.errors" class="error">
+                        <div *ngIf="f.bancoPension.errors.required"><small>Este campo es requerido</small></div>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6" *ngIf="isEstudiante" >
+                      <div class="form-group">
+
+                          <label>Cual es tu fuente de ingreso ?</label>
+                          <select formControlName="fuenteIngreso" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="fuenteIngreso" id="fuenteIngreso" class="form-control" required="true">
+                          <option value="Familiares">Familiares</option>
+                          <option value="Trabajos particulares">Trabajos particulares</option>
+                          </select>
+                          <div *ngIf="submitted && f.fuenteIngreso.errors" class="error">
+                          <div *ngIf="f.fuenteIngreso.errors.required"><small>Este campo es requerido</small></div>
+                          </div>
+                      </div>
+                  </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+
+      <label>¿En qué usarás el crédito?</label>
+    <select formControlName="usoCredito" (change)="usarCredito($event.target.value)" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="usaras" class="form-control" required="true">
+        <option value="Viajes">Viajes</option>
+        <option value="Útiles escolares">Útiles escolares</option>
+        <option value="Matrícula de mis hijos">Matrícula de mis hijos</option>
+        <option value="Matrícula de mi universidad">Matrícula de mi universidad</option>
+        <option value="Negocio">Negocio</option>
+        <option value="Compra de medicamentos">Compra de medicamentos</option>
+        <option value="Urgencias médicas">Urgencias médicas</option>
+        <option value="Pago de deudas">Pago de deudas</option>
+        <option value="Pago de servicios públicos">Pago de servicios públicos</option>
+        <option value="Pago de arriendo">Pago de arriendo</option>
+        <option value="Reparación vehículo / Moto">Reparación vehículo / Moto</option>
+        <option value="Seguros vehículo / Moto">Seguros vehículo / Moto</option>
+        <option value="Arreglo de la casa">Arreglo de la casa</option>
+        <option value="Mercado">Mercado</option>
+        <option value="Diversión (fiesta,cine,etc)">Diversión (fiesta,cine,etc)</option>
+        <option value="Pago de impuestos">Pago de impuestos</option>
+        <option value="Tecnología (celular,televisor, electrodomésticos)">Tecnología (celular,televisor, electrodomésticos)</option>
+        <option value="Otros">Otros</option>
+      </select>
+      <div *ngIf="submitted && f.usoCredito.errors" class="error">
+        <div *ngIf="f.usoCredito.errors.required"><small>¿En qué usarás el crédito? es requerido</small></div>
+        </div> 
+      </div>
+      </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6" *ngIf="isOtros">
+                        <div class="form-group">
+
+                    <label>Cual?</label>
+                    <input formControlName="cual" type="text" name="cual" id="cual" class="form-control " placeholder="" required="required">                 </div>
+                    <div *ngIf="submitted && f.cual.errors" class="error">
+                        <div *ngIf="f.cual.errors.required"><small>Este campo es requerido</small></div>
+                        </div>
+                    </div>
+                </div>  
+                
+                <div class="row">
+                  <div *ngIf="msjSubmit" class="col-md-12 text-center">
+                      <img src="/assets/img/load.gif" width="100" height="100">
+                      <p>Enviando solicitud espere...</p>
+                  </div>
+<!-- <div class="col-md-12 text-center"> -->
+
+  <!-- <a class="btn_actdash" >Actualizar</a> -->
+
+  <!-- <input type="submit" name="financiera" value="Continuar"> -->
+  <!--<a class="btn_actdash" href="<?php echo get_site_url() . '/dashboard';?>">Dashboard</a>-->
+
+<!--<button id="btn-sig" class="btn btn-primary" type="submit">Siguiente</button>-->
+<!-- </div> -->
+                  <div class="col-md-12 padd_top_20 text-center">
+  
+</div>
+              </div>
+                
+                
+                
+                                <div class="row">
+                                  <div class="col-md-12 text-center">
+                                    <button (click)="edit(1)" type="button" class="btn btn-raised btn-primary" >Guardar Cambios</button>
+                                </div>
+                                    <div class="col-md-12 padd_top_20 text-center">
+                    
+                  </div>
+                                </div>
+            </form>
+            
+              </div>
+
+
+
+<div class="wpb_text_column wpb_content_element " >
+    <div class="wpb_wrapper">
+        
+
+    </div>
+</div>
+</div></div></div><div class="wpb_column vc_column_container vc_col-sm-2"><div class="vc_column-inner"><div class="wpb_wrapper"></div></div></div></div>
+
+      <!-- FINALLLLLLLLLLLLL-->
+    </div>
+  </div>
+  <!-- <div class="row justify-content-center py-3 my-1">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <app-time-per-user></app-time-per-user>
+    </div>
+  </div> -->
+</div>

@@ -1,0 +1,279 @@
+
+<div class="container-fluid padding-mv-0">
+  <div class="row justify-content-center margin-mv-0">
+    <div class="col-sm-12 col-md-12 col-lg-12 padding-mv-0">
+
+      <!-- <app-time-per-client></app-time-per-client> -->
+
+
+      <div class="vc_row wpb_row vc_row-fluid grisaseo">
+        <div class="wpb_column vc_column_container vc_col-sm-2"><div class="vc_column-inner"><div class="wpb_wrapper"></div></div></div><div class="wpb_column vc_column_container vc_col-sm-8 mt3em"><div class="vc_column-inner"><div class="wpb_wrapper"><link rel="stylesheet" id="calculadora-css" href="http://creditospanda.com/wp-content/plugins/CalculadoraPlus/css/calculadora.css" type="text/css" media="all">
+            <div class="fed_tab_content" data-id="fed_register_tab">
+              <form (ngSubmit)="edit(2)" [formGroup]="registroForm" class="form_calc fed_form_post formula" name="ref">
+                <div class="row margenesform" >
+                  <!-- <div class="row line">
+                      <div class="col-xs-3 stepText1-1"><strong>Información básica</strong></div>
+                      <div class="col-xs-3 stepText1-2"><strong>Referencias</strong></div>
+                      <div class="col-xs-3 stepText1-3"><strong>Información financiera y laboral</strong></div>
+                      <div class="col-xs-3 stepText1-4"><strong>Verificación de datos importantes</strong></div>
+                
+                  </div>
+                  <div class="row">
+                      <div class="col-xs-3"><div class="step step1-1 "></div></div>
+                      <div class="col-xs-3"><div class="step step1-2 active"></div></div>
+                      <div class="col-xs-3"><div class="step step1-3"></div></div>
+                      <div class="col-xs-3"><div class="step step1-4"></div></div>
+                  </div>  -->
+                  <ul class="list-unstyled multi-steps">
+                      <li (click)="edit(1)">Información básica</li>
+                      <li (click)="edit(2)" class="is-active">Referencias</li>
+                      <li (click)="edit(3)" >Info. Financiera y laboral</li>
+                    </ul>
+                </div>
+              <div class="row">
+                  <div class="col-md-12">
+                      <h2 class="txtlft">Referencia Personal</h2>
+                  </div>
+                
+                <div class="col-md-6">
+                                <div class="form-group">
+
+                  <label>Nombres</label>
+                  <input formControlName="ReferenciaPersonalNombres" type="text" name="nombre_personal" value="" class="form-control " placeholder="" required="required">                 </div>
+                  <div *ngIf="submitted && f.ReferenciaPersonalNombres.errors" class="error">
+                      <div *ngIf="f.ReferenciaPersonalNombres.errors.required"><small>Nombres es requerido</small></div>
+                      <div *ngIf="f.ReferenciaPersonalNombres.errors.pattern"><small>Este campo solo permite letras</small></div>
+                  </div>
+                  </div>
+                  <div class="col-md-6">
+                                  <div class="form-group">
+
+                  <label>Apellidos</label>
+                  <input formControlName="ReferenciaPersonalApellidos" type="text" name="apellido_personal" value="" class="form-control " placeholder="" required="required">        
+                  <div *ngIf="submitted && f.ReferenciaPersonalApellidos.errors" class="error">
+                      <div *ngIf="f.ReferenciaPersonalApellidos.errors.required"><small>Apellidos es requerido</small></div>
+                      <div *ngIf="f.ReferenciaPersonalApellidos.errors.pattern"><small>Este campo solo permite letras</small></div>
+                  </div>
+                  </div>
+                </div>
+
+                  </div>
+                  <div class="row">
+                <div class="col-md-6">
+                                  <div class="form-group">
+
+                  <label>Seleccione la Ciudad</label>
+                  <!-- <select formControlName="ReferenciaPersonalCiudadFk" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="ciudad_personal" id="ciudad_personal" class="form-control" required="true">
+                    <option value=""></option>
+                    <option *ngFor="let c of countries">{{ c.name }}</option>
+                  </select> -->
+                  <ngx-select-dropdown
+                  [multiple]="false"
+                  [config]="clientSelectConfig"
+                  [options]="countries"
+                  (change)="clientSelected($event.value)"
+                  formControlName="ReferenciaPersonalCiudad"
+                  style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" id="ciudad" class="form-control select-dropdown" required="true"
+               
+                  ></ngx-select-dropdown>
+                  <div *ngIf="submitted && f.ReferenciaPersonalCiudadFk.errors" class="error">
+                      <div *ngIf="f.ReferenciaPersonalCiudadFk.errors.required"><small>Ciudad es requerido</small></div>
+                  </div>
+                </div>
+                </div>
+                <div class="col-md-6">
+                                  <div class="form-group">
+
+                  <label>Teléfono celular</label>
+                  <input type="text" formControlName="ReferenciaPersonalTelefono" name="tlfn_personal" value="" class="form-control " placeholder="" required="required">            
+                  <div *ngIf="submitted && f.ReferenciaPersonalTelefono.errors" class="error">
+                      <div *ngIf="f.ReferenciaPersonalTelefono.errors.required"><small>Teléfono celular es requerido</small></div>
+                      <div *ngIf="f.ReferenciaPersonalTelefono.errors.pattern"><small>No se reconoce el formato del teléfono</small></div>
+                      <div *ngIf="f.ReferenciaPersonalTelefono.errors.maxlength"><small>Este campo debe tener maximo 10 caracteres</small></div>
+                  </div>
+                  </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="form-group">
+
+                        <label>Relación</label>
+                        <select formControlName="relacionp" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="ciudad_personal" id="ciudad_personal" class="form-control" required="true">
+                        <option value="Compañero de trabajo">Compañero de trabajo </option>
+                        <option value="Amigo">Amigo</option>
+                        <option value="Socio">Socio</option>
+                        <option value="Pareja">Pareja</option>
+                        <option value="Jefe">Jefe</option>
+                        <option value="Otro">Otro</option>
+                 
+                        
+                        </select>
+            
+                        <div *ngIf="submitted && f.relacionp.errors" class="error">
+                            <div *ngIf="f.relacionp.errors.required"><small>Relación Personal</small></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+
+                        <label>Email (Opcional)</label>
+                        <input type="text" formControlName="emailp" name="emailp" id="emailp" value="" class="form-control " placeholder="">            
+            
+                        <div *ngIf="submitted && f.emailp.errors" class="error">
+                            <div *ngIf="f.emailp.errors.required"><small>Email referencia Personal</small></div>
+                        </div>
+                    </div>
+                </div>
+                  </div>
+
+                  <div class="row">
+<p id="mar">&nbsp;</p>
+<div class="col-md-12 ">
+                <h2 class="txtlft">Referencia Familiar</h2>
+</div>
+                <div class="col-md-6">
+                                <div class="form-group">
+
+                  <label>Nombres</label>
+                  <input formControlName="ReferenciaFamiliarNombres" type="text" name="nombre_familiar" value="" class="form-control " placeholder="" required="required">                 </div>
+                  <div *ngIf="submitted && f.ReferenciaFamiliarNombres.errors" class="error">
+                      <div *ngIf="f.ReferenciaFamiliarNombres.errors.required"><small>Nombres celular es requerido</small></div>
+                      <div *ngIf="f.ReferenciaFamiliarNombres.errors.pattern"><small>Este campo solo permite letras</small></div>
+                      
+                  </div>
+              </div>
+                  <div class="col-md-6">
+                                  <div class="form-group">
+
+                  <label>Apellidos</label>
+                  <input formControlName="ReferenciaFamiliarApellidos" type="text" name="apellido_familiar" value="" class="form-control " placeholder="" required="required">        
+                  <div *ngIf="submitted && f.ReferenciaFamiliarApellidos.errors" class="error">
+                      <div *ngIf="f.ReferenciaFamiliarApellidos.errors.required"><small>Apellidos celular es requerido</small></div>
+                      <div *ngIf="f.ReferenciaFamiliarApellidos.errors.pattern"><small>Este campo solo permite letras</small></div>
+                  </div>
+              </div>
+                </div>
+
+         
+
+                  </div>
+                  <div class="row">
+                <div class="col-md-6">
+                                  <div class="form-group">
+
+                  <label>Selecciona la Ciudad</label>
+                  <!-- <select formControlName="ReferenciaFamiliarCiudadFk" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="ciudad_familiar" id="ciudad_familiar" class="form-control" required="true">
+                    <option value=""></option>
+                    <option *ngFor="let c of countries">{{ c.name }}</option>
+                  </select> -->
+                  <ngx-select-dropdown
+                  [multiple]="false"
+                  [config]="clientSelectConfig"
+                  [options]="countries"
+                  formControlName="ReferenciaFamiliarCiudad"
+                  (change)="clientSelected2($event.value)"
+                  style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" id="ciudad" class="form-control select-dropdown" required="true"
+               
+                  ></ngx-select-dropdown>
+                  <div *ngIf="submitted && f.ReferenciaFamiliarCiudadFk.errors" class="error">
+                      <div *ngIf="f.ReferenciaFamiliarCiudadFk.errors.required"><small>Ciudad es requerido</small></div>
+                  </div>
+                </div>
+                </div>
+                <div class="col-md-6">
+                                  <div class="form-group">
+
+                  <label>Teléfono celular</label>
+                  <input type="text" formControlName="ReferenciaFamiliarTelefono" name="tlfn_familiar" value="" class="form-control " placeholder="" required="required">            
+                  <div *ngIf="submitted && f.ReferenciaFamiliarTelefono.errors" class="error">
+                      <div *ngIf="f.ReferenciaFamiliarTelefono.errors.required"><small>Teléfono celular es requerido</small></div>
+                      <div *ngIf="f.ReferenciaFamiliarTelefono.errors.pattern"><small>No se reconoce el formato del teléfono</small></div>
+                      <div *ngIf="f.ReferenciaFamiliarTelefono.errors.maxlength"><small>Este campo debe tener maximo 10 caracteres</small></div>
+                  </div>
+              </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="form-group">
+  
+                        <label>Relación</label>
+                        <select formControlName="relacionf" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="ciudad_personal" id="ciudad_personal" class="form-control" required="true">
+                        <option value="Padres">Padres</option>
+                        <option value="Hermano/a">Hermano/a</option>
+                        <option value="Abuelo/a">Abuelo/a </option>
+                        <option value="Hijo/a">Hijo/a</option>
+                        <option value="Tio/a">Tio/a</option>
+                        <option value="Primo/a">Primo/a</option>
+                        <option value="Conyugue">Conyugue</option>
+                        <option value="Otro">Otro</option>
+                        
+                        </select>
+            
+                        <div *ngIf="submitted && f.relacionf.errors" class="error">
+                            <div *ngIf="f.relacionf.errors.required"><small>Relación Familiar</small></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+  
+                        <label>Email (Opcional)</label>
+                        <input type="text" formControlName="emailf" name="emailf" id="emailf" value="" class="form-control " placeholder="">            
+            
+                        <div *ngIf="submitted && f.emailf.errors" class="error">
+                            <div *ngIf="f.emailf.errors.required"><small>Email referencia Familiar</small></div>
+                        </div>
+                    </div>
+                </div>
+                  </div>
+
+                  <div class="row">
+<p id="mar">&nbsp;</p>
+<div class="col-md-12">
+                <h2 class="txtlft">¿Quien te recomendó?</h2>
+</div>
+                <div class="col-md-12">
+                                <div class="form-group">
+
+                  <label>Codigo, identificación, o email (Opcional)</label>
+                  <input formControlName="QuienRecomendo" type="text" name="recomendo" value="" class="form-control " placeholder="">                 </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div *ngIf="msjSubmit" class="col-md-12 text-center">
+                      <img src="/assets/img/load.gif" width="100" height="100">
+                      <p>Enviando solicitud espere...</p>
+                  </div>
+                </div>
+                
+                                <div class="row">
+                                  <div class="col-md-12 text-center">
+                                    <button (click)="edit(3)" type="button" class="btn btn-raised btn-primary" >Guardar Cambios</button>
+                                </div>
+                                    <div class="col-md-12 padd_top_20 text-center">
+
+                  </div>
+                                </div>
+            </form>
+              </div>
+
+
+
+<div class="wpb_text_column wpb_content_element " >
+    <div class="wpb_wrapper">
+        
+
+    </div>
+</div>
+</div></div></div><div class="wpb_column vc_column_container vc_col-sm-2"><div class="vc_column-inner"><div class="wpb_wrapper"></div></div></div></div>
+
+      <!-- FINALLLLLLLLLLLLL-->
+    </div>
+  </div>
+  <!-- <div class="row justify-content-center py-3 my-1">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <app-time-per-user></app-time-per-user>
+    </div>
+  </div> -->
+</div>

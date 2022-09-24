@@ -1,0 +1,16 @@
+::ng-deep ngb-accordion [role=tabpanel] {
+    padding: 0 !important;
+}
+
+::ng-deep .modal.show .modal-dialog {
+
+    min-width: 1082px;
+}
+
+::ng-deep .card-body {
+    padding: 0px;
+  }
+
+::ng-deep .collapse {
+    padding: 0px;
+}

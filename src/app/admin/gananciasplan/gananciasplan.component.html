@@ -1,0 +1,367 @@
+<div class="container-fluid padding-mv-0">
+  <div class="row margin-mv-0">
+    <div class="col-12 padding-mv-0">
+      <div class="card formula mt3em">
+        <div class="card-header">
+          <div class="card-title">
+            <h2 >Ganancias plan de referidos</h2>
+          </div>
+     
+        </div>
+        <div class="card-body">
+          <div class="row">
+  
+            <div class="col-12">
+
+              
+              <div  class="col-md-10" style="background-color: #f2f2f2;padding: 20px;border-left: 2px solid #ebc121;">
+                <div class="row">
+                  <div class="col-md-6">
+                    <h4>Total Comisiones</h4>
+                    <div class="col-md-12">
+                      <p>Comisión pendiente de pago: $ {{pendiente | number:'1.0-0':'es'}}</p>
+                    </div>
+                    <div class="col-md-12">
+                      <p>Comisión pagada: $ {{pagado | number:'1.0-0':'es'}}</p>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <h4>Estadisticas de Trafico </h4>
+                    <div class="col-md-12">
+                      <p>Usuarios registrados: {{referido}}</p>
+                    </div>
+            
+                  </div>
+                </div>
+                  
+              </div>
+
+              
+              
+            </div><!--FINAL DEL COL QUE ENCIERRA TODO-->
+        
+          </div>
+          
+        </div>
+      </div>
+      <!-- {{ users$ | async | json }} -->
+    </div>
+  </div>
+</div>
+
+<ng-template #pagar let-modal>
+
+  <div class="modal-header">
+    <h4 class="modal-title">Repagos</h4>
+  <button type="button"  (click)="modal.dismiss('Cross click')" class="close" data-dismiss="modal">&times;</button>
+  
+  </div>
+  <div class="modal-body" style="max-height: 600px;overflow-y: scroll;">
+    <form [formGroup]="form">
+      <div class="form-row align-items-end">
+        <div class="col-12">
+          <div class="form-group">
+            <label for="medio">Concepto de pago</label>
+            <select formControlName="concepto" (change)="cambioConcepto($event.target.value)" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="concepto" class="form-control" required="true">
+              <option *ngIf="solicitud.tipoCredito == 'd'" value="Novacion">Novación</option>
+              <option *ngIf="solicitud.tipoCredito == 'm'" value="Pago cuota mensual">Pago cuota mensual</option>
+              <option *ngIf="solicitud.tipoCredito == 'm'" value="Pago ultima cuota">Pago última cuota</option>
+              <option *ngIf="solicitud.tipoCredito == 'd'" value="Pago total credito">Pago total crédito</option>
+              <!-- <option value="Pago parcial">Pago parcial</option> -->
+              <option value="Pago anticipado">Pago anticipado</option>
+              <option *ngIf="solicitud.tipoCredito == 'd'" value="Pago total saldo al dia moroso">Pago total saldo al día moroso</option>
+              <option *ngIf="solicitud.tipoCredito == 'm'" value="Pago cuota mensual morosa">Pago cuota mensual morosa</option>
+              </select>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="form-group">
+            <label for="monto">Monto a pagar</label>
+            <input
+              class="form-control"
+              [value]="montoP"
+              (change)="monto_pagar($event.target.value)" 
+              type="text" 
+              name="monto_pagar"
+              required
+            />
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="form-group">
+            <label for="medio">Medio de pago</label>
+            <select formControlName="medioPago" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="medioPago" class="form-control" required="true">
+              <option value="Transferencia bancaria">Transferencia bancaria</option>
+              <option value="Baloto">Baloto</option>
+              <option value="Ventanilla">Ventanilla</option>
+              <option value="Pse">Pse</option>
+              </select>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="form-group">
+            <label for="descripcion">Fecha de pago</label>
+            <input
+              type="text"
+              ngbDatepicker
+              #fecha_pago="ngbDatepicker"
+              (click)="fecha_pago.toggle()"
+              class="form-control"
+              id="fecha_pago"
+              (dateSelect)="fechaSelect($event)"
+            />
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="form-group">
+            <label for="descripcion">Nro de Referencia</label>
+            <input
+              type="text"
+              class="form-control"
+              id="nroReferencia"
+              formControlName="nroReferencia"
+            />
+          </div>
+        </div>
+        <!-- <div class="col-12">
+          <div class="form-group">
+            <label for="descripcion">Factura</label>
+            <input
+              type="file"
+              class="form-control"
+              formControlName="factura"
+              id="factura"
+              (change)="onFileChangeFactura($event)"
+            />
+          </div>
+        </div> -->
+      </div>
+      <div class="row">
+        
+          <div class="col-auto my-2">
+            <button
+              type="button"
+              class="btn btn-raised btn-primary"
+              [disabled]="form.invalid"
+              (click)="repago()"
+            >
+              Guardar
+            </button>
+          </div>
+      </div>
+    </form>
+  </div>
+  <!-- <div class="modal-footer">
+  <button type="button"  (click)="modal.dismiss('Cross click')" class="btn btn-default" data-dismiss="modal" style="background-color: #f36c21;color: white;border-color: #f36c21;">Cerrar</button>
+  </div> -->
+  
+  </ng-template>
+
+  <ng-template #contratos let-modal>
+
+    <div class="modal-header">
+      <h4 class="modal-title">Contratos</h4>
+    <button type="button"  (click)="modal.dismiss('Cross click')" class="close" data-dismiss="modal">&times;</button>
+    
+    </div>
+    <div class="modal-body" style="max-height: 600px;overflow-y: scroll;">
+      <form [formGroup]="formContratos">
+        <div class="form-row align-items-end">
+          <div class="col-12">
+            <div class="form-group">
+              <label for="monto">Contrato</label>
+              <input
+                type="file"
+                class="form-control"
+                formControlName="contrato"
+                id="contrato"
+                (change)="onFileChangeContrato($event)"
+              />
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="form-group">
+              <label for="medio">Carta de autorizacion</label>
+              <input
+              type="file"
+              class="form-control"
+              formControlName="carta"
+              id="carta"
+              (change)="onFileChangeCarta($event)"
+            />
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="form-group">
+              <label for="descripcion">Pagare</label>
+              <input
+                type="file"
+                class="form-control"
+                formControlName="pagare"
+                id="pagare"
+                (change)="onFileChangePagare($event)"
+              />
+            </div>
+          </div>
+  
+        </div>
+        <div class="row">
+          
+            <div class="col-auto my-2">
+              <button
+                type="button"
+                class="btn btn-raised btn-primary"
+                [disabled]="formContratos.invalid"
+                (click)="editContratos()"
+              >
+                Guardar
+              </button>
+            </div>
+        </div>
+      </form>
+    </div>
+    <!-- <div class="modal-footer">
+    <button type="button"  (click)="modal.dismiss('Cross click')" class="btn btn-default" data-dismiss="modal" style="background-color: #f36c21;color: white;border-color: #f36c21;">Cerrar</button>
+    </div> -->
+    
+    </ng-template>
+    <ng-template #pago_parcial let-modal>
+
+      <div class="modal-header">
+        <h4 class="modal-title">Pago parcial</h4>
+      <button type="button"  (click)="modal.dismiss('Cross click')" class="close" data-dismiss="modal">&times;</button>
+      
+      </div>
+      <div class="modal-body" style="max-height: 600px;overflow-y: scroll;">
+        <form [formGroup]="formPagoParcial">
+          <div class="form-row align-items-end">
+            <div class="col-12">
+              <div class="form-group">
+                <label for="monto">Capital</label>
+                <input
+                  class="form-control"
+                  [value]="capital_"
+                  (change)="monto_capital($event.target.value)" 
+                  type="text" 
+                  name="monto_capital"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group">
+                  <label for="monto">Intereses</label>
+                  <input
+                    class="form-control"
+                    [value]="intereses_"
+                    (change)="monto_intereses($event.target.value)" 
+                    type="text" 
+                    name="monto_intereses"
+                    required
+                  />
+                </div>
+            </div>
+            <div class="col-12">
+              <div class="form-group">
+                <label for="monto">Intereses de mora</label>
+                <input
+                  class="form-control"
+                  [value]="intereses_mora"
+                  (change)="monto_intereses_mora($event.target.value)" 
+                  type="text" 
+                  name="monto_intereses_mora"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-group">
+                <label for="monto">Plataforma</label>
+                <input
+                  class="form-control"
+                  [value]="plataforma_"
+                  (change)="monto_plataforma($event.target.value)" 
+                  type="text" 
+                  name="monto_plataforma"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-group">
+                <label for="monto">Aprobacion Rapida</label>
+                <input
+                  class="form-control"
+                  [value]="aprobacion_rapida"
+                  (change)="monto_aprobacion_rapida($event.target.value)" 
+                  type="text" 
+                  name="monto_aprobacion_rapida"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-group">
+                <label for="monto">Gastos de cobranza</label>
+                <input
+                  class="form-control"
+                  [value]="gastos_cobranza"
+                  (change)="monto_gastos_cobranza($event.target.value)" 
+                  type="text" 
+                  name="monto_gastos_cobranza"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-group">
+                <label for="monto">Iva</label>
+                <input
+                  class="form-control"
+                  [value]="iva_"
+                  (change)="monto_iva($event.target.value)" 
+                  type="text" 
+                  name="monto_iva"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-group">
+                <label for="monto">Total no pago</label>
+                <input
+                  class="form-control"
+                  [value]="total_no_pago"
+                  (change)="monto_total_no_pago($event.target.value)" 
+                  type="text" 
+                  name="monto_total_no_pago"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            
+              <div class="col-auto my-2">
+                <button
+                  type="button"
+                  class="btn btn-raised btn-primary"
+                  [disabled]="formPagoParcial.invalid"
+                  (click)="pagoParcial()"
+                >
+                  Guardar
+                </button>
+              </div>
+          </div>
+        </form>
+      </div>
+      <!-- <div class="modal-footer">
+      <button type="button"  (click)="modal.dismiss('Cross click')" class="btn btn-default" data-dismiss="modal" style="background-color: #f36c21;color: white;border-color: #f36c21;">Cerrar</button>
+      </div> -->
+      
+      </ng-template>
+
+        
+          
+   
+

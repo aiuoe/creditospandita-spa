@@ -1,0 +1,134 @@
+<div class="container-fluid padding-mv-0">
+  <div class="row margin-mv-0">
+    <div class="col-12 padding-mv-0">
+      <div class="card formula mt3em">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>Evaluación</h2>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-6">
+              <label>Estatus</label>
+              <select  (change)='cambioestatus($event.target.value)' style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" class="form-control" >
+                  <option value="aprobado">aprobado</option>
+                  <option value="negado">negado</option>
+                  <option value="pendiente">pendiente</option>
+                  <option value="no posee">no posee</option>
+            
+                  </select> 
+            </div>
+            
+            <div class="col-12">
+
+              <app-filter (onFilter)="onFilter($event)"></app-filter>
+            </div>
+            <div class="col-12">
+              <button
+                        ngbTooltip="Descargar Excel"
+                          type="button"
+                          class="btn btn-success"
+                          (click)="export()"
+                          
+                        >
+                          <a class="ft-download" style="color:white"></a>
+                        </button>
+            </div>
+            <div class="col-12 table-responsive">
+              <table
+                class="table table-striped"
+              >
+                <thead class="thead-inverse">
+                  <tr>
+                    <th>Fecha de solicitud</th>
+                    <th>Número de credito</th>
+                    <th>Estatus de crédito</th>
+                    <th>Estatus de Evaluacion</th>
+                    <th>Cliente</th>
+                    <th>Oferta</th>
+                    <th>Firma</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                  *ngFor="
+                    let c of (configuraciones$ | async)['data']
+                      | paginate
+                        : {
+                            itemsPerPage: pItemsInPage,
+                            currentPage: p,
+                            totalItems: (configuraciones$ | async)['total']
+                          }
+                    "
+                  >
+                
+                    <td scope="row">{{ c.fecha_solicitud}}</td>
+                    <td>{{ c.numero_credito }}</td>
+                    <td>{{ c.estatus_credito }}</td>
+                    <td>{{ c.estatus_evaluacion ? c.estatus_evaluacion : 'No posee' }}</td>
+                    <td>{{ c.first_name }} {{ c.last_name }}</td>
+                    <td *ngIf="c.ofertaEnviada == null">No enviada</td>
+                    <td *ngIf="c.ofertaEnviada != null && c.ofertaEnviada == 0">Minima</td>
+                    <td *ngIf="c.ofertaEnviada != null && c.ofertaEnviada == 1">Maxima</td>
+                    <td *ngIf="c.ofertaEnviada != null && c.ofertaEnviada == 2">Completa</td>
+                    <td>{{c.estatus_firma}}</td>
+                    <td>
+                      <div class="btn-group">
+                        <button
+                        *ngIf="c.estatus_evaluacion != 'Aprobado'"
+                        ngbTooltip="Evaluar"
+                          type="button"
+                          class="btn btn-secondary"
+                          (click)="evaluar(c)"
+                          [disabled]="evalua"
+                        >
+                          <a class="ft-check-square" text-info></a>
+                        </button>
+
+                        <!-- <button
+                        ngbTooltip="Eliminar"
+                          type="button"
+                          class="btn btn-danger"
+                          (click)="delete(c)"
+                        >
+                          <a class="ft-trash" style="color:white"></a>
+                        </button> -->
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row aling-items-end">
+            <div class="col-3">
+              <div class="form-group">
+                <!-- <label for="page">Items por Página</label> -->
+                <select
+                  class="form-control"
+                  name="page"
+                  id="page"
+                  (change)="perPage($event.target.value, p)"
+                >
+                  <option value="5">5</option>
+                  <option value="15">15</option>
+                  <option value="50">50</option>
+                </select>
+              </div>
+            </div>
+            <div class="col">
+              <pagination-controls
+              (pageChange)="perPage(pItemsInPage,$event)"
+                previousLabel="Anterior"
+                nextLabel="Siguiente"
+              ></pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- {{ users$ | async | json }} -->
+    </div>
+  </div>
+</div>

@@ -1,0 +1,437 @@
+<div class="container-fluid padding-mv-0">
+  <div class="row margin-mv-0">
+    <div [ngClass]="{'col-6 padding-mv-0': external && !expandR && !expandL, 'col-12 padding-mv-0': !external && !expandR || expandL, 'd-none': external && expandR && !expandL}">
+      <div class="card formula mt3em">
+        <div class="card-header">
+          <div class="card-title">
+            <button
+              *ngIf="external"
+              type="button"
+              class="close margin-rl-5"    
+              (click)="expandLeftPanel()"           
+            >
+              <i class="ft-maximize-2"></i>
+            </button>
+            <h2>Morosos</h2>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <label>Dias de Mora</label>
+              <div class="row">
+                
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <input type="number" class="form-control" placeholder="Desde" [(ngModel)]="desdeMora" id="desdeMora">
+                </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <input type="number" class="form-control" placeholder="Hasta" [(ngModel)]="hastaMora" id="hastaMora">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <label>Busqueda por: Nºcrédito,Nombres y Apellido,Estatus,Fecha de desembolso</label><br>
+              <app-filter (onFilter)="onFilter($event)"></app-filter>
+            </div>
+          </div>
+          <div class="row">
+            
+            <div class="col-md-12 table-responsive">
+              <table class="table table-striped">
+                <thead class="thead-inverse">
+                  <tr>
+                    <th>Nro de Credito</th>
+                    <th>Cliente</th>
+                    <th>Estado</th>
+                    <th>Fecha de pago</th>      
+                    <th>Dias de mora</th>
+                    <th>Cuota Total</th>
+                    <th>Pendiente por pagar</th>
+                    
+                    <th>Saldo al día</th>
+                    <th>Compromiso de pago</th>
+                    <th>Acciones</th> 
+            
+                  </tr>
+                </thead>
+                <tbody *ngIf="records.length > 0; else elseTemplate">
+                  <tr *ngFor="
+                  let c of records 
+                    | paginate
+                      : {
+                          itemsPerPage: itemsPerPage,
+                          currentPage: p,
+                          totalItems: totalItems
+                        }; 
+                      index as i
+                ">
+                    <td>{{c.numero_credito}}</td>
+                    <td> {{ c.first_name }} {{c.last_name}}</td>
+                    <td> {{ c.estatus_credito }}</td>
+                    <td>{{c.ProximoPago ? c.ProximoPago.fechaPago : ''}}</td>
+                    <td>{{c.diasMora}}</td>
+                    <ng-container *ngIf="c.tipoCredito === 'm'; else elseTemplate">
+                      <td> ${{ c.cuotaTotalMora | number:'1.0-0':'es' }}</td>
+                    </ng-container>
+                    <ng-template #elseTemplate>
+                      <td> $0 </td>
+                    </ng-template>
+                    
+                    <td> ${{ c.pendientePagarMora | number:'1.0-0':'es' }}</td>
+                    <td> ${{ c.saldoDia | number:'1.0-0':'es' }}</td>
+                    <td> {{ c.historial_ultimo_contacto.length > 0 ? c.historial_ultimo_contacto[0].fechaPtp : '' }}</td>
+                    <td>     
+                      <div class="btn-group">
+                        <button
+                          ngbTooltip="Detalle"
+                          type="button"
+                          class="btn btn-info"
+                          (click)="setExternalSolicitudId(c.id_solicitud)"
+                        >
+                          <a class="ft-list" style="color:white"></a>
+                        </button>
+                        <button
+                          ngbTooltip="Contacto"
+                          type="button"
+                          class="btn btn-primary"
+                          (click)="openHistory(history, c)"
+                          
+                        >
+                          <a class="ft-phone" style="color:white"></a>
+                        </button>
+                      </div> 
+                    </td>
+                  </tr>
+                </tbody>
+                <ng-template #elseTemplate>
+                  <div style="width: max-content;">
+                    Sin registros
+                  </div>
+                </ng-template>
+                
+              </table>
+            </div>
+          </div>
+          <div class="row aling-items-end">
+            <div class="col-3">
+              <div class="form-group">
+                <select
+                  class="form-control"
+                  name="page"
+                  id="page"
+                  (change)="perPage($event.target.value, p)"
+                >
+                  <option value="5">5</option>
+                  <option value="15">15</option>
+                  <option value="50">50</option>
+                </select>
+              </div>
+            </div>
+            <div class="col">
+              <pagination-controls
+                (pageChange)="perPage(itemsPerPage,$event)"
+                previousLabel="Anterior"
+                nextLabel="Siguiente"
+              ></pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="external" class="col-6 padding-mv-0" [ngClass]="{'col-6 padding-mv-0': external && !expandR && !expandL, 'col-12 padding-mv-0': external && expandR || expandL}">
+      <app-detalle-abierto (closeExternalId)="closeExternal($event)" (expandExternal)="expandPanel($event)" [exteral_solicitud_id]="external_solicitud_id" [external]="external"></app-detalle-abierto>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DE HISTORIAL DE CONTACTOS -->
+<ng-template #history id="history" let-modal>
+  
+    <div class="modal-header">
+      <h4 class="modal-title">Historial de contactos</h4>
+      <button type="button" (click)="modal.dismiss('Cross click')" class="close" data-dismiss="modal">&times;</button>
+    
+    </div>
+    <div class="modal-body" style="max-height: 600px;overflow-y: auto;">
+      <div class="row">
+        <div class="col-12 text-right">
+          <button
+            type="button"
+            class="btn btn-primary btn-raised"
+            
+            (click)="openHistory(formHistory)"
+          >
+            Nuevo contacto
+          </button>
+        </div>
+      </div>
+
+      <div class="row">
+
+        <div class="col-3">
+          <label for="">Email</label>
+        </div>
+        <div class="col-3">
+          {{ userContact?.email }}
+        </div>
+        <div class="col-3">
+          <label>Teléfono principal</label>
+        </div>
+        <div class="col-3">
+          {{ userContact?.phone_number }}
+        </div>
+        <div class="col-3">
+          <label>Teléfono de trabajo</label>
+        </div>
+        <div class="col-3">
+          
+        </div>
+        <div class="col-3">
+          <label>Teléfono alternativo</label>
+        </div>
+        <div class="col-3">
+          
+        </div>
+      </div>
+
+    <!-- DETALLES DE USUARIO -->
+      <ngb-accordion #acc="ngbAccordion" animation="true">
+        <ngb-panel id="toggle-1" title="Detalles de usuario">
+          <ng-template ngbPanelContent>
+            <app-ficha [exteral_user_id]="userContact.idUserFk" [external]="true"></app-ficha>
+          </ng-template>
+        </ngb-panel>
+      </ngb-accordion>
+
+      <div class="row">
+              
+        <div class="col-md-12 table-responsive">
+          <table class="table table-striped">
+            <thead class="thead-inverse">
+              <tr>
+                <th>Fecha</th>
+                <th>Colaborador</th>
+                <th>Proposito</th>
+                <th>Método</th>
+                <th>Resultado</th>
+                <th>Comentario</th>      
+                <th>Fecha PTP</th>
+                <th>Monto PTP</th> 
+              </tr>
+            </thead>
+            <tbody *ngIf="userContact?.hitorial_contactos.length > 0; else elseTemplate">
+              <tr *ngFor="let c of userContact.hitorial_contactos">
+                <td>{{c.fechaContacto}}</td>
+                <td> {{ c.colaborador.first_name }} {{c.colaborador.last_name}}</td>
+                <td> {{ c.proposito }}</td>
+                <td>{{c.metodoContacto}}</td>
+                <td>{{c.resultado}}</td>
+                <td> {{ c.comentario }}</td>
+                <td> {{ c.fechaPtp }}</td>
+                <td> ${{ c.montoPtp | number:'1.0-0':'es' }}</td>
+              </tr>
+            </tbody>
+            <ng-template #elseTemplate>
+              <div style="width: max-content;">
+                Sin registros
+              </div>
+            </ng-template>
+            
+          </table>
+        </div>
+      </div>
+    </div>
+  
+</ng-template>
+
+<!-- FORMULARIO DE HISTORIAL DE CONTACTOS -->
+<ng-template #formHistory id="formHistory" let-modal>
+  
+    <div class="modal-header">
+      <h4 class="modal-title">Nuevo contacto</h4>
+      <button type="button" (click)="modal.dismiss('Cross click')" class="close" data-dismiss="modal">&times;</button>
+    </div>
+    <div class="modal-body" style="max-height: 600px;overflow-y: auto;">
+      <form class="row" [formGroup]="validations_form" (ngSubmit)="registerHistory(validations_form.value)">
+        <div class="col-4">
+          <div class="form-group">
+            <label for="medio">Fecha contacto</label>
+            <input
+              type="text"
+              ngbDatepicker
+              placeholder="Fecha"
+              #fechaContacto="ngbDatepicker"
+              (click)="fechaContacto.toggle()"
+              class="form-control"
+              id="fechaContacto"
+              formControlName="fechaContacto"
+            />
+            <div class="validation-errors">
+              <ng-container *ngFor="let validation of validation_messages.fechaContacto">
+                <div class="error-message"
+                  *ngIf="validations_form.get('fechaContacto').hasError(validation.type) && (validations_form.get('fechaContacto').dirty || validations_form.get('fechaContacto').touched)">
+                  <small class="text-danger">{{ validation.message }}</small>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-8">
+          <div class="form-group">
+            <label>Método de contacto</label>
+            <select 
+              placeholder="Método"
+              formControlName="metodoContacto" 
+              style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" 
+              class="form-control">
+              <option value="email">Email</option>
+              <option value="telefono principal">Telefono principal</option>
+              <option value="whatsapp">WhatsApp</option>
+              <option value="telegram">Telegram</option>
+              <option value="referencia personal">Referencia personal</option>
+              <option value="referencia familiar">Referencia familiar</option>
+              <option value="empleo">Empleo</option>
+              <option value="otro">Otro</option>
+            </select>
+            <div class="validation-errors">
+              <ng-container *ngFor="let validation of validation_messages.metodoContacto">
+                <div class="error-message"
+                  *ngIf="validations_form.get('metodoContacto').hasError(validation.type) && (validations_form.get('metodoContacto').dirty || validations_form.get('metodoContacto').touched)">
+                  <small class="text-danger">{{ validation.message }}</small>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="form-group">
+            <label for="medio">Proposito de contacto</label>
+            <input
+              placeholder="Proposito"
+              type="text"
+              class="form-control"
+              formControlName="proposito"
+              #proposito
+            />
+            <div class="validation-errors">
+              <ng-container *ngFor="let validation of validation_messages.proposito">
+                <div class="error-message"
+                  *ngIf="validations_form.get('proposito').hasError(validation.type) && (validations_form.get('proposito').dirty || validations_form.get('proposito').touched)">
+                  <small class="text-danger">{{ validation.message }}</small>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="form-group">
+            <label for="medio">Resultado del contacto</label>
+            <select 
+              placeholder="Resultado"
+              style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" 
+              class="form-control"
+              formControlName="resultado"
+              #resultado
+            >
+              <option value="promete pagar">Promete pagar</option>
+              <option value="llamar referencias">Llamar referencias</option>
+              <option value="enviar aviso prejurido">Enviar aviso prejurido</option>
+              <option value="enviar descuento de libranza">Enviar descuento de libranza</option>
+              <option value="ejecucion garantia mobiliaria">Ejecucion garantia mobiliaria</option>
+              <option value="enviar depostio bancario">Enviar depostio bancario</option>
+              <option value="ejecucion pagare">Ejecución pagare</option>
+            </select>
+            <div class="validation-errors">
+              <ng-container *ngFor="let validation of validation_messages.resultado">
+                <div class="error-message"
+                  *ngIf="validations_form.get('resultado').hasError(validation.type) && (validations_form.get('resultado').dirty || validations_form.get('resultado').touched)">
+                  <small class="text-danger">{{ validation.message }}</small>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div class="form-group">
+            <label for="medio">Promete pagar</label>
+            <input
+              type="text"
+              ngbDatepicker
+              placeholder="Fecha"
+              #fechaPtp="ngbDatepicker"
+              (click)="fechaPtp.toggle()"
+              class="form-control"
+              id="fechaPtp"
+              formControlName="fechaPtp"
+            />
+            <div class="validation-errors">
+              <ng-container *ngFor="let validation of validation_messages.fechaPtp">
+                <div class="error-message"
+                  *ngIf="validations_form.get('fechaPtp').hasError(validation.type) && (validations_form.get('fechaPtp').dirty || validations_form.get('fechaPtp').touched)">
+                  <small class="text-danger">{{ validation.message }}</small>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div class="form-group">
+            <label for="medio">Monto a pagar</label>
+            <input
+              placeholder="Monto"
+              type="text"
+              class="form-control"
+              formControlName="montoPtp"
+              #montoPtp
+            />
+            <div class="validation-errors">
+              <ng-container *ngFor="let validation of validation_messages.montoPtp">
+                <div class="error-message"
+                  *ngIf="validations_form.get('montoPtp').hasError(validation.type) && (validations_form.get('montoPtp').dirty || validations_form.get('montoPtp').touched)">
+                  <small class="text-danger">{{ validation.message }}</small>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="form-group">
+            <label for="medio">Comentario</label>
+            <textarea
+              placeholder="Comentario"
+              type="text"
+              class="form-control"
+              formControlName="comentario"
+              #comentario
+            ></textarea>
+            <div class="validation-errors">
+              <ng-container *ngFor="let validation of validation_messages.comentario">
+                <div class="error-message"
+                  *ngIf="validations_form.get('comentario').hasError(validation.type) && (validations_form.get('comentario').dirty || validations_form.get('comentario').touched)">
+                  <small class="text-danger">{{ validation.message }}</small>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 text-center">
+          <input type="submit" class="btn btn-raised btn-primary" value="Guardar" [disabled]="!validations_form.valid">
+        </div>
+
+      </form>
+  
+    </div>
+  
+</ng-template>

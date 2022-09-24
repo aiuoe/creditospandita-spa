@@ -1,0 +1,136 @@
+<div class="container-fluid padding-mv-0">
+  <div class="row margin-mv-0">
+    <div class="col-12 padding-mv-0">
+      <div class="card formula mt3em">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>Usuarios Referidos</h2>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12">
+              <label>Busqueda por: Nombres y Apellido, Nº cedula, Email</label><br>
+              <app-filter (onFilter)="onFilter($event)"></app-filter>
+            </div>
+            <div class="col-12 table-responsive">
+              <table
+                class="table table-striped"
+                *ngIf="users$ | async as users"
+              >
+                <thead class="thead-inverse">
+                  <tr>
+                    <th>Fecha de registro</th>
+                    <th *ngIf="isAdmin">Nombres y Apellidos</th>
+                    <th *ngIf="isAdmin">Nº cedula</th>
+                    <th>Email</th>
+                    <th>Estatus del credito</th>
+                    <th>Nº crédito</th>
+                    <th>Comision</th>
+                    <th>Estatus Comision</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="
+                      let user of (users$ | async)['data']
+                        | paginate
+                          : {
+                              itemsPerPage: itemsPerPage,
+                              currentPage: p,
+                              totalItems: (users$ | async)['total']
+                            };
+                      index as i
+                    "
+                  >
+                  <td scope="row">{{ user.created_at }}</td>
+                    <td *ngIf="isAdmin">{{ user.first_name }} {{ user.last_name }}</td>
+                    <td scope="row" *ngIf="isAdmin">{{ user.n_document }}</td>
+                    <td scope="row">{{ user.email }}</td>
+                    <td scope="row" *ngIf="user.FirstSolicitud.Evaluacion != '' && user.FirstSolicitud.Evaluacion.estatus !='aprobado' && user.FirstSolicitud.Evaluacion.estatus !='negado en matriz de calculo' && user.FirstSolicitud.Evaluacion.estatus !='negado verificacion selfie' && user.FirstSolicitud.Evaluacion.estatus !='negado verificacion identidad' && user.FirstSolicitud.Evaluacion.estatus !='negado archivos adicionales' && user.FirstSolicitud.Evaluacion.estatus !='negado en data credito' ">En Evaluacion</td>
+                    <td scope="row" *ngIf="user.FirstSolicitud.Evaluacion != '' && (user.FirstSolicitud.Evaluacion.estatus =='negado en matriz de calculo' || user.FirstSolicitud.Evaluacion.estatus =='negado verificacion selfie' || user.FirstSolicitud.Evaluacion.estatus =='negado verificacion identidad' || user.FirstSolicitud.Evaluacion.estatus =='negado archivos adicionales' || user.FirstSolicitud.Evaluacion.estatus =='negado en data credito') ">Negado en evaluacion</td>
+                    <td scope="row" *ngIf="user.FirstSolicitud.Evaluacion != '' && user.FirstSolicitud.Evaluacion.estatus =='aprobado' ">Aprobado</td>
+                    <td scope="row" *ngIf="user.FirstSolicitud.Evaluacion == ''">{{ user.FirstSolicitud.estatus }}</td>
+                    <td scope="row">{{ user.FirstSolicitud.numero_credito }}</td>
+                    <td scope="row">{{ user.FirstSolicitud.estatus=='pagado' ? '$10.000' : '$0'}}</td>
+                    <td scope="row">{{ user.FirstSolicitud.Pagoreferidor.estatus }}</td>
+                    <td>
+                      <div class="btn-group">
+                        <button
+                        *ngIf="isAdmin && user.FirstSolicitud.Pagoreferidor.estatus=='pendiente' && user.FirstSolicitud.Pagoreferidor.comision=='10000'"
+                        ngbTooltip="Desembolsar"
+                          type="button"
+                          class="btn btn-success"
+                          [routerLink]="['/admin/pagar-referido/', user.FirstSolicitud.id,myId]"
+                         
+                        >
+                          <a class="ft-download-cloud" style="color:white"></a>
+                        </button>
+                        <button
+                        *ngIf="isAdmin && user.FirstSolicitud.Pagoreferidor.estatus=='pendiente' && user.FirstSolicitud.Pagoreferidor.comision!='10000'"
+                        ngbTooltip="Credito Moroso"
+                          type="button"
+                          class="btn btn-success"
+                          (click)="creditoMora()"
+                        >
+                          <a class="ft-info" style="color:white"></a>
+                        </button>
+                        <button
+                        *ngIf="isAdmin && user.FirstSolicitud.Pagoreferidor.estatus=='pagado'"
+                        ngbTooltip="Detalle"
+                          type="button"
+                          class="btn btn-success"
+                          (click)="detallePago(user.FirstSolicitud.Pagoreferidor.id)"
+                         
+                        >
+                          <a class="ft-list" style="color:white"></a>
+                        </button>
+                        <button
+                        *ngIf="!isAdmin && user.FirstSolicitud.Pagoreferidor.estatus=='pagado'"
+                        ngbTooltip="Ver desembolso"
+                          type="button"
+                          class="btn btn-success"
+                          (click)="detallePago(user.FirstSolicitud.Pagoreferidor.id)"
+                         
+                        >
+                          <a class="ft-download-cloud" style="color:white"></a>
+                        </button>
+                      </div>
+                    </td>
+                    
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row aling-items-end">
+            <div class="col-3">
+              <div class="form-group">
+                <!-- <label for="page">Items por Página</label> -->
+                <select
+                  class="form-control"
+                  name="page"
+                  id="page"
+                  (change)="perPage($event.target.value, p)"
+                >
+                  <option value="5">5</option>
+                  <option value="15">15</option>
+                  <option value="50">50</option>
+                </select>
+              </div>
+            </div>
+            <div class="col">
+              <pagination-controls
+              (pageChange)="perPage(itemsPerPage,$event)"
+                previousLabel="Anterior"
+                nextLabel="Siguiente"
+              ></pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- {{ users$ | async | json }} -->
+    </div>
+  </div>
+</div>

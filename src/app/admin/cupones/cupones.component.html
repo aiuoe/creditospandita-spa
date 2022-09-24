@@ -1,0 +1,109 @@
+<div class="container-fluid">
+  <div class="row align-items-end">
+    <div class="col-xs-12">
+      <div class="card formula mt3em">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>
+          Cupones
+            </h2>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-content">
+            <form [formGroup]="formBlog">
+              <div class="form-row align-items-end">
+                <div class="col-12">
+                  <div class="form-group">
+                    <label for="email">Nombre</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="nombre"
+                      id="nombre"
+                      required
+                    />
+                  </div>
+                </div>
+                  <div class="col-12">
+                    <div class="form-group">
+                      <label for="email">valor</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        formControlName="valor"
+                        id="valor"
+                        required
+                      />
+                    </div>
+                
+                    
+                </div>
+                <div class="col-12">
+                  <div class="form-group">
+                    <label for="email">Desde</label>
+                    <input
+                      type="date"
+                      class="form-control"
+                      formControlName="desde"
+                      id="desde"
+                      
+                    />
+                  </div>
+              
+                  
+              </div>
+              <div class="col-12">
+                <div class="form-group">
+                  <label for="email">Hasta</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    formControlName="hasta"
+                    id="hasta"
+                    
+                  />
+                </div>
+            
+                
+            </div>
+
+          
+              
+            
+              </div>
+
+              <div class="row">
+         
+             
+                  <div class="col-auto my-2">
+                    <button
+                      type="button"
+                      class="btn btn-raised btn-primary"
+                      [disabled]="formBlog.invalid"
+                      (click)="add()"
+                    >
+                      Guardar
+                    </button>
+                  </div>
+             
+
+                <div class="col-auto my-2">
+                  <button
+                    type="button"
+                    class="btn btn-raised btn-warning"
+                    [disabled]="!formBlog.dirty"
+                    (click)="formBlog.reset()"
+                  >
+                    Limpiar
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

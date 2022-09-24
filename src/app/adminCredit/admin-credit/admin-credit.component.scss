@@ -1,0 +1,52 @@
+.btn-link:hover {
+
+    text-decoration: none !important;
+}
+
+ .dark {
+    background: #f7f9fa;
+    border-radius: 0.5em;
+    padding: 15px;
+    text-align: center;
+    font-size: 1em;
+    color: #223857;
+    font-weight: normal;
+}
+.right{
+    text-align: right;
+}
+.left{
+    text-align: left;
+}
+
+.btn-primary {
+    color: #fff !important;
+    background-color: #ebc121 !important;
+    border-color: #ebc121 !important;
+}
+ngb-accordion .card {
+    border-bottom: 0px solid #f5f7fa !important;
+    margin: 0;
+}
+@media (min-width: 992px){
+.titulo-panel{
+    font-size: 2rem;
+}
+}
+@media (max-width: 767px){
+    ngb-accordion{
+        [role=tabpanel]{
+            padding: 0 !important;
+        }
+    }
+    .card-body {
+     padding-right: 0 !important; 
+     padding-left: 0 !important;
+    }
+}
+
+@media (max-width: 425px){
+    h2{
+        font-size: 14px !important;
+    }
+}

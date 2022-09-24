@@ -1,0 +1,252 @@
+<div class="container-fluid padding-mv-0">
+  <div class="row margin-mv-0">
+    <div class="col-12 padding-mv-0">
+      <div class="card formula mt3em">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>Créditos activos</h2>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12">
+              
+            </div>
+            <div class="col-12 txtc" *ngIf="solicitud">
+              
+              <h4><strong>Sustituye tu crédito actual por uno nuevo y obtén {{ solicitud.plazo }} dias mas de plazo</strong></h4>
+              <p>Para sustituir tu crédito <strong>#{{ solicitud.numero_credito }}</strong> debes pagar lo siguiente:</p>
+              <div class="row">
+              <div class="col-md-6 col-md-offset-3 mlrauto">
+              <table class="table table-bordered">
+               
+                <tbody>
+                  <!-- <tr>
+               
+                    <th>Monto Solicitado</th> -->
+                  
+                    <!-- <td>$ {{ montoSolicitado | number:'1.0-0':'es'}}</td> -->
+                    <!-- <td>$ 10.000</td>
+                  </tr> -->
+                  <tr>
+               
+                    <th>Tasa de interes</th>
+                  
+                    <!-- <td>$ {{ taxInTotal | number:'1.0-0':'es'}}</td> -->
+                    <td>$ {{ contra_oferta.tasaInteres | number:'1.0-0':'es' }}</td>
+                  </tr>
+                  <!-- <tr>
+               
+                    <th>Subtotal</th> -->
+                  
+                    <!-- <td>$ {{ subtotal | number:'1.0-0':'es'}}</td> -->
+                    <!-- <td>$ 10.000</td>
+                  </tr> -->
+                  <tr>
+                    <th>Plataforma</th>
+                  
+                    <!-- <td>$ {{ plataforma | number:'1.0-0':'es'}}</td> -->
+                    <td>$ {{ contra_oferta.plataforma | number:'1.0-0':'es' }}</td>
+                  </tr>
+                  <tr>
+                    <th>Aprobación rapida</th>
+                  
+                    <!-- <td>$ {{ ap_express | number:'1.0-0':'es'}}</td> -->
+                    <td>$ {{ contra_oferta.aprobacionRapida | number:'1.0-0':'es' }}</td>
+                  </tr>
+                  <tr>
+                    <th>IVA</th>
+                  
+                    <!-- <td>$ {{ iva | number:'1.0-0':'es'}}</td> -->
+                    <td>$ {{ contra_oferta.iva | number:'1.0-0':'es' }}</td>
+                  </tr>
+                  
+                  <tr style="font-size: 20px;">
+                    <th><b>Total a pagar</b></th>
+                  
+                    <!-- <td>$ {{ total | number:'1.0-0':'es'}}</td> -->
+                    <td><b>$ {{totalNovacion | number:'1.0-0':'es' }}</b></td>
+                  </tr>
+                
+                </tbody>
+              </table>
+              <p><b>SUSTITUCIÓN DE TU CRÉDITO: </b> Autorizas a créditos panda a sustituir tu crédito actual por uno nuevo, el cual tendra un plazo de {{solicitud.plazo }} días. <a class="situacion" (click)="open(credito)"> Ver detalle de sustitución.</a></p>
+              <div class="col-md-12 col-md-offset-3 mlrauto left">
+                <label class="checkbox-inline">
+                  <input type="checkbox" id="inlineCheckbox1" (change)="cambioTermino($event.target.checked)"><a class="terminos" (click)="open(terminos)"> Acepto términos y condiciones</a>
+                </label>
+                <div *ngIf="!checkTerminos" class="error">
+                  <div *ngIf="!checkTerminos"><small>Acepta terminos y condiciones</small></div>
+                </div>
+              </div>
+              <div class="col-md-12 col-md-offset-3 mlrauto left">
+                <label class="checkbox-inline">
+                  <input type="checkbox" id="inlineCheckbox1" (change)="cambioSituacion($event.target.checked)"><a class="situacion" (click)="open(situacion)"> Acepto sustitucion</a>
+                </label>
+                <div *ngIf="!checkSituacion" class="error">
+                  <div *ngIf="!checkSituacion"><small>Acepta sustitucion</small></div>
+                </div>
+              </div><br>
+              <div class="row" style="margin-bottom: 1em;" >
+                <div class="col-md-12" style="text-align: center;">
+                  <p style="margin-bottom: 0;"><b>Selecciona abajo tu medio de pago</b></p>
+                  <small>Al hacer esto estas aceptando la sustitución de tu crédito</small>
+                </div>
+              <br>
+              </div>
+              <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6 col-md-offset-4 ">
+
+                  <button class="btn btn-block btn-primary" [class.disabled]="!checkTerminos || !checkSituacion"  *ngIf="solicitud" (click)="cambioEstatus(solicitud.id_solicitud)"  style="color:#fff;" >Otros medios de pago</button>
+                  
+
+
+                </div>
+                <!-- <div class="col-md-6 col-md-offset-3 ">
+                  <a class="btn btn-block btn-primary" [class.disabled]="!checkTerminos || !checkSituacion" href="#" style="color:#fff;" (click)="cambioEstatus2(solicitud.id_solicitud)" >Pagar vía PSE</a>
+
+                </div> -->
+                
+              
+            </div>
+            </div>
+          </div>
+   
+            </div>
+          </div>
+    
+        </div>
+      </div>
+      <!-- {{ users$ | async | json }} -->
+    </div>
+  </div>
+</div>
+
+            <!-- terminos -->
+            <ng-template #terminos let-modal>
+      
+              <div class="modal-header">
+                <button type="button"  (click)="modal.dismiss('Cross click')" class="close" data-dismiss="modal">&times;</button>
+                <!-- <h4 class="modal-title">Modal Header</h4> -->
+              </div>
+              <div class="modal-body" style="max-height: 300px;overflow-y: scroll;">
+                <p><strong>T&eacute;rminos y condiciones Novaci&oacute;ncr&eacute;dito</strong></p>
+                <p>&nbsp;</p>
+                <p>Tu como PRESTATARIO autorizas expresamente a EL ACREEDORpara que ejercite las siguientes atribuciones, en tu nombre y representaci&oacute;n:&nbsp;<br /> <br /> <strong>1.&nbsp;</strong>Para realizar las consultas, verificaciones, reportes, divulgaci&oacute;n y procesamiento de informaci&oacute;n sobre el estado de tu endeudamiento y/o el cumplimiento de los compromisos comerciales y financieros.&nbsp;<br /> <strong>2.&nbsp;</strong>Tu como PRESTATARIO certificas y declaras que la informaci&oacute;n suministrada es exacta, veraz y verificable y que te comprometes a actualizarla, mientras seas usuario de los servicios de CREDITOS PANDA.&nbsp;<br /> <strong>3.&nbsp;</strong>Tu como PRESTATARIO autorizas a EL ACREEDOR, adicionalmente, y a las personas que hagan sus veces en el futuro, para desentra&ntilde;ar informaci&oacute;n en las bases de datos legalmente autorizadas, igual que en las dependencias oficiales de catastro.&nbsp;<br /> <strong>4.&nbsp;</strong>Tu como PRESTATARIO entiendes que la permanencia de la informaci&oacute;n del dato negativo o positivo, seg&uacute;n sea el caso, ser&aacute; la que la legislaci&oacute;n se&ntilde;ale, siendo responsabilidad de los operadores de bancos de datos de informaci&oacute;n, velar por su debido cumplimiento, para dar as&iacute; plena aplicaci&oacute;n a lo dispuesto en la Ley 1581 de 2012, que desarrolla el derecho constitucional que tienen todas las personas a conocer, actualizar y rectificar las informaciones que se hayan recogido sobre ellas en bases de datos o archivos, su Decreto Reglamentario 1377 de 2013 y la sentencia C - 748 de 2011 de la Corte Constitucional, que, en conjunto, se refieren a la protecci&oacute;n del derecho al HABEAS DATA, y en estos postulados legales, reglamentarios y jurisprudenciales, se concentran los derechos y deberes, anotados precedentemente.&nbsp;<br /> <strong>5.&nbsp;</strong>Tu como PRESTATARIO te comprometes a notificar a EL ACREEDOR, cualquier cambio en la informaci&oacute;n suministrada en el proceso de aplicaci&oacute;n o durante la vigencia de la relaci&oacute;n entre las partes.&nbsp;<br /> <strong>6.&nbsp;</strong>Tu como PRESTATARIO autorizas a CREDITOS PANDA SAS y a las personas que hagan sus veces en el futuro, para que contrate con terceros localizados en Colombia o en el exterior, servicios relacionados con el procesamiento de datos, transmisi&oacute;n y almacenamiento de &oacute;rdenes e informaci&oacute;n, para su utilizaci&oacute;n a escala nacional o internacional.&nbsp;<br /> <strong>7.&nbsp;</strong>Tu como PRESTATARIO autorizas a CREDITOS PANDASAS y/o sus aliados, filiales o matriz, cesionarios, compradores de cartera, tanto nacionales como extranjeras, a conservar, mantener, compartir, suministrar, remitir, comercializar e intercambiar entre s&iacute; toda informaci&oacute;n sobre las condiciones personales, econ&oacute;micas y/o comerciales, y el comportamiento crediticio tuyo como PRESTATARIO con el fin que sean ofrecidos los productos y/o servicios propios del objeto social de CREDITOS PANDASAS o los productos y/o los servicios que prestan los terceros en ejercicio de sus objetos sociales y actividades comerciales l&iacute;citas o para prop&oacute;sitos leg&iacute;timos de las partes definidos en esta cl&aacute;usula.&nbsp;<br /> <strong>8.&nbsp;</strong>En desarrollo de lo dispuesto en los art&iacute;culos 8&deg; y 13 de la Ley 1581 de 2012, autorizas a LOS OPERADORES DE INFORMACI&Oacute;N PILA para que le hagan entrega a CREDITOS PANDA SAS la informaci&oacute;n relativa a tus ingresos y aportes parafiscales. Para los efectos anteriores, otorgas poder especial, amplio y suficiente a CREDITOS PANDASAS para que reciba dicha informaci&oacute;n cuantas veces esta lo requiera y mientras el presente poder no se revoque por ti mediante comunicaci&oacute;n escrita, y quien utilizar&aacute; dicha informaci&oacute;n para actualizar tu informaci&oacute;n y ofrecerte productos financieros. As&iacute; mismo, dejas constancia de que est&aacute;s informado de que tus datos transferidos a CREDITOS PANDASAS pueden ser revisados, actualizados y/o modificados. Es as&iacute; como quedan expresamente autorizados a utilizar tales datos para finalidades comerciales y promocionales sobre sus servicios y productos, y tambi&eacute;n respecto de productos y servicios de terceros, a cuyo efecto tu como PRESTATARIO consientes el uso de los mismos para las finalidades indicadas, autorizando expresamente a CREDITOS PANDASAS y/o terceros para que te env&iacute;en comunicaciones comerciales y publicitarias sobre productos, servicios y actividades propios de CREDITOS PANDA SAS y/o de dichos terceros.&nbsp;<br /> <strong>9.&nbsp;</strong>Tu como PRESTATARIO autorizas expresamente a CREDITOS PANDASAS para que te contacte con fines comerciales y promocionales ya sea sobre sus propios servicios y productos, o los de terceros con los que CREDITOS PANDA SAS tenga relaciones comerciales o alianzas, a trav&eacute;s de tu correo electr&oacute;nico, tu tel&eacute;fono o cualquier otro medio conocido o por conocer, a trav&eacute;s del cual te podamos contactar. A trav&eacute;s del presente contrato, autorizas a que CREDITOS PANDASAS comparta con los comercios afiliados, tu informaci&oacute;n de contacto y un perfil sociodemogr&aacute;fico que permita emprender acciones de mercadeo para llevar productos y servicios de tu inter&eacute;s. CREDITOS PANDA SAS compartir&aacute; entre otras cosas: tu nombre completo, tu email, tu n&uacute;mero de celular, fecha de nacimiento, direcci&oacute;n y datos demogr&aacute;ficos generales, manteniendo en estricta confidencialidad datos financieros e informaci&oacute;n sensible.</p>
+                <p>&nbsp;</p>          
+              </div>
+              <div class="modal-footer">
+                <button type="button"  (click)="modal.dismiss('Cross click')" class="btn btn-default" data-dismiss="modal" style="background-color: #f36c21;color: white;border-color: #f36c21;">Cerrar</button>
+              </div>
+          
+      </ng-template>
+            <!-- situacion -->
+            <ng-template #situacion let-modal>
+      
+              <div class="modal-header">
+                <button type="button"  (click)="modal.dismiss('Cross click')" class="close" data-dismiss="modal">&times;</button>
+                <!-- <h4 class="modal-title">Modal Header</h4> -->
+              </div>
+              <div class="modal-body" style="max-height: 300px;overflow-y: scroll;">
+                <p><strong>Autorizar Novaci&oacute;n </strong></p>
+                <p>&nbsp;</p>
+                <p>SUSTITUCI&Oacute;N OPCIONAL DE TUS OBLIGACIONES (V&Iacute;A NOVACI&Oacute;N DE LA OBLIGACI&Oacute;N)&nbsp;<br /> <br /> Como Deudor podr&aacute;s sustituir tu cr&eacute;dito por un nuevo cr&eacute;dito, que ser&aacute; otorgadopor la misma duraci&oacute;n que el per&iacute;odo de vencimiento inicial. Para ser beneficiario de este nuevo cr&eacute;dito, v&iacute;a novaci&oacute;n, deber&aacute;s pagar la suma de los intereses y tarifas pendientes antes de que se realice la novaci&oacute;n del cr&eacute;dito actual.Esta aceptaci&oacute;n la haces a trav&eacute;s del bot&oacute;n de "Novaci&oacute;n" (obtener m&aacute;s plazo) en tu panel de control de usuario, y entiendes que se genera un nuevo cr&eacute;dito amparado en un nuevo contrato de cr&eacute;dito, con autorizaci&oacute;n descuento de n&oacute;mina, pagar&eacute; y carta de instrucciones que extinguen el anterior. La novaci&oacute;n es un servicio solicitado por ti de manera OPCIONAL y bajo ninguna circunstancia estamos obligados a aceptar dicha novaci&oacute;n ya que nos aumenta la exposici&oacute;n al riesgo y nos consume recursos por m&aacute;s tiempo. &iexcl;Tampoco es recomendable para ti como DEUDOR dado que incrementa el costo total de tu obligaci&oacute;n, la cual recuerda es para emergencias y casos especiales y debe ser una obligaci&oacute;n de corto plazo!El procedimiento para novar la obligaci&oacute;n, se lleva a cabo a trav&eacute;s del panel de control de usuario, siempre que solicites dicho nuevo contrato a trav&eacute;s de la misma y dentro del plazo permitido de hasta quince (15) d&iacute;as despu&eacute;s del vencimiento, cancelando al momento de solicitar la novaci&oacute;n, lo adeudado frente a la plataforma tecnol&oacute;gica y los otros servicios en tu cr&eacute;dito actual, si estos fueron as&iacute; contratados. No se cobrar&aacute;n intereses de mora en caso de que sea aprobada tu novaci&oacute;n.</p>
+                <p>Esta opci&oacute;n de novaci&oacute;n podr&aacute; no generar costo adicional en el caso de que el Deudor no acepte las tarifas de uso de la plataforma ni la tarifa de aprobaci&oacute;n r&aacute;pida. En este evento, el Deudor deber&aacute; hacer entrega por medios f&iacute;sicos, los documentos necesarios para analizar el cupo de cr&eacute;dito en esta novaci&oacute;n:</p>
+                <p>a)Certificado de tradici&oacute;n y libertad del inmueble del co-deudor, con fecha no mayor de 30 d&iacute;as a la fecha de presentaci&oacute;n del documento. b) Certificaciones laborales del codeudor solidario &lt; 30 d&iacute;as que acredite m&iacute;nimo 6 meses de historia laboral en la empresa. c) Certificado de ingresos, expedido por contador acreditado. d)pagar&eacute; y carta de instrucciones firmados por el codeudor solidario debidamente notarizados. e) Formulario de solicitud de cr&eacute;dito firmado y notarizado. f) copia de tu c&eacute;dula ampliada g) copia de tus servicios p&uacute;blicos h) extracto bancario &uacute;ltimos tres meses i) Si eres independiente deber&aacute;s anexar: certificaci&oacute;n de pagos a la seguridad social y copia de la matr&iacute;cula de tu veh&iacute;culo. j) ADICIONALMENTE si es aprobada tu solicitud deber&aacute;s imprimir y enviarnos: El presente contrato de mutuo, Carta de autorizaci&oacute;n de descuento, el poder, el pagar&eacute; y carta de instrucciones debidamente diligenciados y notarizados, a la direcci&oacute;n de nuestras oficinas que aparece en nuestra p&aacute;gina web WWW.CREDITOSPANDA.COM.</p>              
+              </div>
+              <div class="modal-footer">
+                <button type="button"  (click)="modal.dismiss('Cross click')" class="btn btn-default" data-dismiss="modal" style="background-color: #f36c21;color: white;border-color: #f36c21;">Cerrar</button>
+              </div>
+          
+      </ng-template>
+
+
+       <!-- credito nuevo -->
+       <ng-template #credito let-modal>
+      
+        <div class="modal-header">
+          <h4 class="modal-title">Valor a pagar de mi nuevo crédito</h4>
+          <button type="button"  (click)="modal.dismiss('Cross click')" class="close" data-dismiss="modal">&times;</button>
+          <!-- <h4 class="modal-title">Modal Header</h4> -->
+        
+        </div>
+        <div class="modal-body" >
+          <table class="table table-bordered">
+               
+            <tbody>
+              <!-- <tr>
+           
+                <th>Monto Solicitado</th> -->
+              
+                <!-- <td>$ {{ montoSolicitado | number:'1.0-0':'es'}}</td> -->
+                <!-- <td>$ 10.000</td>
+              </tr> -->
+              <tr>
+           
+                <th>Fecha de pago</th>
+              
+                <!-- <td>$ {{ taxInTotal | number:'1.0-0':'es'}}</td> -->
+                <td>{{ fechaNovacion }}</td>
+              </tr>
+              <!-- <tr>
+           
+                <th>Subtotal</th> -->
+              
+                <!-- <td>$ {{ subtotal | number:'1.0-0':'es'}}</td> -->
+                <!-- <td>$ 10.000</td>
+              </tr> -->
+              <tr>
+                <th>Monto aprobado</th>
+              
+                <!-- <td>$ {{ plataforma | number:'1.0-0':'es'}}</td> -->
+                <td>$ {{ (contra_oferta ? contra_oferta.montoAprobado : solicitud.montoSolicitado) | number:'1.0-0':'es' }}</td>
+              </tr>
+              <tr>
+               
+                <th>Tasa de interes</th>
+              
+                <!-- <td>$ {{ taxInTotal | number:'1.0-0':'es'}}</td> -->
+                <td>$ {{ contra_oferta.tasaInteres | number:'1.0-0':'es' }}</td>
+              </tr>
+              <!-- <tr>
+           
+                <th>Subtotal</th> -->
+              
+                <!-- <td>$ {{ subtotal | number:'1.0-0':'es'}}</td> -->
+                <!-- <td>$ 10.000</td>
+              </tr> -->
+              <tr>
+                <th>Plataforma</th>
+              
+                <!-- <td>$ {{ plataforma | number:'1.0-0':'es'}}</td> -->
+                <td>$ {{ contra_oferta.plataforma | number:'1.0-0':'es' }}</td>
+              </tr>
+              <tr>
+                <th>Aprobación rapida</th>
+              
+                <!-- <td>$ {{ ap_express | number:'1.0-0':'es'}}</td> -->
+                <td>$ {{ contra_oferta.aprobacionRapida | number:'1.0-0':'es' }}</td>
+              </tr>
+              <tr>
+                <th>IVA</th>
+              
+                <!-- <td>$ {{ iva | number:'1.0-0':'es'}}</td> -->
+                <td>$ {{ contra_oferta.iva | number:'1.0-0':'es' }}</td>
+              </tr>
+              
+              <tr style="font-size: 20px;">
+                <th>Total a pagar</th>
+              
+                <!-- <td>$ {{ total | number:'1.0-0':'es'}}</td> -->
+                <td><b>$ {{contra_oferta.totalPagar | number:'1.0-0':'es' }}</b></td>
+              </tr>
+            
+            </tbody>
+          </table>              
+        </div>
+        <div class="modal-footer">
+          <button type="button"  (click)="modal.dismiss('Cross click')" class="btn btn-default" data-dismiss="modal" style="background-color: #f36c21;color: white;border-color: #f36c21;">Cerrar</button>
+        </div>
+    
+</ng-template>

@@ -1,0 +1,97 @@
+<div class="container-fluid">
+  <div class="row align-items-end">
+    <div class="col-xs-12">
+      <div class="card formula mt3em">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>
+              {{ (testimonialToEdit$ | async)?.id ? 'Edición' : 'Registro' }} de
+              Comentario
+            </h2>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-content">
+            <form [formGroup]="formTestimonial">
+              <div class="form-row align-items-end">
+           
+                <div class="col-12">
+                  <div class="form-group">
+                    <div class="row">
+                      <div class="col-8">
+                        <label for="password">Archivo</label>
+                      <input
+                        type="file"
+                        class="form-control"
+                        formControlName="imagen"
+                        id="imagen"
+                        (change)="onFileChange($event)"
+                      />
+                      </div>
+                      <div class="col-4">
+                        <div *ngIf="isResize">
+                          <p><small>Espere para continuar...</small></p>
+                        </div>
+                        <img *ngIf="urlImagen" [src]="urlImagen" width="70" height="auto">
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
+                <div class="col-12">
+                  <div class="form-group">
+                    <label for="contenido">Comentario</label>
+                    <textarea class="form-control"
+                    formControlName="comentario"
+                    id="comentario"></textarea>
+                  </div>
+                </div>
+           
+              </div>
+              <div class="row">
+                <div
+                  class="col-auto my-2"
+                  *ngIf="(testimonialToEdit$ | async)?.id; else noEditMode"
+                >
+                  <button
+                    type="button"
+                    class="btn btn-raised btn-primary"
+                    [disabled]="formTestimonial.invalid"
+                    (click)="edit()"
+                  >
+                    Editar
+                  </button>
+                </div>
+                <ng-template #noEditMode>
+                  <div class="col-auto my-2">
+                    <button
+                      type="button"
+                      class="btn btn-raised btn-primary"
+                      [disabled]="formTestimonial.invalid"
+                      (click)="add()"
+                    >
+                      Guardar
+                    </button>
+                  </div>
+                </ng-template>
+
+                <div class="col-auto my-2">
+                  <button
+                    type="button"
+                    class="btn btn-raised btn-warning"
+                    [disabled]="!formTestimonial.dirty"
+                    (click)="formTestimonial.reset()"
+                  >
+                    Limpiar
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+

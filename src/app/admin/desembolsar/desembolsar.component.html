@@ -1,0 +1,190 @@
+<div class="container-fluid">
+  <div class="row align-items-end">
+    <div class="col-xs-12">
+      <div class="card formula mt3em">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>
+              Desembolsar
+            </h2>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-content">
+            <form [formGroup]="formBlog">
+              <div class="form-row align-items-end">
+                <div class="col-12">
+                  <div class="form-group">
+                    <label for="email">Nombres y Apellidos</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="nombres"
+                      id="nombres"
+                      disabled
+                    />
+                  </div>
+                  <!-- <div class="form-group" >
+                    <label>Selecciona tu Variable</label> -->
+                    <!-- <select formControlName="ciudad" name="ciudad" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" id="ciudad" class="form-control select-dropdown" required="true">      
+                      <option *ngFor="let c of countries">{{ c.name }}</option>
+                    </select> -->
+                    <!-- <ngx-select-dropdown
+                    formControlName="ciudads"
+                    [multiple]="false"
+                    [config]="clientSelectConfig"
+                    [options]="variables"
+                    (change)="clientSelected($event.value)"
+                    class="form-control"
+                    ></ngx-select-dropdown>
+             
+                    </div> -->
+                    
+                </div>
+
+          
+                <div class="col-12
+                ">
+                  <!-- <label for="descripcion_larga">Descripcion Larga</label> -->
+                  <!-- <div >Hello, Froala!</div>                   -->
+                  <div class="form-group">
+                    <label for="descripcion_larga">Nº cedula</label>
+                    <input
+                    type="text"
+                    class="form-control"
+                    formControlName="ncedula"
+                    id="ncedula"
+                    disabled
+                  />
+                  </div>
+                </div>
+                <div class="col-12
+                ">
+                  <!-- <label for="descripcion_larga">Descripcion Larga</label> -->
+                  <!-- <div >Hello, Froala!</div>                   -->
+                  <div class="form-group">
+                    <label for="descripcion_larga">Email</label>
+                    <input
+                    type="text"
+                    class="form-control"
+                    formControlName="email"
+                    id="email"
+                    disabled
+                  />
+                  </div>
+                </div>
+                <div class="col-12
+                ">
+                  <!-- <label for="descripcion_larga">Descripcion Larga</label> -->
+                  <!-- <div >Hello, Froala!</div>                   -->
+                  <div class="form-group">
+                    <label for="descripcion_larga">Nombre del banco</label>
+                    <input
+                    type="text"
+                    class="form-control"
+                    formControlName="nombreBanco"
+                    id="nombreBanco"
+                    disabled
+                  />
+                  </div>
+                </div>
+                <div class="col-12
+                ">
+                  <!-- <label for="descripcion_larga">Descripcion Larga</label> -->
+                  <!-- <div >Hello, Froala!</div>                   -->
+                  <div class="form-group">
+                    <label for="descripcion_larga">Tipo de cuenta</label>
+                    <input
+                    type="text"
+                    class="form-control"
+                    formControlName="tipoCuenta"
+                    id="tipoCuenta"
+                    disabled
+                  />
+                  </div>
+                </div>
+                <div class="col-12
+                ">
+                  <!-- <label for="descripcion_larga">Descripcion Larga</label> -->
+                  <!-- <div >Hello, Froala!</div>                   -->
+                  <div class="form-group">
+                    <label for="descripcion_larga">Nº de cuenta</label>
+                    <input
+                    type="text"
+                    class="form-control"
+                    formControlName="ncuenta"
+                    id="ncuenta"
+                    disabled
+                  />
+                  </div>
+                </div>
+                <div class="col-12
+                ">
+                  <!-- <label for="descripcion_larga">Descripcion Larga</label> -->
+                  <!-- <div >Hello, Froala!</div>                   -->
+                  <div class="form-group">
+                    <label for="descripcion_larga">Monto a transferir</label>
+                    <input
+                    [value]="cantidad" 
+                    type="text"
+                    class="form-control"
+                    formControlName="monto"
+                    id="monto"
+                    disabled
+                  />
+                  </div>
+                </div>
+                <div class="col-12
+                ">
+                  <!-- <label for="descripcion_larga">Descripcion Larga</label> -->
+                  <!-- <div >Hello, Froala!</div>                   -->
+                  <div class="form-group">
+                    <label for="descripcion_larga">Metodo de desembolso</label>
+                    <input
+                    type="text"
+                    class="form-control"
+                    formControlName="metodo"
+                    id="metodo"
+                    disabled
+                  />
+                  </div>
+                </div>
+                <div class="col-12
+                ">
+                  <!-- <label for="descripcion_larga">Descripcion Larga</label> -->
+                  <!-- <div >Hello, Froala!</div>                   -->
+                  <div class="form-group">
+                    <label for="descripcion_larga">Comentario</label>
+                    <input
+                    type="text"
+                    class="form-control"
+                    formControlName="comentario"
+                    id="comentario"
+                    
+                  />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+        
+                  <div class="col-auto my-2">
+                    <button
+                      type="button"
+                      class="btn btn-raised btn-primary"
+                      [disabled]="formBlog.invalid"
+                      (click)="add()"
+                    >
+                      Guardar
+                    </button>
+                  </div>
+
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

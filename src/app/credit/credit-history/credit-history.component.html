@@ -1,0 +1,82 @@
+<div class="container-fluid padding-mv-0">
+  <div class="row margin-mv-0">
+    <div class="col-12 padding-mv-0">
+      <div class="card formula mt3em">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>Historial Crediticio</h2>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12 pull-right" style="text-align: right;">
+              <button
+                        ngbTooltip="Descargar  PDF"
+                          type="button"
+                          class="btn btn-success"
+                          style="background-color: green;"
+                          (click)="exportPDF()"
+                          
+                        >
+                          <a class="ft-download" style="color:white"></a>
+                        </button>
+                   
+            </div>
+            <div class="col-12 table-responsive">
+              <table
+                class="table table-striped"
+                
+              >
+                <thead class="thead-inverse">
+                  <tr>
+                    <th>Nro de credito</th>
+                    <th>Monto desembolsado</th>
+                    <th>Fecha de pago</th>
+                    <th>Estatus</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let c of creditos ">
+                <td> {{ c.numero_credito}}</td>
+                <td >$ {{ (c.ofertaEnviada == 2 ? c.montoSolicitado : c.ContraOferta.montoAprobado ) | number:'1.0-0':'es' }}</td>
+                <td *ngIf="c.estatus !='pagado' && c.estatus !='castigado'"> {{ c.ProximoPago.fechaPago }}</td>
+                <td *ngIf="c.estatus =='pagado'"> {{ c.UltimoPago.fecha }}</td>
+                <td *ngIf="c.estatus =='castigado'"> {{ c.PagoParcial.created_at }}</td>
+                <td> {{c.estatus}}</td>
+                
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row aling-items-end">
+            <div class="col-3">
+              <div class="form-group">
+                <!-- <label for="page">Items por Página</label> -->
+                <select
+                  class="form-control"
+                  name="page"
+                  id="page"
+                  
+                >
+                  <option value="5">5</option>
+                  <option value="15">15</option>
+                  <option value="50">50</option>
+                </select>
+              </div>
+            </div>
+            <div class="col">
+              <pagination-controls
+                (pageChange)="p = $event"
+                previousLabel="Anterior"
+                nextLabel="Siguiente"
+              ></pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- {{ users$ | async | json }} -->
+    </div>
+  </div>
+</div>
+

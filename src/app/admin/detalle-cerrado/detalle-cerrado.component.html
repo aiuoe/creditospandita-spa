@@ -1,0 +1,872 @@
+<div class="container-fluid padding-mv-0">
+  <div class="row margin-mv-0">
+    <div class="col-12 padding-mv-0">
+      <div class="card formula mt3em">
+        <div class="card-header">
+          <div class="card-title">
+            <h2 *ngIf="solicitud">Detalle del credito Nº {{solicitud.numero_credito}}</h2>
+          </div>
+          <div class="pull-left" *ngIf="solicitud && isAdmin">
+            <button
+              type="button"
+              class="btn btn-raised btn-success margin-rl-10"                  
+              (click)="detalleDesembolso(solicitud.id_solicitud)">
+                Desembolso
+            </button>
+            <!-- <button
+              type="button"
+              class="btn btn-raised btn-warning margin-rl-10"                  
+              (click)="open(pagar)">
+                Repagos
+            </button>
+            <button
+              type="button"
+              class="btn btn-raised btn-warning margin-rl-10"                  
+              (click)="open(pago_parcial)">
+                Pago parcial
+            </button> -->
+            <!-- <button
+              type="button"
+              class="btn btn-raised btn-info margin-rl-10"                  
+              (click)="descargar()">
+                Descargar documentos
+            </button> -->
+            <div ngbDropdown class="d-inline-block">
+              <button class="btn btn-raised btn-primary" id="dropdownBasic1" ngbDropdownToggle>Descargar Documentos</button>
+              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                <button ngbDropdownItem class="btn btn-link" (click)="descargar(1)">Contrato</button>
+                <button ngbDropdownItem class="btn btn-link" (click)="descargar(2)">Carta de autorizacion</button>
+                <button ngbDropdownItem class="btn btn-link" (click)="descargar(3)">Pagare</button>
+              </div>
+            </div>
+            <button
+              type="button"
+              class="btn btn-raised btn-info margin-rl-10"                  
+              (click)="open(enviar_factura)">
+                Subir factura
+            </button>
+            <button
+            *ngIf="solicitud.factura"
+              type="button"
+              class="btn btn-raised btn-info margin-rl-10"                  
+              (click)="descargarFactura()">
+                Descargar factura
+            </button>
+            <!-- <button
+              type="button"
+              class="btn btn-raised btn-info margin-rl-10"    
+              (click)="open(contratos)"           
+              >
+                Subir documentos
+            </button> -->
+            <!-- <button
+              type="button"
+              [class]= "solicitud.estatusIntereses == 1 ? 'btn btn-raised margin-rl-10 btn-success' : 'btn btn-raised btn-danger margin-rl-10' " 
+              (click)="cambioEstatusIntereses()"           
+              >
+                Intereses {{solicitud.estatusIntereses == 1 ? 'Activados' : 'Desactivados'}}
+            </button> -->
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+  
+            <div class="col-12">
+
+
+              <ngb-tabset [justify]="currentJustify" *ngIf="isAdmin">
+                <ngb-tab>
+                  <ng-template ngbTabTitle>
+                    Detalles
+                  </ng-template>
+                  <ng-template ngbTabContent>
+                   <div class="row" *ngIf="solicitud">
+                    <div class="col-md-12 border-b-g padding-tb-10">
+                      <h4>Detalles de Usuario</h4>
+                      <label>Nombre: </label>
+                      <span> {{ solicitud.first_name }} {{ solicitud.last_name }}</span>
+                      <br>
+                      <label>Email: </label>
+                      <span> {{ solicitud.email }}</span>
+                      <br>
+                      <label>Telefono: </label>
+                      <span> {{ solicitud.phone_number }}</span>
+                      <br>
+                      <label>Documento: </label>
+                      <span> {{ solicitud.n_document }}</span>
+                      <br>
+                      <label>Direccion: </label>
+                      <span> {{ solicitud.direccion }}</span>
+                      <br>
+                      <label>Ciudad: </label>
+                      <span> {{ solicitud.ciudad }}</span>
+                    </div>
+                    <div class="col-md-12 border-b-g padding-tb-10">
+                      <h4>Detalles de credito</h4>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <label>Nro de credito: </label>
+                          <span> {{ solicitud.numero_credito }}</span>
+                          <br>
+                          <label>Tipo de credito: </label>
+                          <span> {{ solicitud.tipoCredito == 'm' ? 'Panda Meses' : 'Panda Dias' }}</span>
+                          <br>
+                          <label>Plazo: </label>
+                          <span> {{ solicitud.plazo }} {{ solicitud.tipoCredito == 'm' ? 'Meses' : 'Dias' }}</span>
+                          <br>
+                          <label>Credito aprobado: </label>
+                          <span *ngIf="solicitud.ofertaEnviada == 2"> Solicitud Original</span>
+                          <span *ngIf="solicitud.ofertaEnviada == 1"> Oferta Maxima</span>
+                          <span *ngIf="solicitud.ofertaEnviada == 0"> Oferta Minima</span>
+                          <br>
+                          <label>Monto aprobado: </label>
+                          <span *ngIf="solicitud.ofertaEnviada == 2"> ${{ solicitud.montoSolicitado | number:'1.0-0':'es' }}</span>
+                          <span *ngIf="solicitud.ofertaEnviada != 2"> ${{ contra_oferta.montoAprobado | number:'1.0-0':'es' }}</span>
+                          <br>
+                          <label>Pagado: </label>
+                          <span> ${{ (detalleCa.suma_montoPagado) | number:'1.0-0':'es' }}</span>
+                          <br>
+                          <label>Intereses de mora: </label>
+                          <span> ${{ (interesMora) | number:'1.0-0':'es' }}</span>
+                          <br>
+                          <label>Gastos de Cobranza: </label>
+                          <span> ${{ (gastosCobranza) | number:'1.0-0':'es' }}</span>
+                          <br>
+                          <label>Total a pagar: </label>
+                          <span > ${{ (solicitud && solicitud.estatus_credito =='castigado' ? totalPagarFinal : totalPagarFinal) | number:'1.0-0':'es' }}</span>
+                          <br *ngIf="solicitud.tipoCredito == 'm'">
+                          <label *ngIf="solicitud.tipoCredito == 'm'">Cuota: </label>
+                          <span *ngIf="solicitud.tipoCredito == 'm'"> ${{ cuota | number:'1.0-0':'es' }}</span>
+                          <!-- <br *ngIf="solicitud.tipoCredito == 'm' && diasMora > 0">
+                          <label *ngIf="solicitud.tipoCredito == 'm' && diasMora > 0 ">Cuota Total: </label>
+                          <span *ngIf="solicitud.tipoCredito == 'm' && diasMora > 0"> ${{ cuotaTotal | number:'1.0-0':'es' }}</span> -->
+                        </div>
+                        <div class="col-md-6">
+                          <label>Fecha de desembolso: </label>
+                          <span> {{ solicitud.fechaDesembolso  }}</span>
+                          <br>
+                          <label *ngIf="solicitud.tipoCredito == 'd'">Fecha de novacion: </label>
+                          <span *ngIf="solicitud.tipoCredito == 'd'"> {{ solicitud.fechaNovado }}</span>
+                          <br *ngIf="solicitud.tipoCredito == 'd'">
+                          <label>Fecha de pago: </label>
+                          <span> {{ fechaPago  }}</span>
+                          <br *ngIf="solicitud.tipoCredito == 'm' && pagoProximo">
+                          <label *ngIf="solicitud.tipoCredito == 'm' && pagoProximo">Fecha de pago de ultima cuota: </label>
+                          <span *ngIf="solicitud.tipoCredito == 'm' && pagoProximo"> {{ pagoProximo.fechaPagado  }}</span>
+                          <br>
+                          <label>Estatus del credito: </label>
+                          <span> {{ solicitud.estatus_credito }}</span>
+                          <!-- <br *ngIf="diasMora == 0">
+                          <label *ngIf="diasMora == 0">Saldo al vencimiento: </label>
+                          <span *ngIf="diasMora == 0"> ${{ saldoVencimiento | number:'1.0-0':'es' }}</span>
+                          <br>
+                          <label>Saldo al dia: </label>
+                          <span> ${{ saldoDia | number:'1.0-0':'es' }}</span>
+                          <br *ngIf="diasMora == 0">
+                          <label *ngIf="diasMora == 0">Días/Meses al vencimiento: </label>
+                          <span *ngIf="diasMora == 0"> Faltan {{ diasMesesVencimiento }} {{ solicitud.tipoCredito == 'm' ? 'Cuotas' : 'Dias' }}</span>-->
+                          <br>
+                          <label>Días de mora: </label>
+                          <span> {{ (dias_mora) }}</span> 
+                        </div>
+
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="row padding-tb-10">
+                        <button
+                          type="button"
+                          class="btn btn-raised btn-success"
+                          [routerLink]="['/admin/comentarioSolicitud', solicitud.id_solicitud]"
+
+                        >
+                          Agregar comentario
+                        </button>
+                      </div>
+                      <div class="row">
+                        <h4>Comentarios</h4>
+                        <div class="col-12 " *ngFor="let c of comentarios">
+                          <div class="row fondoComent">
+                            <div class="col-6">
+                              <strong>{{c.usuario}}</strong>
+                            </div>
+                            <div class="col-6" style="text-align: right;">
+                              <p>{{c.created_at}}</p>
+                            </div>
+                            <div class="col-6">
+                              <p>{{c.comentario}}</p>
+                            </div>
+                            <div class="col-6"></div>
+                            <div class="col-6">
+                              <p><a href="{{ruta}}{{c.archivo}}" target="_blank" download="{{c.archivo}}">{{c.archivo}}</a></p>
+                            </div>
+                            <div class="col-6" style="text-align: right;">
+                              <div class="row">
+                                <div class="col-9" style="text-align: right;"><p><a [routerLink]="['/admin/comentarios/', c.id]">Editar</a></p></div>
+                                <div class="col-3" style="text-align: left;"><p><a style="color: #f4c269;" (click)="borrarComentario(c)">Borrar</a></p></div>
+                              </div>
+                             
+                              
+            
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                   </div>
+                  </ng-template>
+                </ngb-tab>
+                <ngb-tab>
+                  <ng-template ngbTabTitle>
+                    Pagos
+                  </ng-template>
+                  <ng-template ngbTabContent>
+                   <div class="row">
+                    
+                      <div class="col-12 table-responsive">
+                        <table
+                          class="table table-striped"
+                          
+                        >
+                          <thead class="thead-inverse">
+                            <tr>
+                              <th>Fecha de cuota</th>
+                              <!-- <th>Estatus del pago</th> -->
+                              <th>Fecha de pago</th>
+                              <th>Dias de mora</th>
+                              <th *ngIf="solicitud.tipoCredito == 'd'">Total a pagar</th>
+                              <th *ngIf="solicitud.tipoCredito == 'm'">Cuota mensual</th>
+                              <th>Capital</th>
+                              <th>Intereses</th>
+                              <th>Intereses de mora</th>
+                              <th>Plataforma</th>
+                              <th>Aprobacion Rapida</th>
+                              <th>Gastos de cobranza</th>
+                              <th>Iva de Gastos de cobranza</th>
+                              <th>IVA</th>
+                              <th>Monto pagado</th>
+                              <th *ngIf="solicitud.tipoCredito == 'd'">Novacion</th>
+                              <th>Pendiente por pagar</th>
+                              <th>Descuento bancario</th>
+                              <!-- <th>Nro de Recibo</th> 
+                              <th>Concepto</th> -->
+                              
+                      
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="
+                            let c of pagos; index as i
+                          ">
+                          <!-- <td>{{c.fechaPago}}</td> -->
+                              <!-- <td> {{ c.estatusPago }}</td> -->
+                              <td>{{c.fechaPago}}</td>
+                              <td>{{c.fechaPagado}}</td>
+                              <td>{{c.diasMora}}</td>
+                              <td>${{(c.montoPagar) | number:'1.0-0':'es'}}</td>
+                              <td>${{c.capital | number:'1.0-0':'es'}}</td>
+                              <td>${{c.intereses | number:'1.0-0':'es'}}</td>
+                              <td>${{c.interesMora | number:'1.0-0':'es'}}</td>
+                              <td>${{c.plataforma | number:'1.0-0':'es'}}</td>
+                              <td>${{c.aprobacionRapida | number:'1.0-0':'es'}}</td>
+                              <td>${{c.gastosCobranzaSinIva | number:'1.0-0':'es'}}</td>
+                              <td>${{c.ivaGastosCobranza | number:'1.0-0':'es'}}</td>
+                              <td>${{c.iva | number:'1.0-0':'es'}}</td>
+                              <td>${{c.montoPagado | number:'1.0-0':'es'}}</td>
+                              <td *ngIf="solicitud.tipoCredito == 'd'">${{(c.Novacion !='' ? c.Novacion.montoRepagar : 0) | number:'1.0-0':'es'}}</td>
+                              <td>${{c.pendientePagar | number:'1.0-0':'es'}}</td>
+                              <td>${{c.montoRestante | number:'1.0-0':'es'}}</td>
+                              <!-- <td>{{c.nroReferencia}}</td>
+                              <td>{{c.concepto}}</td> -->
+                              <!-- <td *ngIf="solicitud.tipoCredito == 'd'">
+                                <label class="fs-novado">Fecha de pago: </label>
+                                <span class="fs-novado"> {{ c.fechaPagadoNovado  }}</span>
+                                <br>
+                                <label class="fs-novado">Medio de pago: </label>
+                                <span class="fs-novado"> {{ c.medioNovado  }}</span>
+                                <br>
+                                <label class="fs-novado">Referencia de pago: </label>
+                                <span class="fs-novado"> {{ c.nroReferenciaNovado  }}</span>
+                                <br>
+                                <label class="fs-novado">Monto de pago: </label>
+                                <span class="fs-novado"> ${{ c.montoNovado | number:'1.0-0':'es' }}</span>
+                                <br>
+                              </td> -->
+                            </tr>
+                            <tr>
+                              <td><b>Total pagar</b></td>
+                              <td></td>
+                              <td></td>
+                              <td colspan="10">${{ (totalPagarSuma) | number:'1.0-0':'es'}}</td>
+                            </tr>
+                            <!-- <tr>
+                              <td><b>Total adeudado</b></td>
+                              <td colspan="4">${{pagado | number:'1.0-0':'es'}}</td>
+                            </tr> -->
+                            <tr>
+                              <td><b>Total pagado</b></td>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td>${{detalleCa.suma_capital | number:'1.0-0':'es'}}</td>
+                              <td>${{detalleCa.suma_intereses | number:'1.0-0':'es'}}</td>
+                              <td>${{detalleCa.suma_interesMora | number:'1.0-0':'es'}}</td>
+                              <td>${{detalleCa.suma_plataforma | number:'1.0-0':'es'}}</td>
+                              <td>${{detalleCa.suma_aprobacionRapida | number:'1.0-0':'es'}}</td>
+                              <td>${{detalleCa.suma_gastosCobranzaSinIva | number:'1.0-0':'es'}}</td>
+                              <td>${{detalleCa.suma_ivaGastosCobranza | number:'1.0-0':'es'}}</td>
+                              <td>${{detalleCa.suma_iva | number:'1.0-0':'es'}}</td>
+                              <td>${{detalleCa.suma_montoPagado | number:'1.0-0':'es'}}</td>
+                              <td *ngIf="solicitud.tipoCredito == 'd'">${{pagado_novacion | number:'1.0-0':'es'}}</td>
+                              <td></td>
+                            </tr>
+                            <!-- <tr>
+                              <td><b>Pendiente por pagar</b></td>
+                              <td colspan="4">${{totalPagar | number:'1.0-0':'es'}}</td>
+                            </tr> -->
+                          </tbody>
+                        </table>
+                    </div>
+                   </div>
+                  </ng-template>
+                </ngb-tab>
+                <!-- <ngb-tab *ngIf="solicitud && solicitud.estatus_credito =='castigado'">
+                  <ng-template ngbTabTitle>
+                    Pagos Parciales
+                  </ng-template>
+                  <ng-template ngbTabContent>
+                    <div class="row">
+                    
+                      <div class="col-12 table-responsive">
+                        <table
+                          class="table table-striped"
+                          
+                        >
+                          <thead class="thead-inverse">
+                            <tr>
+                              <th>Fecha de pago</th>
+                              <th>Capital</th>
+                              <th>Intereses</th>
+                              <th>Intereses de mora</th>
+                              <th>Plataforma</th>
+                              <th>Aprobacion Rapida</th>
+                              <th>Gastos de cobranza</th>
+                              <th>IVA</th>
+                              <th>Nro de Referencia</th> 
+                              <th>Concepto</th>
+                              <th>Medio de pago</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr >
+                              <td>{{pagos_parciales.fecha}}</td>
+                              <td>${{pagos_parciales.capital | number:'1.0-0':'es'}}</td>
+                              <td>${{pagos_parciales.intereses | number:'1.0-0':'es'}}</td>
+                              <td>${{pagos_parciales.interesesMora | number:'1.0-0':'es'}}</td>
+                              <td>${{pagos_parciales.plataforma | number:'1.0-0':'es'}}</td>
+                              <td>${{pagos_parciales.aprobacionRapida | number:'1.0-0':'es'}}</td>
+                              <td>${{pagos_parciales.gastosCobranza | number:'1.0-0':'es'}}</td>
+                              <td>${{pagos_parciales.iva | number:'1.0-0':'es'}}</td>
+                              <td>{{pagos_parciales.nroReferencia}}</td>
+                              <td>{{pagos_parciales.concepto}}</td>
+                              <td>{{pagos_parciales.medioPago}}</td>
+                            </tr>
+                            <tr>
+                              <td colspan="11"></td>
+                            </tr>
+                            <tr>
+                              <td colspan="11"></td>
+                            </tr>
+                            
+                            <tr>
+                              <td><b>Total a pagar</b></td>
+                              <td colspan="10">${{totalPagarFinalParcial | number:'1.0-0':'es'}}</td>
+                            </tr>
+                            <tr>
+                              <td><b>Total pagado</b></td>
+                              <td colspan="10">${{pagos_parciales.totalNoPago | number:'1.0-0':'es'}}</td>
+                            </tr>
+                            <tr>
+                              <td><b>Pendiente por pagar</b></td>
+                              <td colspan="10">${{totalPagarParcial | number:'1.0-0':'es'}}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                    </div>
+                   </div>
+                  </ng-template>
+                </ngb-tab> -->
+              </ngb-tabset>
+              
+              <div *ngIf="!isAdmin && solicitud" class="col-md-10" style="background-color: #f2f2f2;padding: 20px;border-left: 2px solid #ebc121;">
+                <div class="row">
+                  <div class="col-md-12" style="margin-bottom: 10px;">
+                    <span><b>Nº Crédito:</b></span><span><b>{{solicitud.numero_credito}}</b> </span>
+                  </div><br>
+                  <div class="col-md-6">
+                    <span>Fecha de desembolso:</span><span><b> {{solicitud.fechaDesembolso}}</b> </span>
+                  </div>
+                  <div class="col-md-6">
+                    <span>Fecha de pago:</span><span><b>   <span> {{ fechaPago  }}</span></b> </span>
+                  </div>
+                 <div class="col-md-6" *ngIf="solicitud.tipoCredito == 'd'">
+                  <span *ngIf="solicitud.tipoCredito == 'd'">Fecha de novacion: </span>
+                  <span *ngIf="solicitud.tipoCredito == 'd'"> <b>{{ solicitud.fechaNovado }}</b></span>
+                 </div>
+                  <div class="col-md-6">
+                    <span>Monto desembolsado:</span>
+                    <span *ngIf="solicitud.ofertaEnviada == 2"><b> ${{ solicitud.montoSolicitado | number:'1.0-0':'es' }}</b></span>
+                          <span *ngIf="solicitud.ofertaEnviada != 2"><b> ${{ contra_oferta.montoAprobado | number:'1.0-0':'es' }}</b></span>
+                  </div>
+                  <div class="col-md-6">
+                    <span>Plazo:</span><span><b>   <span> {{ solicitud.plazo }} {{ solicitud.tipoCredito == 'm' ? 'Meses' : 'Dias' }}</span></b> </span>
+                  </div>
+                  <div class="col-md-6" *ngIf="solicitud.tipoCredito == 'm'">
+                    <span *ngIf="solicitud.tipoCredito == 'm' && diasMora == 0">Valor cuota mensual:</span>
+                    <!-- <label *ngIf="solicitud.tipoCredito == 'm'"></label> -->
+                    <span *ngIf="solicitud.tipoCredito == 'm' && diasMora == 0" style="color:orange"> <b>${{ cuota | number:'1.0-0':'es' }}</b></span>
+                    <!-- <br *ngIf="solicitud.tipoCredito == 'm' && diasMora > 0"> -->
+                    <!-- <label *ngIf="solicitud.tipoCredito == 'm' && diasMora > 0 ">Valor cuota mensual en mora: </label> -->
+                    <span *ngIf="solicitud.tipoCredito == 'm' && diasMora > 0">Valor cuota mensual en mora:</span>
+                    <span *ngIf="solicitud.tipoCredito == 'm' && diasMora > 0" style="color:orange"> <b>${{ cuotaTotal | number:'1.0-0':'es' }}</b></span>
+                  </div>
+                  <div class="col-md-6" *ngIf="solicitud.tipoCredito == 'm'">
+                    <span>Fecha de pago proxima cuota:</span><span><b>   <span *ngIf="solicitud.tipoCredito == 'm'"> {{ pagoProximo.fechaPago  }}</span></b> </span>
+                  </div>
+                  <div class="col-md-6" *ngIf="diasMora == 0">
+                    <span *ngIf="diasMora == 0">Saldo al vencimiento: </span>
+                    <span *ngIf="diasMora == 0 && solicitud.tipoCredito == 'd' " style="color:orange"><b> ${{ saldoVencimiento | number:'1.0-0':'es' }}</b></span>
+                    <span *ngIf="diasMora == 0 && solicitud.tipoCredito == 'm' " ><b> ${{ saldoVencimiento | number:'1.0-0':'es' }}</b></span>
+
+                  </div>
+                  <!-- <div class="col-md-6">
+                    <span>Saldo al día:</span>
+                    <span ><b> ${{ saldoDia | number:'1.0-0':'es' }}</b></span>
+                         
+                  </div> -->
+
+                  <div class="col-md-6">
+                    <span>Pagado:</span><span><b>   <span> ${{ pagado_todo | number:'1.0-0':'es' }}</span></b> </span>
+                  </div>
+                  <div class="col-md-6">
+                    <span *ngIf="solicitud.tipoCredito == 'd'">Días al vencimiento:</span>
+                    <span *ngIf="solicitud.tipoCredito == 'm'">Meses al vencimiento:</span>
+                    <span *ngIf="diasMora == 0"><b>  Faltan {{ diasMesesVencimiento }} {{ solicitud.tipoCredito == 'm' ? 'Cuotas' : 'Dias' }}</b></span>
+                         
+                  </div>
+                  <div class="col-md-6">
+              
+                    <span>Intereses de mora:</span><span><b> ${{ interesMora| number:'1.0-0':'es' }} </b></span>
+                  </div>
+                  <div class="col-md-6">
+                    <span>Días en mora:</span><span><b>{{ diasMora }}</b></span>
+                  </div>
+                  <div class="col-md-6">
+                    <span>Gastos de cobranza:</span><span><b> ${{ gastosCobranza| number:'1.0-0':'es' }}</b></span>
+                  </div>
+                  <div class="col-md-6" *ngIf="solicitud.tipoCredito == 'd'">
+                    <span *ngIf="solicitud.tipoCredito == 'd'">Total pagado novacion:</span><span *ngIf="solicitud.tipoCredito == 'd'"><b> ${{ pagado_novacion| number:'1.0-0':'es' }}</b></span>
+                  </div>
+                  <div class="col-md-6">
+                    <span>Estado:</span><span><b> {{ solicitud.estatus_credito=='abierto' ? 'Desembolsado' : solicitud.estatus_credito   }}</b> </span>
+                  </div>
+                  <div class="col-md-10">
+                
+                    <div class="row" style="text-align: center;margin-top: 2em;">
+                      <div class="col-md-6">
+                        <!-- <button
+                        ngbTooltip="Pagar credito"
+                          type="button"
+                          class="btn btn-success"
+                          [routerLink]="['/admin-credit/', solicitud.id_solicitud]"
+                        
+                        >
+                          <a class="fa fa-credit-card" style="color:white">
+                          Pagar Crédito
+                        </a>
+                        </button> -->
+                      </div>
+                      <div class="col-md-6">
+                        <!-- <button
+                        *ngIf="solicitud.tipoCredito!='m'"
+                        ngbTooltip="Novacion"
+                          type="button"
+                          class="btn btn-warning"
+                          [routerLink]="['/credit/novacion/', solicitud.id_solicitud]"
+                        
+                        >
+                          <a class="ft-watch" style="color:white">
+                          Obtener más plazo
+                        </a>
+                        </button> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              
+              
+            </div><!--FINAL DEL COL QUE ENCIERRA TODO-->
+        
+          </div>
+          
+        </div>
+      </div>
+      <!-- {{ users$ | async | json }} -->
+    </div>
+  </div>
+</div>
+
+<ng-template #pagar let-modal>
+
+  <div class="modal-header">
+    <h4 class="modal-title">Repagos</h4>
+  <button type="button"  (click)="modal.dismiss('Cross click')" class="close" data-dismiss="modal">&times;</button>
+  
+  </div>
+  <div class="modal-body" style="max-height: 600px;overflow-y: scroll;">
+    <form [formGroup]="form">
+      <div class="form-row align-items-end">
+        <div class="col-12">
+          <div class="form-group">
+            <label for="medio">Concepto de pago</label>
+            <select formControlName="concepto" (change)="cambioConcepto($event.target.value)" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="concepto" class="form-control" required="true">
+              <option *ngIf="solicitud.tipoCredito == 'd'" value="Novacion">Novación</option>
+              <option *ngIf="solicitud.tipoCredito == 'm'" value="Pago cuota mensual">Pago cuota mensual</option>
+              <option *ngIf="solicitud.tipoCredito == 'm'" value="Pago ultima cuota">Pago última cuota</option>
+              <option *ngIf="solicitud.tipoCredito == 'd'" value="Pago total credito">Pago total crédito</option>
+              <!-- <option value="Pago parcial">Pago parcial</option> -->
+              <option value="Pago anticipado">Pago anticipado</option>
+              <option *ngIf="solicitud.tipoCredito == 'd'" value="Pago total saldo al dia moroso">Pago total saldo al día moroso</option>
+              <option *ngIf="solicitud.tipoCredito == 'm'" value="Pago cuota mensual morosa">Pago cuota mensual morosa</option>
+              </select>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="form-group">
+            <label for="monto">Monto a pagar</label>
+            <input
+              class="form-control"
+              [value]="montoP"
+              (change)="monto_pagar($event.target.value)" 
+              type="text" 
+              name="monto_pagar"
+              required
+            />
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="form-group">
+            <label for="medio">Medio de pago</label>
+            <select formControlName="medioPago" style="background: url(/assets/img/arrow.svg) 100% no-repeat !important;" name="medioPago" class="form-control" required="true">
+              <option value="Transferencia bancaria">Transferencia bancaria</option>
+              <option value="Baloto">Baloto</option>
+              <option value="Ventanilla">Ventanilla</option>
+              <option value="Pse">Pse</option>
+              </select>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="form-group">
+            <label for="descripcion">Fecha de pago</label>
+            <input
+              type="text"
+              ngbDatepicker
+              #fecha_pago="ngbDatepicker"
+              (click)="fecha_pago.toggle()"
+              class="form-control"
+              id="fecha_pago"
+              (dateSelect)="fechaSelect($event)"
+            />
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="form-group">
+            <label for="descripcion">Nro de Referencia</label>
+            <input
+              type="text"
+              class="form-control"
+              id="nroReferencia"
+              formControlName="nroReferencia"
+            />
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="form-group">
+            <label for="descripcion">Factura</label>
+            <input
+              type="file"
+              class="form-control"
+              formControlName="factura"
+              id="factura"
+              (change)="onFileChangeFactura($event)"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        
+          <div class="col-auto my-2">
+            <button
+              type="button"
+              class="btn btn-raised btn-primary"
+              [disabled]="form.invalid"
+              (click)="repago()"
+            >
+              Guardar
+            </button>
+          </div>
+      </div>
+    </form>
+  </div>
+  <!-- <div class="modal-footer">
+  <button type="button"  (click)="modal.dismiss('Cross click')" class="btn btn-default" data-dismiss="modal" style="background-color: #f36c21;color: white;border-color: #f36c21;">Cerrar</button>
+  </div> -->
+  
+  </ng-template>
+
+  <ng-template #contratos let-modal>
+
+    <div class="modal-header">
+      <h4 class="modal-title">Contratos</h4>
+    <button type="button"  (click)="modal.dismiss('Cross click')" class="close" data-dismiss="modal">&times;</button>
+    
+    </div>
+    <div class="modal-body" style="max-height: 600px;overflow-y: scroll;">
+      <form [formGroup]="formContratos">
+        <div class="form-row align-items-end">
+          <div class="col-12">
+            <div class="form-group">
+              <label for="monto">Contrato</label>
+              <input
+                type="file"
+                class="form-control"
+                formControlName="contrato"
+                id="contrato"
+                (change)="onFileChangeContrato($event)"
+              />
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="form-group">
+              <label for="medio">Carta de autorizacion</label>
+              <input
+              type="file"
+              class="form-control"
+              formControlName="carta"
+              id="carta"
+              (change)="onFileChangeCarta($event)"
+            />
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="form-group">
+              <label for="descripcion">Pagare</label>
+              <input
+                type="file"
+                class="form-control"
+                formControlName="pagare"
+                id="pagare"
+                (change)="onFileChangePagare($event)"
+              />
+            </div>
+          </div>
+  
+        </div>
+        <div class="row">
+          
+            <div class="col-auto my-2">
+              <button
+                type="button"
+                class="btn btn-raised btn-primary"
+                [disabled]="formContratos.invalid"
+                (click)="editContratos()"
+              >
+                Guardar
+              </button>
+            </div>
+        </div>
+      </form>
+    </div>
+    <!-- <div class="modal-footer">
+    <button type="button"  (click)="modal.dismiss('Cross click')" class="btn btn-default" data-dismiss="modal" style="background-color: #f36c21;color: white;border-color: #f36c21;">Cerrar</button>
+    </div> -->
+    
+    </ng-template>
+    <ng-template #pago_parcial let-modal>
+
+      <div class="modal-header">
+        <h4 class="modal-title">Pago parcial</h4>
+      <button type="button"  (click)="modal.dismiss('Cross click')" class="close" data-dismiss="modal">&times;</button>
+      
+      </div>
+      <div class="modal-body" style="max-height: 600px;overflow-y: scroll;">
+        <form [formGroup]="formPagoParcial">
+          <div class="form-row align-items-end">
+            <div class="col-12">
+              <div class="form-group">
+                <label for="monto">Capital</label>
+                <input
+                  class="form-control"
+                  [value]="capital_"
+                  (change)="monto_capital($event.target.value)" 
+                  type="text" 
+                  name="monto_capital"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group">
+                  <label for="monto">Intereses</label>
+                  <input
+                    class="form-control"
+                    [value]="intereses_"
+                    (change)="monto_intereses($event.target.value)" 
+                    type="text" 
+                    name="monto_intereses"
+                    required
+                  />
+                </div>
+            </div>
+            <div class="col-12">
+              <div class="form-group">
+                <label for="monto">Intereses de mora</label>
+                <input
+                  class="form-control"
+                  [value]="intereses_mora"
+                  (change)="monto_intereses_mora($event.target.value)" 
+                  type="text" 
+                  name="monto_intereses_mora"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-group">
+                <label for="monto">Plataforma</label>
+                <input
+                  class="form-control"
+                  [value]="plataforma_"
+                  (change)="monto_plataforma($event.target.value)" 
+                  type="text" 
+                  name="monto_plataforma"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-group">
+                <label for="monto">Aprobacion Rapida</label>
+                <input
+                  class="form-control"
+                  [value]="aprobacion_rapida"
+                  (change)="monto_aprobacion_rapida($event.target.value)" 
+                  type="text" 
+                  name="monto_aprobacion_rapida"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-group">
+                <label for="monto">Gastos de cobranza</label>
+                <input
+                  class="form-control"
+                  [value]="gastos_cobranza"
+                  (change)="monto_gastos_cobranza($event.target.value)" 
+                  type="text" 
+                  name="monto_gastos_cobranza"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-group">
+                <label for="monto">Iva</label>
+                <input
+                  class="form-control"
+                  [value]="iva_"
+                  (change)="monto_iva($event.target.value)" 
+                  type="text" 
+                  name="monto_iva"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-group">
+                <label for="monto">Total no pago</label>
+                <input
+                  class="form-control"
+                  [value]="total_no_pago"
+                  (change)="monto_total_no_pago($event.target.value)" 
+                  type="text" 
+                  name="monto_total_no_pago"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            
+              <div class="col-auto my-2">
+                <button
+                  type="button"
+                  class="btn btn-raised btn-primary"
+                  [disabled]="formPagoParcial.invalid"
+                  (click)="pagoParcial()"
+                >
+                  Guardar
+                </button>
+              </div>
+          </div>
+        </form>
+      </div>
+      <!-- <div class="modal-footer">
+      <button type="button"  (click)="modal.dismiss('Cross click')" class="btn btn-default" data-dismiss="modal" style="background-color: #f36c21;color: white;border-color: #f36c21;">Cerrar</button>
+      </div> -->
+      
+      </ng-template>
+      <ng-template #enviar_factura let-modal>
+
+        <div class="modal-header">
+          <h4 class="modal-title">Factura</h4>
+        <button type="button"  (click)="modal.dismiss('Cross click')" class="close" data-dismiss="modal">&times;</button>
+        
+        </div>
+        <div class="modal-body" style="max-height: 600px;overflow-y: scroll;">
+          <form >
+            <div class="form-row align-items-end">
+              <div class="col-12">
+                <div class="form-group">
+                  <label for="descripcion">Factura</label>
+                  <input
+                    type="file"
+                    class="form-control"
+                    id="factura"
+                    (change)="onFileChangeFactura($event)"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              
+                <div class="col-auto my-2">
+                  <button
+                    type="button"
+                    class="btn btn-raised btn-primary"
+                    (click)="enviarFactura()"
+                  >
+                    Guardar
+                  </button>
+                </div>
+            </div>
+          </form>
+        </div>
+        <!-- <div class="modal-footer">
+        <button type="button"  (click)="modal.dismiss('Cross click')" class="btn btn-default" data-dismiss="modal" style="background-color: #f36c21;color: white;border-color: #f36c21;">Cerrar</button>
+        </div> -->
+        
+        </ng-template>

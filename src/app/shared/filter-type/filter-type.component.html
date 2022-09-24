@@ -1,0 +1,58 @@
+<div class="form-inline">
+
+  <div class="form-group">
+    <select 
+      class="form-control" 
+      style="background: url(/assets/img/arrow.svg) 100% no-repeat !important; width: 150px;" 
+      [(ngModel)]="typeFilter"
+      change="setFilter()"
+    >
+      <option value="actualMonth">Mes actual</option>
+      <!-- <option value="month">Meses</option> -->
+      <option value="betweenDate">Rango de fecha</option>
+    </select>
+  </div>
+  <div class="form-group" *ngIf="typeFilter === 'betweenDate'">
+    <input
+      type="text"
+      ngbDatepicker
+      placeholder="Desde"
+      #desde="ngbDatepicker"
+      (click)="desde.toggle()"
+      class="form-control"
+      id="desde"
+      [(ngModel)]="since"
+      [ngModelOptions]="{ standalone: true }"
+    />
+    <!-- <small id="helpId" class="text-muted">Help text</small> -->
+  </div>
+  <div class="form-group" *ngIf="typeFilter === 'betweenDate'">
+    <input
+      type="text"
+      ngbDatepicker
+      placeholder="Hasta"
+      #hasta="ngbDatepicker"
+      (click)="hasta.toggle()"
+      class="form-control"
+      id="hasta"
+      [(ngModel)]="until"
+      [ngModelOptions]="{ standalone: true }"
+    />
+    <!-- <small id="helpId" class="text-muted">Help text</small> -->
+  </div>
+
+  <div class="form-group margin-rl-5">
+    <!-- <button
+      class="btn btn-raised btn-warning mt-2 margin-rl-5"
+      (click)="reset()"
+    >
+      <i class="ft-trash"></i>
+    </button> -->
+    <button
+      class="btn btn-raised btn-primary mt-2"
+      (click)="setFilter()"
+    >
+      <i class="ft-search"></i>
+    </button>
+  </div>
+</div>

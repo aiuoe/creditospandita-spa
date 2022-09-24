@@ -1,0 +1,216 @@
+<div class="container-fluid padding-mv-0" style="width: 100%;">
+  <div class="row margin-mv-0">
+    <div class="col-12 padding-mv-0">
+      <div class="card formula mt3em">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>{{ (userToEdit$ | async)?.id ? 'Edición' : 'Registro' }} de usuario Administrador</h2>
+          </div>
+        </div>
+        <!--INICIO DEL CARD BODY-->
+        <div class="card-body padding-mv-0" >
+            
+            <div class="row w-100" >
+                <div class="card-content w-100">
+                    <form [formGroup]="registroForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                            <div class="form-group margin-fg">
+
+                                <label>Primer Nombre</label>
+                                <input type='text'  [ngClass]="{ 'is-invalid': submitted && f.first_name.errors }" formControlName="first_name" name='first_name' value='' class='form-control ' placeholder='' required="required" /> 
+                                <div *ngIf="submitted && f.first_name.errors" class="error">
+                                    <div *ngIf="f.first_name.errors.required"><small>Primer nombre es requerido</small></div>
+                                    <div *ngIf="f.first_name.errors.pattern"><small>Este campo solo permite letras</small></div>
+
+                                </div>
+
+                            </div>
+                            </div>
+                            <div class="col-md-6">
+                            <div class="form-group margin-fg">
+
+                                <label>Segundo Nombre</label>
+                                <input type='text' formControlName="second_name" name='last_name' value='' class='form-control ' placeholder='' /> 
+                                <div *ngIf="submitted && f.second_name.errors" class="error">
+                                    <div *ngIf="f.second_name.errors.pattern"><small>Este campo solo permite letras</small></div>
+
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                            <div class="form-group margin-fg">
+
+                                <label>Primer Apellido</label>
+                                <input type='text' [ngClass]="{ 'is-invalid': submitted && f.primer_apelli.errors }" formControlName="primer_apelli" name='primer_apelli' value='' class='form-control ' placeholder='' required="required" /> 
+                                <div *ngIf="submitted && f.primer_apelli.errors" class="error">
+                                    <div *ngIf="f.primer_apelli.errors.required"><small>Primer apellido es requerido</small></div>
+                                    <div *ngIf="f.primer_apelli.errors.pattern"><small>Este campo solo permite letras</small></div>
+
+                                </div>
+                            </div>
+                            </div>
+                            <div class="col-md-6">
+                            <div class="form-group margin-fg">
+
+                                <label>Segundo Apellido</label>
+                                <input type='text' formControlName="segundo_apell" name='segundo_apell' value='' class='form-control ' placeholder='' /> 
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                            <div class="form-group margin-fg">
+
+                                <label>Tipo de Documento</label>
+                                <br>
+                                <div class='radio '>
+                                    <label for='C.C'>
+                                        <input type='radio' [checked]="true" formControlName="tipo_de_docum" name='tipo_de_docum' value='C.C' class='' required="required" checked="true" />C.C</label>
+                                        <div *ngIf="submitted && f.tipo_de_docum.errors" class="error">
+                                            <div *ngIf="f.tipo_de_docum.errors.required"><small>Tipo de documento es requerido</small></div>
+                                                    
+                                        </div>
+                                </div>
+                               
+                            </div>
+                            </div>
+                            <div class="col-md-6">
+                            <div class="form-group margin-fg">
+
+                                <label>Numero de Documento</label>
+                                <input type='text' name='n_documento' [ngClass]="{ 'is-invalid': submitted && f.n_documento.errors }" formControlName="n_documento" value='' class='form-control ' placeholder='' required="required" /> 
+                                <div *ngIf="submitted && f.n_documento.errors" class="error">
+                                    <div *ngIf="f.n_documento.errors.required"><small>N° de documento es requerido</small></div>
+                                    <div *ngIf="f.n_documento.errors.pattern"><small>Este campo es numerico</small></div>
+
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                            <div class="form-group margin-fg">
+
+                                <label>Correo Electrónico</label>
+                                <input type='email' name='user_email' [ngClass]="{ 'is-invalid': submitted && f.user_email.errors }" formControlName="user_email" value='' class='form-control ' placeholder='' required="required" /> 
+                                <div *ngIf="submitted && f.user_email.errors" class="error">
+                                    <div *ngIf="f.user_email.errors.required"><small>Correo electrónico es requerido</small></div>
+                                    <div *ngIf="f.user_email.errors.pattern"><small>Formato de Correo electrónico invalido</small></div>
+                                </div>
+                            </div>
+                            </div>
+                            <div class="col-md-6">
+                            <div class="form-group margin-fg">
+
+                                <label>Tel&eacute;fono Celular</label>
+                                <input type='text' name='telfono_celul' [ngClass]="{ 'is-invalid': submitted && f.telfono_celul.errors }" formControlName="telfono_celul" value='' class='form-control ' placeholder='' />
+                                <div *ngIf="submitted && f.telfono_celul.errors" class="error">
+                                    <div *ngIf="f.telfono_celul.errors.required"><small>Teléfono celular es requerido</small></div>
+                                    <div *ngIf="f.telfono_celul.errors.pattern"><small>Este campo es numerico</small></div>
+                                    <div *ngIf="f.telfono_celul.errors.maxlength"><small>Este campo debe tener maximo 10 caracteres</small></div>
+
+                                </div> 
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="!(userToEdit$ | async)?.id">
+                            <div class="col-md-6">
+                            <div class="form-group margin-fg">
+
+                                <label>Contrase&ntilde;a</label>
+                                <input type='password' name='user_pass' [ngClass]="{ 'is-invalid': submitted && f.user_pass.errors }" formControlName="user_pass" class='form-control ' placeholder='' required="required" /> 
+                                <div *ngIf="submitted && f.user_pass.errors" class="error">
+                                    <div *ngIf="f.user_pass.errors.required"><small>Contraseña es requerido</small></div>
+                                    <div *ngIf="f.user_pass.errors.pattern"><small>Contraseña debe tener minimo 8 caracteres, un numero, una mayuscula, una minuscula y un caracter especial.</small></div>
+                                </div> 
+                                <!-- <div *ngIf="f.user_pass.errors.minlength">Contraseña debe contener al menos 6 caracteres</div> -->
+                            </div>
+                            </div>
+                            <div class="col-md-6">
+                            <div class="form-group margin-fg">
+
+                                <label>Confirmar Contrase&ntilde;a </label>
+                                <input type='password' [ngClass]="{ 'is-invalid': submitted && f.confirmation_password.errors }" name='confirmation_password' formControlName="confirmation_password" class='form-control ' placeholder='' required="required" /> 
+                                <div *ngIf="submitted && f.confirmation_password.errors" class="error">
+                                    <div *ngIf="f.confirmation_password.errors.required"><small>Confirmar contraseña es requerido</small></div>
+                                    <div *ngIf="f.confirmation_password.errors.mustMatch"><small style="color:red">Contraseñas no coinciden</small></div>
+                                </div> 
+                                
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12"><h3>Modulos</h3></div>
+                            <div class="col-md-6" *ngFor="let m of (modulos$ | async)['data']">
+                                <div class="form-group margin-b-0">
+                                    <label class="fw-600">
+                                        <input type='checkbox' [checked]='m.checked' name='' class='' value="{{ m.nombre }}" (change)="onCheckChange($event)" /> {{m.nombre}}
+                                    </label> 
+                                </div>
+                            </div>
+                            <!-- <div class="col-md-6">
+                                <div class="form-group margin-b-0">
+                                    <label class="fw-600">
+                                        <input type='checkbox' name='' class='' value="blogs" (change)="onCheckChange($event)" /> Blogs
+                                    </label> 
+                                </div>
+                            </div> -->
+                        </div>
+                        <div *ngIf="submitted" class="row w-100">
+                            <div class="col-md-12 text-center">
+                                <img src="/assets/img/load.gif" width="150" height="100"><br>
+                                <p>Enviando solicitud espere...</p>
+                            </div>
+                        </div>
+                      <div class="row">
+                        <div
+                        class="col-auto my-2"
+                        *ngIf="(userToEdit$ | async)?.id; else noEditMode"
+                      >
+                        <button
+                          type="button"
+                          class="btn btn-raised btn-primary"
+                          (click)="edit()"
+                          [disabled] = "submitted"
+                        >
+                          Guardar cambios
+                        </button>
+                      </div>
+                      <ng-template #noEditMode>
+                        <div class="col-auto my-2">
+                          <button
+                            type="button"
+                            class="btn btn-raised btn-primary"
+                            (click)="add()"
+                            [disabled] = "submitted"
+                          >
+                            Guardar
+                          </button>
+                        </div>
+                      </ng-template>
+                        <div class="col-auto my-2">
+                          <button
+                            type="button"
+                            class="btn btn-raised btn-warning"
+                            [disabled]="!registroForm.dirty"
+                            (click)="registroForm.reset()"
+                          >
+                            Limpiar
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+            </div>
+
+              </div>
+              <!--INICIO DEL CARD BODY--> 
+                                         
+      </div>
+      <!-- {{ users$ | async | json }} -->
+    </div>
+  </div>
+</div>
